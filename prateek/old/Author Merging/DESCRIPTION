@@ -1,0 +1,9 @@
+Package: Identity.Merging
+Type: Package
+Title: What the package does (short line)
+Version: 1.0
+Date: 2013-07-02
+Author: Prateek Rastogi <p.rastogi@outlook.com> with the contribution of Brian Ripley <ripley@stats.ox.ac.uk> and Michael Lapsley
+Maintainer: Prateek Rastogi <p.rastogi@outlook.com>
+Description: More about what it does (maybe more than one line)
+License: What license is it under?
