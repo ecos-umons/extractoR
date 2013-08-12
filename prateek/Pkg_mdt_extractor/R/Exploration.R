@@ -7,7 +7,7 @@ pkgexplore<-function(path){
   rfiles<-dir(path,pattern="^R$",recursive=F)
   rpath<-(file.path(path,(setdiff(rfiles,setdiff(rfiles,c('R'))))))# To find the r source directory
   if(length(rpath)>1 && length(dindex)>1 ){ srcexplore(rpath[2],files[dindex[2]],namespace)}
-  else if(length(rpath)==1 && length(dindex)>1){ srcexplore(rpath[1],files[dindex[2]],namespace)}
+else if(length(rpath)==1 && length(dindex)>1){ srcexplore(rpath[1],files[dindex[2]],namespace)}
   else if(length(rpath)>1 && length(dindex)==1){ srcexplore(rpath[2],files[dindex[1]],namespace)}
   else if(length(rpath)==1 && length(dindex)==1){ srcexplore(rpath[1],files[dindex[1]],namespace)}
   #rpath<-path

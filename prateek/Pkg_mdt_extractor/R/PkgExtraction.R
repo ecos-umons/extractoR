@@ -53,15 +53,17 @@ wpkg<-lst #to be used by the our loop to come to this point again to check if so
         temppath<-file.path(fldpath,fld)
         info<-(file.info(temppath)$isdir)
         info<-info[!is.na(info)]
-        if(info)
+       if(length(info)>0)
+      {  if(info)
         {
           
         #  print("Analyzing a new package... ")
           
          pkgexplore(temppath) 
         unlink(file.path(temppath),recursive=T)
+         unlink(file.path(getwd(),'data/temp'),recursive=T)
         #  print("Finished analysis of the previous package")
-        }
+        }}
       }
     }   
     #for removing items that are proccessed from the wpkg vector
@@ -121,14 +123,15 @@ wpkg<-lst #to be used by the our loop to come to this point again to check if so
         temppath<-file.path(fldpath,fld)
         info<-(file.info(temppath)$isdir)
         info<-info[!is.na(info)]
-        if(info)
+        if(length(info)>0)
+       { if(info)
         {
           #print("Analyzing a new package... ")
           pkgexplore(temppath) 
         
         #  print("Finished analysis of the previous package")
           unlink(file.path(temppath),recursive=T)
-        }
+        }}
       }
     }
     #for removing items that are proccessed from the wpkg vector

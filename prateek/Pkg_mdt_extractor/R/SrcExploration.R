@@ -104,9 +104,10 @@ fdplst<-c(tx,setdiff(fdplst,tx)) #as import field in namespace got more priority
     {
       #print(fldpath)
       funextractlst<-funextract(fldpath)
+
       funlst<-as.vector(funextractlst[[1]])   #getting list of functions present inside the dependent package
       funlst<-c(pkgname[i],funlst)
-      rfpath<-funextractlst[[2]]     #path of the r source file in the dependent package
+      rfpath<-funextractlst[[2]]    #path of the r source file in the dependent package
       if(length(rfpath)>0)        #this code has literally raped my mind
       {
         for(i in 1:length(rfpath))
@@ -140,14 +141,15 @@ fdplst<-c(tx,setdiff(fdplst,tx)) #as import field in namespace got more priority
     fldpath<-(file.path(fldpath1,(setdiff(fldpath,setdiff(fldpath,c('R'))))))
     fldpath<-list.files(fldpath,pattern="\\.R|\\.S|\\.q|\\.r|\\.s", full.names=T,include.dirs=T)
     fldpath<-setdiff(fldpath,fldpath[grep("\\.rda|\\.in",fldpath)])   #getting only r source files
-    print("loop again")
+   # print("loop again")
     if(length(grep("\\/R\\/",tmp))>0)
     {
       #print(fldpath)
       funextractlst<-funextract(fldpath)
+     
       funlst<-as.vector(funextractlst[[1]])   #getting list of functions present inside the dependent package
       
-      rfpath<-funextractlst[[2]]     #path of the r source file in the dependent package
+      rfpath<-funextractlst[[2]]   #path of the r source file in the dependent package
       if(length(rfpath)>0)        #this code has literally raped my mind
       {
         for(i in 1:length(rfpath))
@@ -177,22 +179,27 @@ fdplst<-c(tx,setdiff(fdplst,tx)) #as import field in namespace got more priority
   ofuncallees<-NULL #list of calls to the original function in the same order as they are in vecctor.
   if(length(tfun)!=0)
  {finalfunlst<-c(tlist,finalfunlst)}   #final function list
-  fw<-foodweb(where="custom",plotting=F)
-  
-  for(fun in originalfunlst)
+  #print("here")
+ # print("fuck")
+  fw<-NULL
+  try({fw<-foodweb(where="custom",plotting=F)})
+ # print("yaha")
+  if(length(fw)>0)
+ { for(fun in originalfunlst)
   {
-    ofuncallees<-c(ofuncallees,list(c(fun,callees.of(fun,fw))))
+    ofuncallees<-(c(ofuncallees,list(c(fun,callees.of(fun,fw)))))
   }
   #print(ofuncallees)
   detach(custom) # it is detached before calling function because it changes base environment to this and then the actual i.e. my program can't find the functions of my program.
-  dframefunction(originalfunlst,finalfunlst,ofuncallees)
+dframefunction(originalfunlst,finalfunlst,ofuncallees)
   #print(finalfunlst)
  # print(originalfunlst)
  #names(finalfunlst)<-funname  #final function list with names of vector element representing package in which a function belongs
  #print(finalfunlst) 
   #detach(custom)
+   #print("h")
   # end of dependency manipulation with list of the function of each dependent package in our hand
-}
+}}
 
 
 

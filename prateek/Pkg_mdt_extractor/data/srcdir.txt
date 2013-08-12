@@ -1,1 +1,1 @@
-c:\\rsrc
+C:\\RSRC
