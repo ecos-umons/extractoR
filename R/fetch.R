@@ -22,8 +22,9 @@ get.url <- function(package, filename) {
 
 download.archive <- function(package, filename, datadir) {
   dest <- file.path(datadir, filename)
-  if(check.url(url)) {
-    download.file(get.url(package, filename), dest, method="wget")
+  url <- get.url(package, filename)
+  if(length(url)) {
+    download.file(url, dest, method="wget")
     dest
   } else {
     NULL
