@@ -35,6 +35,7 @@ pkglist.getpackages <- function(lastversions, archives) {
   }
   getversions <- function(package) {
     versions <- union(lastversions[package], archives[[package]])
+    versions <- versions[!is.na(versions)]
     as.character(sapply(versions, getversion))
   }
   all.names <- union(names(lastversions), names(archives))
