@@ -1,4 +1,4 @@
 rextract
 ========
 
-Extracts R packages metadata to a SQL database
+Extracts R packages metadata in a SQL database
