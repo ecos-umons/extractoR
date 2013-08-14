@@ -37,7 +37,7 @@ fetch.archive <- function(version, package, datadir) {
   if(!file.exists(dest)) {
     res <- download.archive(package, filename, datadir)
     if(length(res)) {
-      untar(res, files=package, exdir=dest)
+      untar(res, exdir=dest)
       file.remove(res)
       return(TRUE)
     }
