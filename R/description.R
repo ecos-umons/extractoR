@@ -37,3 +37,25 @@ all.keys <- function(descfiles) {
 num.packages.all.keys <- function(descfiles) {
   sapply(all.keys(descfiles), num.packages.with.key, descfiles)
 }
+
+get.keys <- function(con, package, version) {
+  package <- dbEscapeStrings(con, package)
+  version <- dbEscapeStrings(con, version)
+  query <- paste("SELECT keyword",
+                 "FROM description_files df, packages p, package_versions v",
+                 "WHERE p.name = '%s' AND v.package_id = p.id",
+                 "AND v.version = '%s' AND df.version_id = v.id")
+  dbGetQuery(con, sprintf(query, package, version))[, 1]
+}
+
+get.value <- function(con, package, version, key) {
+  package <- dbEscapeStrings(con, package)
+  version <- dbEscapeStrings(con, version)
+  key <- dbEscapeStrings(con, key)
+  query <- paste("SELECT df.value",
+                 "FROM description_files df, packages p, package_versions v",
+                 "WHERE p.name = '%s' AND v.package_id = p.id",
+                 "AND v.version = '%s' AND df.version_id = v.id",
+                 "AND df.keyword = '%s'", sep=" ")
+  dbGetQuery(con, sprintf(query, package, version, key))[1, 1]
+}
