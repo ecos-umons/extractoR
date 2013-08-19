@@ -93,3 +93,9 @@ insert.descfiles <- function(con, packages, descfiles) {
     }
   }
 }
+
+sql.load <- function(con) {
+  query <- paste("SELECT p.name, v.version FROM packages p, package_versions v",
+                 "WHERE v.package_id = p.id", sep=" ")
+  dbGetQuery(con, query)
+}
