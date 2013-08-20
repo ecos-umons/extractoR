@@ -3,23 +3,21 @@ library(RMySQL)
 insert.package <- function(con, package) {
   name <- dbEscapeStrings(con, package$name)
   query <- sprintf("INSERT INTO packages (name) VALUES ('%s')", name)
-  res <- dbSendQuery(con, query)
-  dbClearResult(res)
-  dbGetQuery(con, "SELECT LAST_INSERT_ID()")
+  dbClearResult(dbSendQuery(con, query))
+  dbGetQuery(con, "SELECT LAST_INSERT_ID()")[1, 1]
 }
 
 get.package.id <- function(con, package) {
   name <- dbEscapeStrings(con, package$name)
   query <- sprintf("SELECT id FROM packages WHERE name = '%s'", name)
-  dbGetQuery(con, query)
+  dbGetQuery(con, query)[1, 1]
 }
 
 ensure.package <- function(package, con) {
-  res <- get.package.id(con, package)
-  if(!nrow(res)) {
-    res <- insert.package(con, package)
+  id <- get.package.id(con, package)
+  if(is.null(id)) {
+    id <- insert.package(con, package)
   }
-  id <- res[1,1]
   package$sql.id <- id
   package
 }
@@ -32,24 +30,22 @@ insert.version <- function(con, package, version) {
   version <- dbEscapeStrings(con, version)
   query <- "INSERT INTO package_versions (version, package_id) VALUES ('%s', %d)"
   query <- sprintf(query, version, package$sql.id)
-  res <- dbSendQuery(con, query)
-  dbClearResult(res)
-  dbGetQuery(con, "SELECT LAST_INSERT_ID()")
+  dbClearResult(dbSendQuery(con, query))
+  dbGetQuery(con, "SELECT LAST_INSERT_ID()")[1, 1]
 }
 
 get.version.id <- function(con, package, version) {
   version <- dbEscapeStrings(con, version)
   query <- "SELECT id FROM package_versions WHERE package_id = %d AND version = '%s'"
   query <- sprintf(query, package$sql.id, version)
-  dbGetQuery(con, query)
+  dbGetQuery(con, query)[1, 1]
 }
 
 ensure.version <- function(version, package, con) {
-  res <- get.version.id(con, package, version)
-  if(!nrow(res)) {
-    res <- insert.version(con, package, version)
+  id <- get.version.id(con, package, version)
+  if(is.null(id)) {
+    id <- insert.version(con, package, version)
   }
-  id <- res[1,1]
   list(version=version, sql.id=id)
 }
 
@@ -95,7 +91,7 @@ insert.descfiles <- function(con, packages, descfiles) {
 }
 
 sql.load <- function(con) {
-  query <- paste("SELECT p.name, v.version FROM packages p, package_versions v",
+  query <- paste("SELECT p.name package, v.version FROM packages p, package_versions v",
                  "WHERE v.package_id = p.id", sep=" ")
   dbGetQuery(con, query)
 }
