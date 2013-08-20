@@ -1,91 +1,86 @@
 library(RMySQL)
 
-insert.package <- function(con, package) {
-  name <- dbEscapeStrings(con, package$name)
-  query <- sprintf("INSERT INTO packages (name) VALUES ('%s')", name)
+package.insert <- function(con, package) {
+  package <- dbEscapeStrings(con, package)
+  query <- sprintf("INSERT INTO packages (name) VALUES ('%s')", package)
   dbClearResult(dbSendQuery(con, query))
   dbGetQuery(con, "SELECT LAST_INSERT_ID()")[1, 1]
 }
 
-get.package.id <- function(con, package) {
-  name <- dbEscapeStrings(con, package$name)
-  query <- sprintf("SELECT id FROM packages WHERE name = '%s'", name)
+package.get.id <- function(con, package) {
+  package <- dbEscapeStrings(con, package)
+  query <- sprintf("SELECT id FROM packages WHERE name = '%s'", package)
   dbGetQuery(con, query)[1, 1]
 }
 
-ensure.package <- function(package, con) {
-  id <- get.package.id(con, package)
+package.ensure <- function(package, con) {
+  id <- package.get.id(con, package$name)
   if(is.null(id)) {
-    id <- insert.package(con, package)
+    id <- package.insert(con, package$name)
   }
-  package$sql.id <- id
-  package
+  id
 }
 
-ensure.packages <- function(con, packages) {
-  lapply(packages, ensure.package, con)
+packages.ensure <- function(con, packages) {
+  lapply(names(packages), package.ensure, con)
 }
 
-insert.version <- function(con, package, version) {
+version.insert <- function(con, package, version) {
   version <- dbEscapeStrings(con, version)
   query <- "INSERT INTO package_versions (version, package_id) VALUES ('%s', %d)"
-  query <- sprintf(query, version, package$sql.id)
+  query <- sprintf(query, version, package.get.id(con, package))
   dbClearResult(dbSendQuery(con, query))
   dbGetQuery(con, "SELECT LAST_INSERT_ID()")[1, 1]
 }
 
-get.version.id <- function(con, package, version) {
+version.get.id <- function(con, package, version) {
+  package <- dbEscapeStrings(con, package)
   version <- dbEscapeStrings(con, version)
-  query <- "SELECT id FROM package_versions WHERE package_id = %d AND version = '%s'"
-  query <- sprintf(query, package$sql.id, version)
+  query <- paste("SELECT v.id FROM package_versions v, packages p",
+                 "WHERE p.name = '%s' AND p.id = v.package_id",
+                 "AND v.version = '%s'")
+  query <- sprintf(query, package, version)
   dbGetQuery(con, query)[1, 1]
 }
 
-ensure.version <- function(version, package, con) {
-  id <- get.version.id(con, package, version)
+version.ensure <- function(version, package, con) {
+  id <- version.get.id(con, package, version)
   if(is.null(id)) {
-    id <- insert.version(con, package, version)
+    id <- version.insert(con, package, version)
   }
-  list(version=version, sql.id=id)
+  id
 }
 
-ensure.versions <- function(package, con) {
-  versions <- lapply(package$versions, ensure.version, package, con)
-  names(versions) <- package$versions
-  package$versions <- versions
-  package
+versions.ensure <- function(package, con) {
+  lapply(names(package$versions), version.ensure, package$name, con)
 }
 
-ensure.all.versions <- function(con, packages) {
-  lapply(packages, ensure.versions, con)
+versions.ensure.all <- function(con, packages) {
+  lapply(packages, versions.ensure, con)
 }
 
-ensure.all.packages <- function(con, packages) {
-  ensure.all.versions(con, ensure.packages(con, packages))
-}
-
-insert.descfile.key <- function(con, version, key, value) {
+descfile.insert.key <- function(con, package, version, key, value) {
   key <- dbEscapeStrings(con, key)
   value <- dbEscapeStrings(con, value)
   query <- "INSERT INTO description_files (version_id, keyword, value) VALUES (%d, '%s', '%s')"
-  query <- sprintf(query, version$sql.id, key, value)
-  res <- dbSendQuery(con, query)
-  dbClearResult(res)
+  query <- sprintf(query, version.get.id(con, package, version), key, value)
+  dbClearResult(dbSendQuery(con, query))
 }
 
-insert.descfile <- function(con, version, descfile) {
+descfile.insert <- function(con, package, version, descfile) {
   for(key in names(descfile)) {
     # TODO remove silent=TRUE
     # rather use tryCatch to print when there is an error other than duplicate
-    try(insert.descfile.key(con, version, key, descfile[[key]]), silent=TRUE)
+    try(descfile.insert.key(con, package, version, key, descfile[[key]]),
+        silent=TRUE)
   }
 }
 
 insert.descfiles <- function(con, packages, descfiles) {
-  for(package in packages) {
-    for(version in package$versions) {
-      descfile <- descfiles[[package$name]][[version$version]]
-      insert.descfile(con, version, descfile)
+  for(package in names(packages)) {
+    for(version in names(packages[[package]]$versions)) {
+      descfile <- descfiles[[package]][[version]]
+      insert.descfile(con, package, version, descfile)
     }
   }
 }

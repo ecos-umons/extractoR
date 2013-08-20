@@ -20,7 +20,7 @@ get.url <- function(package, filename) {
   }
 }
 
-download.archive <- function(package, filename, datadir) {
+fetch.archive <- function(package, filename, datadir) {
   dest <- file.path(datadir, filename)
   url <- get.url(package, filename)
   if(length(url)) {
@@ -31,11 +31,11 @@ download.archive <- function(package, filename, datadir) {
   }
 }
 
-fetch.archive <- function(version, package, datadir) {
+fetch.version <- function(version, package, datadir) {
   filename <- archive.name(package, version)
   dest <- file.path(datadir, package, version)
   if(!file.exists(dest)) {
-    res <- download.archive(package, filename, datadir)
+    res <- fetch.archive(package, filename, datadir)
     if(length(res)) {
       untar(res, exdir=dest)
       file.remove(res)
@@ -46,7 +46,7 @@ fetch.archive <- function(version, package, datadir) {
 }
 
 fetch.package <- function(package, datadir) {
-  sapply(package$versions, fetch.archive, package$name, datadir)
+  sapply(package$versions, fetch.version, package$name, datadir)
 }
 
 fetch.packages <- function(packages, datadir) {
