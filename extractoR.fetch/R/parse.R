@@ -1,50 +1,45 @@
-library(XML)
-library(yaml)
-
-pkglist.getlinks <- function(url) {
+pkglist.links <- function(url) {
+  message(sprintf("Parsing %s", url))
   doc = htmlTreeParse(url, useInternalNodes=T)
-  res <- xpathSApply(doc, "//a[@href]",
-                     function(x)list(xmlValue(x), xmlAttrs(x)))
-  links <- as.character(res[2,])
-  names(links) <- res[1,]
-  links
+  xpathSApply(doc, "//a[@href]", xmlValue)
 }
 
-pkglist.getversions <- function(url) {
-  links <- pkglist.getlinks(url)
-  ids <- grep("\\.tar\\.gz$", links)
-  versions <- links[ids]
-  names(versions) <- sapply(versions, function(x)strsplit(x, "_")[[1]][1])
-  versions
+pkglist.rversions <- function(links) {
+  as.character(sapply(grep("^[0-9]+\\.[0-9]+.*/$", links, value=TRUE),
+                      strsplit, "/"))
 }
 
-pkglist.getarchives <- function(url) {
-  links <- pkglist.getlinks(url)
-  ids <- grep("^[A-Za-z0-9].*/$", links)
-  packages <- links[ids]
-  names(packages) <- sapply(packages, function(x)substr(x, 1, nchar(x)-1))
-  getversions <- function(package) {
-    as.character(pkglist.getversions(paste(url, package, sep="")))
-  }
-  sapply(packages, getversions)
+pkglist.archives <- function(links) {
+  grep("\\.tar\\.gz$", links, value=TRUE)
 }
 
-pkglist.getpackages <- function(lastversions, archives) {
-  getversion <- function(name) {
-    strsplit(strsplit(name, "_")[[1]][2], "\\.tar\\.gz")[[1]]
-  }
-  getversions <- function(package) {
-    versions <- union(lastversions[package], archives[[package]])
-    versions <- versions[!is.na(versions)]
-    as.character(sapply(versions, getversion))
-  }
-  all.names <- union(names(lastversions), names(archives))
-  packages <- lapply(all.names, function(x)
-                     list(name=x, notarchived=x %in% lastversions,
-                          lastversion=getversion(lastversions[x]),
-                          versions=getversions(x)))
-  names(packages) <- all.names
-  packages
+pkglist.packages <- function(links) {
+  as.character(sapply(grep("^[A-Za-z0-9].*/$", links, value=TRUE),
+                      strsplit, "/"))
+}
+
+pkglist.recommended <- function(rversion) {
+  url <- "http://cran.r-project.org/src/contrib/%s/Recommended"
+  pkglist.archives(pkglist.links(sprintf(url, rversion)))
+}
+
+pkglist.archived <- function(package) {
+  url <- "http://cran.r-project.org/src/contrib/Archive/%s"
+  pkglist.archives(pkglist.links(sprintf(url, package)))
+}
+
+pkglist.archived.all <- function() {
+  url <- "http://cran.r-project.org/src/contrib/Archive/"
+  packages <- pkglist.packages(pkglist.links(url))
+  as.vector(sapply(packages, pkglist.archived))
+}
+
+pkglist.cran <- function() {
+  links <- pkglist.links("http://cran.r-project.org/src/contrib/")
+  last <- pkglist.archives(links)
+  rversions <- sapply(pkglist.rversions(links), pkglist.recommended)
+  archived <- pkglist.archived.all()
+  list(last=last, rversions=rversions, archived=archived)
 }
 
 pkglist.save <- function(packages, filename) {
@@ -53,17 +48,4 @@ pkglist.save <- function(packages, filename) {
 
 pkglist.load <- function(filename) {
   yaml.load_file(filename)
-}
-
-pkglist.cran <- function(filename) {
-  ## url = "http://cran.r-project.org/src/"
-  url = "http://cran.r-project.org/src/contrib/"
-  lastversions <- pkglist.getversions(url)
-
-  url = "http://cran.r-project.org/src/contrib/Archive/"
-  archives <- pkglist.getarchives(url)
-
-  packages <- pkglist.getpackages(lastversions, archives)
-  pkglist.save(packages, filename)
-  packages
 }
