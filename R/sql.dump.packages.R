@@ -59,32 +59,6 @@ versions.ensure.all <- function(con, packages) {
   lapply(packages, versions.ensure, con)
 }
 
-descfile.insert.key <- function(con, package, version, key, value) {
-  key <- dbEscapeStrings(con, key)
-  value <- dbEscapeStrings(con, value)
-  query <- "INSERT INTO description_files (version_id, keyword, value) VALUES (%d, '%s', '%s')"
-  query <- sprintf(query, version.get.id(con, package, version), key, value)
-  dbClearResult(dbSendQuery(con, query))
-}
-
-descfile.insert <- function(con, package, version, descfile) {
-  for(key in names(descfile)) {
-    # TODO remove silent=TRUE
-    # rather use tryCatch to print when there is an error other than duplicate
-    try(descfile.insert.key(con, package, version, key, descfile[[key]]),
-        silent=TRUE)
-  }
-}
-
-insert.descfiles <- function(con, packages, descfiles) {
-  for(package in names(packages)) {
-    for(version in names(packages[[package]]$versions)) {
-      descfile <- descfiles[[package]][[version]]
-      insert.descfile(con, package, version, descfile)
-    }
-  }
-}
-
 sql.load <- function(con) {
   query <- paste("SELECT p.name package, v.version FROM packages p, package_versions v",
                  "WHERE v.package_id = p.id", sep=" ")
