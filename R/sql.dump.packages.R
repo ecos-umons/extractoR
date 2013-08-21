@@ -7,12 +7,6 @@ package.insert <- function(con, package) {
   dbGetQuery(con, "SELECT LAST_INSERT_ID()")[1, 1]
 }
 
-package.get.id <- function(con, package) {
-  package <- dbEscapeStrings(con, package)
-  query <- sprintf("SELECT id FROM packages WHERE name = '%s'", package)
-  dbGetQuery(con, query)[1, 1]
-}
-
 package.ensure <- function(package, con) {
   id <- package.get.id(con, package$name)
   if(is.null(id)) {
@@ -23,40 +17,6 @@ package.ensure <- function(package, con) {
 
 packages.ensure <- function(con, packages) {
   lapply(names(packages), package.ensure, con)
-}
-
-version.insert <- function(con, package, version) {
-  version <- dbEscapeStrings(con, version)
-  query <- "INSERT INTO package_versions (version, package_id) VALUES ('%s', %d)"
-  query <- sprintf(query, version, package.get.id(con, package))
-  dbClearResult(dbSendQuery(con, query))
-  dbGetQuery(con, "SELECT LAST_INSERT_ID()")[1, 1]
-}
-
-version.get.id <- function(con, package, version) {
-  package <- dbEscapeStrings(con, package)
-  version <- dbEscapeStrings(con, version)
-  query <- paste("SELECT v.id FROM package_versions v, packages p",
-                 "WHERE p.name = '%s' AND p.id = v.package_id",
-                 "AND v.version = '%s'")
-  query <- sprintf(query, package, version)
-  dbGetQuery(con, query)[1, 1]
-}
-
-version.ensure <- function(version, package, con) {
-  id <- version.get.id(con, package, version)
-  if(is.null(id)) {
-    id <- version.insert(con, package, version)
-  }
-  id
-}
-
-versions.ensure <- function(package, con) {
-  lapply(names(package$versions), version.ensure, package$name, con)
-}
-
-versions.ensure.all <- function(con, packages) {
-  lapply(packages, versions.ensure, con)
 }
 
 sql.load <- function(con) {
