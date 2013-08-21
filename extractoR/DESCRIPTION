@@ -1,0 +1,18 @@
+Package: extractoR
+Type: Package
+Title: CRAN packages metadata extractor
+Version: 1.0
+Date: 2013-08-21
+Author: Maëlick Claes <himself@maelick.net> &
+        Prateek Rastogi <p.rastogi@outlook.com>
+Maintainer: Maëlick Claes <himself@maelick.net>
+Description: extractoR is a set of R packages that can be used to
+             fetch, extract and dump CRAN packages metadata in a SQL
+             database. This main package which act as a glue of
+             functions defined in other packages. Other packages are:
+             extractoR.utils, extractoR.fetch, extractoR.extract,
+             extractoR.sql.dump and extractoR.sql.query.
+Depends: extractoR.utils, extractoR.fetch, extractoR.extract,
+         extractoR.sql.query, extractoR.sql.dump
+License: GPL-3
+Encoding: UTF-8
