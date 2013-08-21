@@ -16,3 +16,8 @@ lstrip <- function(s) {
 strip <- function(s) {
   gsub("^[[:space:]]*|[[:space:]]*$", "", s)
 }
+
+archive.parse.name <- function(archive) {
+  archive <- strsplit(archive, "_")[[1]]
+  list(package=archive[1], version=strsplit(archive[2], "\\.tar\\.gz")[[1]][1])
+}

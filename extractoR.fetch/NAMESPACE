@@ -2,5 +2,7 @@ importFrom(RCurl, getCurlHandle, getURL, getCurlInfo)
 importFrom(XML, htmlTreeParse, xpathSApply)
 importFrom(yaml, as.yaml, yaml.load_file)
 
+importFrom(extractoR.utils, archive.parse.name)
+
 export(pkglist.cran, pkglist.save, pkglist.load)
-export(archive.parse.name, fetch.packages)
+export(fetch.packages)

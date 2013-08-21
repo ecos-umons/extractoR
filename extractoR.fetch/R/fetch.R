@@ -14,11 +14,6 @@ get.url <- function(package, filename, rversions) {
   }
 }
 
-archive.parse.name <- function(archive) {
-  archive <- strsplit(archive, "_")[[1]]
-  list(package=archive[1], version=strsplit(archive[2], "\\.tar\\.gz")[[1]][1])
-}
-
 fetch.archive <- function(package, filename, rversions, datadir) {
   dest <- file.path(datadir, filename)
   url <- get.url(package, filename, rversions)
