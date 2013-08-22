@@ -1,1 +1,5 @@
-exportPattern("^[[:alpha:]]+")
+importFrom(extractoR.utils, archive.parse.name, dflist2df)
+
+export(packages.df)
+export(descfile.read, descfiles.read, descfiles.keys, descfiles.key)
+export(person.extract, roles.extract, people.df)

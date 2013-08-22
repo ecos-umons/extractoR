@@ -1,45 +1,34 @@
-library(RMySQL)
-
-descfile.name <- function(version, package, datadir) {
-  paste(datadir, package, version, package, "DESCRIPTION", sep="/")
+descfile.name <- function(package, version, datadir) {
+  file.path(datadir, package, version, package, "DESCRIPTION")
 }
 
-descfile.read <- function(version, package, datadir) {
-  as.list(read.dcf(descfile.name(version, package, datadir))[1,])
-}
-
-descfiles.read.package <- function(package, datadir) {
-  res <- lapply(package$versions, descfile.read, package$name, datadir)
-  names(res) <- package$versions
-  res
+descfile.read <- function(package, version, datadir) {
+  name <- descfile.name(package, version, datadir)
+  if(file.exists(name)) {
+    descfile <- read.dcf(name)
+    n <- ncol(descfile)
+    data.frame(package=rep(package, n), version=rep(version, n),
+               key=colnames(descfile), value=as.vector(descfile[1,]),
+               stringsAsFactors=FALSE)
+  } else NULL
 }
 
 descfiles.read <- function(packages, datadir) {
-  sapply(packages, descfile.read.package, datadir)
+  descfiles <- apply(packages, 1,
+                     function(p) descfile.read(p["package"], p["version"],
+                                               datadir))
+  dflist2df(descfiles, c("package", "version", "key", "value"))
 }
 
-descfile.insert.keyvalue <- function(con, package, version, key, value) {
-  key <- dbEscapeStrings(con, key)
-  value <- dbEscapeStrings(con, value)
-  query <- "INSERT INTO description_files (version_id, keyword, value) VALUES (%d, '%s', '%s')"
-  query <- sprintf(query, version.get.id(con, package, version), key, value)
-  dbClearResult(dbSendQuery(con, query))
+descfiles.keys <- function(descfiles) {
+  unique(descfiles$key)
 }
 
-descfile.insert <- function(con, package, version, descfile) {
-  for(key in names(descfile)) {
-    # TODO remove silent=TRUE
-    # rather use tryCatch to print when there is an error other than duplicate
-    try(descfile.insert.keyvalue(con, package, version, key, descfile[[key]]),
-        silent=TRUE)
-  }
+descfiles.key <- function(descfiles, key) {
+  m <- matrix(unlist(lapply(descfiles, function(d)d[d$key==key,])), nrow=4)
+  data.frame(package=m[1,], version=m[1,], role=m[3,], people=m[4,])
 }
 
-descfiles.insert <- function(con, packages, descfiles) {
-  for(package in names(packages)) {
-    for(version in names(packages[[package]]$versions)) {
-      descfile <- descfiles[[package]][[version]]
-      descfile.insert(con, package, version, descfile)
-    }
-  }
+descfiles.key <- function(descfiles, key) {
+  descfiles[descfiles$key==key,]
 }
