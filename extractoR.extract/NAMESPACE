@@ -1,6 +1,6 @@
 importFrom(extractoR.utils, archive.parse.name, dflist2df)
 
-export(packages.df)
+export(packages.df, rversion.extract, rversions.extract)
 export(descfile.read, descfiles.read, descfiles.keys, descfiles.key)
 export(person.extract, roles.extract, people.df)
 export(dependency.extract, dependencies.extract)
