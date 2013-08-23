@@ -1,51 +1,51 @@
-pkglist.links <- function(url) {
+FetchPageLinks <- function(url) {
   message(sprintf("Parsing %s", url))
   doc = htmlTreeParse(url, useInternalNodes=T)
   xpathSApply(doc, "//a[@href]", xmlValue)
 }
 
-pkglist.rversions <- function(links) {
+FetchRVersionsList <- function(links) {
   as.character(sapply(grep("^[0-9]+\\.[0-9]+.*/$", links, value=TRUE),
                       strsplit, "/"))
 }
 
-pkglist.archives <- function(links) {
+FetchArchivesList <- function(links) {
   grep("\\.tar\\.gz$", links, value=TRUE)
 }
 
-pkglist.packages <- function(links) {
+FetchPackagesList <- function(links) {
   as.character(sapply(grep("^[A-Za-z0-9].*/$", links, value=TRUE),
                       strsplit, "/"))
 }
 
-pkglist.recommended <- function(rversion) {
+FetchRecommdedList <- function(rversion) {
   url <- "http://cran.r-project.org/src/contrib/%s/Recommended"
-  pkglist.archives(pkglist.links(sprintf(url, rversion)))
+  FetchArchivesList(FetchPageLinks(sprintf(url, rversion)))
 }
 
-pkglist.archived <- function(package) {
+FetchArchivedList <- function(package) {
   url <- "http://cran.r-project.org/src/contrib/Archive/%s"
-  pkglist.archives(pkglist.links(sprintf(url, package)))
+  FetchArchivesList(FetchPageLinks(sprintf(url, package)))
 }
 
-pkglist.archived.all <- function() {
+FetchAllArchivedList <- function() {
   url <- "http://cran.r-project.org/src/contrib/Archive/"
-  packages <- pkglist.packages(pkglist.links(url))
-  as.vector(sapply(packages, pkglist.archived))
+  packages <- FetchPackagesList(FetchPageLinks(url))
+  as.vector(sapply(packages, FetchArchivedList))
 }
 
-pkglist.cran <- function() {
-  links <- pkglist.links("http://cran.r-project.org/src/contrib/")
-  last <- pkglist.archives(links)
-  rversions <- sapply(pkglist.rversions(links), pkglist.recommended)
-  archived <- pkglist.archived.all()
+FetchCRANList <- function() {
+  links <- FetchPageLinks("http://cran.r-project.org/src/contrib/")
+  last <- FetchArchivesList(links)
+  rversions <- sapply(FetchRVersionsList(links), FetchRecommendedList)
+  archived <- FetchAllArchivedList()
   list(last=last, rversions=rversions, archived=archived)
 }
 
-pkglist.save <- function(packages, filename) {
+SavePackagesList <- function(packages, filename) {
   write(as.yaml(packages), file=filename)
 }
 
-pkglist.load <- function(filename) {
+LoadPackagesList <- function(filename) {
   yaml.load_file(filename)
 }

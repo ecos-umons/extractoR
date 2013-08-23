@@ -1,23 +1,23 @@
-check.url <- function(url) {
+CheckURL <- function(url) {
   h = getCurlHandle()
   getURL(url, header=1,nobody=1, curl = h)
   as.logical(getCurlInfo(h, "response.code") == 200)
 }
 
-get.url <- function(package, filename, rversions) {
+GetURL <- function(package, filename, rversions) {
   urls <- file.path("http://cran.r-project.org/src/contrib",
                     c(file.path("Archive", package), "",
                       file.path(rversions, "Recommended")))
   urls <- file.path(urls, filename)
   for(url in urls) {
-    if(check.url(url)) return(url)
+    if (CheckURL(url)) return(url)
   }
 }
 
-fetch.archive <- function(package, filename, rversions, datadir) {
+FetchArchive <- function(package, filename, rversions, datadir) {
   dest <- file.path(datadir, filename)
-  url <- get.url(package, filename, rversions)
-  if(length(url)) {
+  url <- GetURL(package, filename, rversions)
+  if (length(url)) {
     download.file(url, dest, method="wget")
     dest
   } else {
@@ -26,11 +26,11 @@ fetch.archive <- function(package, filename, rversions, datadir) {
   }
 }
 
-fetch.package <- function(filename, rversions, datadir) {
-  archive <- archive.parse.name(filename)
+FetchPackage <- function(filename, rversions, datadir) {
+  archive <- ParseArchiveName(filename)
   dest <- file.path(datadir, archive$package, archive$version)
   if(!file.exists(dest)) {
-    res <- fetch.archive(archive$package, filename, rversions, datadir)
+    res <- FetchArchive(archive$package, filename, rversions, datadir)
     if(length(res)) {
       untar(res, exdir=dest)
       file.remove(res)
@@ -40,7 +40,7 @@ fetch.package <- function(filename, rversions, datadir) {
   FALSE
 }
 
-fetch.packages <- function(packages, datadir) {
+FetchPackages <- function(packages, datadir) {
   rversions <- names(packages$rversions)
-  sapply(unique(unlist(packages)), fetch.package, rversions, datadir)
+  sapply(unique(unlist(packages)), FetchPackage, rversions, datadir)
 }

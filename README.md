@@ -13,3 +13,5 @@ Those R packages are the followings:
 * extractoR.extract: extracts packages metadata in dataframes.
 * extractoR.sql.dump: dumps packages metadata to a SQL database
 * extractoR.sql.query: queries the SQL database.
+
+The following styleguide is used: https://google-styleguide.googlecode.com/svn/trunk/Rguide.xml
