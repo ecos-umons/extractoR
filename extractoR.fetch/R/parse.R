@@ -37,7 +37,7 @@ FetchAllArchivedList <- function() {
 FetchCRANList <- function() {
   links <- FetchPageLinks("http://cran.r-project.org/src/contrib/")
   last <- FetchArchivesList(links)
-  rversions <- sapply(FetchRVersionsList(links), FetchRecommendedList)
+  rversions <- sapply(FetchRVersionsList(links), FetchRecommdedList)
   archived <- FetchAllArchivedList()
   list(last=last, rversions=rversions, archived=archived)
 }
