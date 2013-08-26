@@ -5,8 +5,8 @@
 \title{CRAN packages metadata extractor (fetch)}
 \description{
   extractoR.fetch is part of extractoR which is a set of R packages that
-  can be used to fetch, extract and dump CRAN packages metadata in a SQL
-  database. extractoR.fetch parses CRAN web pages, downloads and
+  can be used to fetch, extract and query CRAN packages
+  metadata. extractoR.fetch parses CRAN web pages, downloads and
   extracts packages.
 }
 \details{

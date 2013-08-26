@@ -1,13 +1,12 @@
-\name{extractoR.sql.dump-package}
-\alias{extractoR.sql.dump-package}
-\alias{extractoR.sql.dump}
+\name{extractoR.sql.query-package}
+\alias{extractoR.sql.query-package}
+\alias{extractoR.sql.query}
 \docType{package}
-\title{CRAN packages metadata extractor (sql.dump)}
+\title{CRAN packages metadata extractor (query)}
 \description{
-  extractoR.sql.dump is part of extractoR which is a set of R packages
-  that can be used to fetch, extract and dump CRAN packages metadata in
-  a SQL database. extractoR.sql.dump dumps packages metadata to a SQL
-  database.
+  extractoR.query is part of extractoR which is a set of R packages
+  that can be used to fetch, extract and query CRAN packages
+  metadata. extractoR.query queries the dataframes.
 }
 \details{
 \tabular{ll}{

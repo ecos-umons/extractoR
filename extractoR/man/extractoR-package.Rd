@@ -5,10 +5,9 @@
 \title{CRAN packages metadata extractor}
 \description{
   extractoR is a set of R packages that can be used to fetch, extract
-  and dump CRAN packages metadata in a SQL database. This main package
-  which act as a glue of functions defined in other packages. Other
-  packages are: extractoR.utils, extractoR.fetch, extractoR.extract,
-  extractoR.sql.dump and extractoR.sql.query.
+  and dump CRAN packages metadata. This main package acts as a glue for
+  functions defined in other packages. Other packages are:
+  extractoR.utils, extractoR.fetch, extractoR.extract, extractoR.query.
 }
 \details{
 \tabular{ll}{

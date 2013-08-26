@@ -5,9 +5,8 @@
 \title{CRAN packages metadata extractor (extract)}
 \description{
   extractoR.extract is part of extractoR which is a set of R packages
-  that can be used to fetch, extract and dump CRAN packages metadata in
-  a SQL database. extractoR.extract extracts packages metadata in
-  dataframes.
+  that can be used to fetch, extract and query CRAN packages
+  metadata. extractoR.extract extracts packages metadata in dataframes.
 }
 \details{
 \tabular{ll}{
