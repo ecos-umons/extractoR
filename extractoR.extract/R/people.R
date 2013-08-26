@@ -5,6 +5,13 @@ email.pattern <- sprintf("%s(%s+([ ]?(\\@|\\[at\\])+[ ]?%s+)+)%s",
                          delim.open, email.chars, email.chars, delim.close)
 
 ExtractPersonInfos <- function(s) {
+  # Extracts a name and an email from a string containing them.
+  #
+  # Args:
+  #   s: The string containing the person's name and email.
+  #
+  # Returns:
+  #   A list with the name and email.
   if (grepl(email.pattern, s)) {
     list(name=Strip(gsub(email.pattern, "", s)),
          email=gsub(paste("^.*", email.pattern, ".*$", sep=""), "\\2", s))
@@ -14,6 +21,17 @@ ExtractPersonInfos <- function(s) {
 }
 
 ExtractPerson <- function(package, version, role, s) {
+  # Extracts all the people defined in a string.
+  #
+  # Args:
+  #   package: The package name.
+  #   version: The package version
+  #   role: The role of the extracted people.
+  #   s: The string containing the people name and email.
+  #
+  # Returns:
+  #   A five columns dataframe containing package name, version and
+  #   the role, the name and email of people extracted.
   s <- gsub("(<[a-fA-F0-9]{2}>)", "", s)
   s <- gsub("[[:space:]]+", " ", s)
   s <- unlist(strsplit(s, "( (with|from|by|/|and) )|[,;&>]"))
@@ -24,6 +42,17 @@ ExtractPerson <- function(package, version, role, s) {
 }
 
 ExtractRoles <- function(descfiles, role) {
+  # Extracts all the people defined in DESCRIPTION files for a given
+  # role.
+  #
+  # Args:
+  #   descfiles: A dataframe containing DESCRIPTION files (like the
+  #              one returned by ReadDescFiles)
+  #   role: The role to extract (either Maintainer or Author).
+  #
+  # Returns:
+  #   A five columns dataframe containing package name, version and
+  #   the role, the name and email of people extracted.
   roles <- GetDescfilesKey(descfiles, role)
   people <- apply(roles, 1,
                   function(d) ExtractPerson(d["package"], d["version"],
@@ -32,5 +61,12 @@ ExtractRoles <- function(descfiles, role) {
 }
 
 ExtractPeople <- function(maintainers, authors) {
+  # Returns the list of all different people.
+  #
+  # Args:
+  #   maintainers: The dataframe of maintainers (like the one returned
+  #                by ExtractRoles)
+  #   authors: The dataframe of authors (like the one returned by
+  #            ExtractRoles)
   unique(rbind(unique(maintainers[, 4:5]), unique(authors[, 4:5])))
 }
