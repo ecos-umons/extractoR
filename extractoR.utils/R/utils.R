@@ -56,9 +56,9 @@ dflist2df <- function(l, names) {
   # Returns:
   #   The new dataframe which is the concatenation of all rows of the
   #   dataframes contained in the list.
-  m <- t(matrix(unlist(sapply(Filter(is.data.frame, l), t)),
-                nrow=length(names)))
-  df <- data.frame(m, stringsAsFactors=FALSE)
-  colnames(df) <- names
-  df
+  m <- unlist(lapply(l, function (x)
+                     if (is.data.frame(x)) t(x) else NULL))
+  m <- matrix(m, ncol=length(names), byrow = TRUE,
+              dimnames=list(base::names(names), colnames(l[[1]])))
+  data.frame(m, stringsAsFactors = FALSE)
 }
