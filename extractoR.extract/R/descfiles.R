@@ -36,8 +36,8 @@ ReadDescfiles <- function(packages, datadir) {
   # Reads and parses the DESCRIPTION file of all packages.
   #
   # Args:
-  #   packages: A list of package archives (like the one returned by
-  #             FetchCRANList).
+  #   packages: A dataframe containing packages (like the one returned
+  #             by GetPackagesDataframe).
   #   datadir: The directory where are stored packages content.
   #
   # Returns:
