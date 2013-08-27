@@ -68,5 +68,22 @@ ExtractPeople <- function(maintainers, authors) {
   #                by ExtractRoles)
   #   authors: The dataframe of authors (like the one returned by
   #            ExtractRoles)
-  unique(rbind(unique(maintainers[, 4:5]), unique(authors[, 4:5])))
+  #
+  # Returns:
+  #   A two-column dataframe containing the people names and emails.
+  people <- unique(rbind(unique(maintainers[, 4:5]), unique(authors[, 4:5])))
+  rownames(people) <- NULL
+  people
+}
+
+People2CSV <- function(people) {
+  # Exports people to a CSV file.
+  #
+  # Args:
+  #   people: The dataframe people (like the one returned by
+  #           ExtractPeople)
+  #
+  # Returns:
+  #   Nothing
+  write.csv2(people, file="people.csv", row.names=FALSE)
 }
