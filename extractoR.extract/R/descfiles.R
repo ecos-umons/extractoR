@@ -46,7 +46,7 @@ ReadDescfiles <- function(packages, datadir) {
   descfiles <- apply(packages, 1,
                      function(p) ReadDescfile(p["package"], p["version"],
                                               datadir))
-  dflist2df(descfiles, c("package", "version", "key", "value"))
+  dflist2df(descfiles)
 }
 
 GetDescfilesKeys <- function(descfiles) {

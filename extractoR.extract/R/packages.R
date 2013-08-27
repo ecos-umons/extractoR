@@ -9,7 +9,7 @@ GetPackagesDataframe <- function(packages) {
   #   A two column dataframe with packages name and version.
   l <- sapply(unique(unlist(packages)), ParseArchiveName)
   df <- data.frame(t(matrix(unlist(l), nrow=2)), stringsAsFactors=FALSE)
-  names(df) <- c("package", "version")
+  colnames(df) <- c("package", "version")
   df
 }
 
@@ -40,5 +40,5 @@ ExtractRversions <- function(packages) {
   rversions <- packages$rversions
   rversions <- mapply(function(v, p) ExtractRversion(v, p),
                       names(rversions), rversions, SIMPLIFY=FALSE)
-  dflist2df(rversions, c("package", "version", "rversion"))
+  dflist2df(rversions)
 }

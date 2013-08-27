@@ -38,7 +38,7 @@ ExtractPerson <- function(package, version, role, s) {
   s <- Strip(grep("[[:alpha:]]", s, value=TRUE))
   m <- matrix(unlist(lapply(s, ExtractPersonInfos)), nrow=2)
   data.frame(package=rep(package, ncol(m)), version=rep(version, ncol(m)),
-             role=rep(role, ncol(m)), name=m[1, ], email=m[2, ])
+             role=rep(role, ncol(m)), name=m[1, ], email=m[2, ], stringsAsFactors=FALSE)
 }
 
 ExtractRoles <- function(descfiles, role) {
@@ -57,7 +57,7 @@ ExtractRoles <- function(descfiles, role) {
   people <- apply(roles, 1,
                   function(d) ExtractPerson(d["package"], d["version"],
                                             tolower(d["key"]), d["value"]))
-  dflist2df(people, c("package", "version", "role", "name", "email"))
+  dflist2df(people)
 }
 
 ExtractPeople <- function(maintainers, authors) {

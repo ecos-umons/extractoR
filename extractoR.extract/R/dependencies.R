@@ -53,6 +53,5 @@ ExtractDependencies <- function(descfiles, type) {
                                                       d["version"],
                                                       tolower(d["key"]),
                                                       d["value"]))
-  dflist2df(dependencies, c("package", "version", "type", "depends.on",
-                            "constraint.type", "constraint.version"))
+  dflist2df(dependencies)
 }

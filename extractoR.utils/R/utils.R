@@ -45,20 +45,19 @@ ParseArchiveName <- function(archive) {
   list(package=archive[1], version=strsplit(archive[2], "\\.tar\\.gz")[[1]][1])
 }
 
-dflist2df <- function(l, names) {
+dflist2df <- function(l) {
   # Converts a list of dataframes which have the same columns to a
   # single dataframe.
   #
   # Args:
   #   l: The list of dataframes.
-  #   names: the names of the column to give to the new dataframe.
   #
   # Returns:
   #   The new dataframe which is the concatenation of all rows of the
   #   dataframes contained in the list.
-  m <- unlist(lapply(l, function (x)
-                     if (is.data.frame(x)) t(x) else NULL))
-  m <- matrix(m, ncol=length(names), byrow = TRUE,
-              dimnames=list(base::names(names), colnames(l[[1]])))
-  data.frame(m, stringsAsFactors = FALSE)
+  names <- names(l[[1]])
+  GetColumn <- function(x) unlist(lapply(l, function(y) y[[x]]))
+  df <- as.data.frame(lapply(names, GetColumn), stringsAsFactors=FALSE)
+  colnames(df) <- names
+  df
 }
