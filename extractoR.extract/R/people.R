@@ -38,7 +38,8 @@ ExtractPerson <- function(package, version, role, s) {
   s <- Strip(grep("[[:alpha:]]", s, value=TRUE))
   m <- matrix(unlist(lapply(s, ExtractPersonInfos)), nrow=2)
   data.frame(package=rep(package, ncol(m)), version=rep(version, ncol(m)),
-             role=rep(role, ncol(m)), name=m[1, ], email=m[2, ], stringsAsFactors=FALSE)
+             role=rep(role, ncol(m)), name=m[1, ], email=m[2, ],
+             stringsAsFactors=FALSE)
 }
 
 ExtractRoles <- function(descfiles, role) {
@@ -76,14 +77,15 @@ ExtractPeople <- function(maintainers, authors) {
   people
 }
 
-People2CSV <- function(people) {
+People2CSV <- function(people, file) {
   # Exports people to a CSV file.
   #
   # Args:
   #   people: The dataframe people (like the one returned by
   #           ExtractPeople)
+  #   file: The name of the file to save identities into.
   #
   # Returns:
   #   Nothing
-  write.csv2(people, file="people.csv", row.names=FALSE)
+  write.csv2(people, file=file, row.names=FALSE)
 }
