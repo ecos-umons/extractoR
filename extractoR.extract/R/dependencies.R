@@ -5,6 +5,34 @@ dependency.re <- sprintf("%s([[:space:]]*%s)?", pkgname.re, constraint.re)
 dependencies.re <- "^[[:space:]]*((%s)([[:space:]]*,[[:space:]]*%s)*,?)?$"
 dependencies.re <- sprintf(dependencies.re, dependency.re, dependency.re)
 
+ParseDependencies <- function(string) {
+  # Parses a dependencies string.
+  #
+  # Args:
+  #   string: The string containing the dependencies to parse
+  #
+  # Returns:
+  #    A three column dataframe containing a dependency on each row
+  #    with package name, compare symbol and version.
+  pieces <- strsplit(string, ",")[[1]]
+  names <- Strip(gsub("\\s*\\(.*?\\)", "", pieces))
+
+  versions.str <- pieces
+  versions.str[!grepl("\\(.*\\)", versions.str)] <- NA
+  compare  <- Strip(sub(".*\\(\\s*([=><]*).*\\)", "\\1", versions.str))
+  versions <- Strip(sub(".*\\(\\s*[=><]*(.*)\\)", "\\1", versions.str))
+
+  compare.nna   <- compare[!is.na(compare)]
+  compare.valid <- compare.nna %in% c(">", ">=", "==", "<=", "<", "")
+  if(!all(compare.valid)) {
+    stop("Invalid comparison operator in dependency: ",
+      paste(compare.nna[!compare.valid], collapse = ", "))
+  }
+
+  data.frame(name=names, compare=compare,
+             version=versions, stringsAsFactors=FALSE)
+}
+
 ExtractDependency <- function(package, version, type, dependencies) {
   # Extracts the dependencies defined in a dependencies string.
   #
@@ -21,13 +49,16 @@ ExtractDependency <- function(package, version, type, dependencies) {
   #   the constraint type (constraint.type) which is either >, >=, <,
   #   <=, == or nothing, and the constraint version
   #   (constraint.version) if any.
-  d <- as.vector(sapply(strsplit(dependencies, ","), Strip))
-  n <- length(d)
-  data.frame(package=rep(package, length(d)), version=rep(version, length(d)),
-             type=rep(type, length(d)),
-             depends.on=sub(sprintf("^%s$", dependency.re), "\\1", d),
-             constraint.type=sub(sprintf("^%s$", dependency.re), "\\3", d),
-             constraint.version=sub(sprintf("^%s$", dependency.re), "\\4", d))
+  deps <- ParseDependencies(dependencies)
+  deps[4:6] <- deps[1:3]
+  names(deps) <- c("package", "version", "type", "depends.on",
+                   "constraint.type", "constraint.version")
+  if (nrow(deps)) {
+    deps$package <- package
+    deps$version <- version
+    deps$type <- type
+  }
+  deps
 }
 
 ExtractDependencies <- function(descfiles, type) {
