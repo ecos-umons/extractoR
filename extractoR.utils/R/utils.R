@@ -56,8 +56,11 @@ dflist2df <- function(l) {
   #   The new dataframe which is the concatenation of all rows of the
   #   dataframes contained in the list.
   names <- names(l[[1]])
-  GetColumn <- function(x) unlist(lapply(l, function(y) y[[x]]))
-  df <- as.data.frame(lapply(names, GetColumn), stringsAsFactors=FALSE)
+  names(l) <- NULL
+  l <- unlist(l, recursive = FALSE)
+  GetColumn <- function (x) unlist(l[names(l) == x])
+  df <- as.data.frame(lapply(as.list(names), GetColumn),
+                      stringsAsFactors = FALSE)
   colnames(df) <- names
   df
 }
