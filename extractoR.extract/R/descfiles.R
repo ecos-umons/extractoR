@@ -25,10 +25,14 @@ ReadDescfile <- function(package, version, datadir) {
   name <- GetDescfileName(package, version, datadir)
   if (file.exists(name)) {
     descfile <- read.dcf(name)
+    values <- as.vector(descfile[1, ])
+    if ("Encoding" %in% colnames(descfile)) {
+      encoding <- descfile[colnames(descfile) == "Encoding"]
+      values <- iconv(as.vector(descfile[1, ]), encoding, "utf8")
+    }
     n <- ncol(descfile)
     data.frame(package=rep(package, n), version=rep(version, n),
-               key=colnames(descfile), value=as.vector(descfile[1, ]),
-               stringsAsFactors=FALSE)
+               key=colnames(descfile), value=values, stringsAsFactors=FALSE)
   } else NULL
 }
 
