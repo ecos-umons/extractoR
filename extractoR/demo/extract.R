@@ -1,50 +1,52 @@
 library(extractoR.fetch)
 library(extractoR.extract)
 
-packages <- LoadPackagesList("packages/packages.yml")
-df <- GetPackagesDataframe(packages)
-rversions <- ExtractRversions(packages)
+packages.list <- LoadPackagesList("packages/packages.yml")
+packages <- GetPackagesDataframe(packages.list)
+rversions <- ExtractRversions(packages.list)
 
 print("Reading description files")
-t <- system.time(descfiles <- ReadDescfiles(df, "packages"))
+t <- system.time({
+  descfiles <- ReadDescfiles(packages, "packages")
+})
 print(sprintf("Description files read in %.3fs", t[3]))
 
 print("Extracting people")
 t <- system.time({
-  maintainers <- ExtractRoles(descfiles, "Maintainer")
-  authors <- ExtractRoles(descfiles, "Author")
+  roles <- rbind(ExtractRoles(descfiles, "Maintainer"),
+                 ExtractRoles(descfiles, "Author"))
   people <- ExtractPeople(maintainers, authors)
 })
 print(sprintf("People extracted in %.3fs", t[3]))
 
 print("Extracting dependencies")
 t <- system.time({
-  depends <- ExtractDependencies(descfiles, "Depends")
-  imports <- ExtractDependencies(descfiles, "Imports")
-  suggests <- ExtractDependencies(descfiles, "Suggests")
-  enhances <- ExtractDependencies(descfiles, "Enhances")
+  dependencies <- rbind(ExtractDependencies(descfiles, "Depends"),
+                        ExtractDependencies(descfiles, "Imports"),
+                        ExtractDependencies(descfiles, "Suggests"),
+                        ExtractDependencies(descfiles, "Enhances"))
 })
 print(sprintf("Dependencies extracted in %.3fs", t[3]))
 
 print("Extracting dates")
 t <- system.time({
-  packaged <- ExtractDates(descfiles, "Packaged")
-  publication <- ExtractDates(descfiles, "Date/Publication")
+  dates <- rbind(ExtractDates(descfiles, "Packaged"),
+                 ExtractDates(descfiles, "Date/Publication"))
 })
 print(sprintf("Dates extracted in %.3fs", t[3]))
 
 print("Extracting checks")
 t <- system.time({
-  details <- ReadChecks("details", "checks")
-  flavors <- ReadChecks("flavors", "checks")
-  results <- ReadChecks("results", "checks")
+  checks <- list(details=ReadChecks("details", "checks"),
+                 flavors=ReadChecks("flavors", "checks"),
+                 results=ReadChecks("results", "checks"))
 })
 print(sprintf("Checks extracted in %.3fs", t[3]))
 
 print("Saving objects in data/rds")
 t <- system.time({
-  dir.create("data/rds", recursive=TRUE)
-  sapply(ls(), function(x) saveRDS(get(x), file=file.path("data/rds",
-                                             sprintf("%s.rds", x))))
+  tosave <- c("packages.list", "packages", "rversions", "descfiles", "roles",
+              "people", "dependencies", "dates", "checks")
+  sapply(tosave, SaveRData, "data/rds")
 })
 print(sprintf("Objects saved in %.3fs", t[3]))
