@@ -37,9 +37,7 @@ print(sprintf("Dates extracted in %.3fs", t[3]))
 
 print("Extracting checks")
 t <- system.time({
-  checks <- list(details=ReadChecks("details", "checks"),
-                 flavors=ReadChecks("flavors", "checks"),
-                 results=ReadChecks("results", "checks"))
+  checks <- ReadChecks("checks")
 })
 print(sprintf("Checks extracted in %.3fs", t[3]))
 
