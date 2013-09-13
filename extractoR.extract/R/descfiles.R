@@ -22,6 +22,7 @@ ReadDescfile <- function(package, version, datadir) {
   # Returns:
   #   A four column dataframe with package name, version, DESCRIPTION
   #   file keys and values.
+  message(sprintf("Reading DESCRIPTION file %s %s", package, version))
   name <- GetDescfileName(package, version, datadir)
   if (file.exists(name)) {
     descfile <- read.dcf(name)
