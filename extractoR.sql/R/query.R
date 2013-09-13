@@ -50,7 +50,7 @@ GetDependencyKey <- function(dependency) {
         dependency["type"], dependency["dependency"])
 }
 
-GetHashDependencies <- function(con, dependencies) {
+GetHashDependencies <- function(con) {
   dependencies <- GetDependencies(con)
   hash(apply(dependencies, 1, GetDependencyKey), dependencies$id)
 }
