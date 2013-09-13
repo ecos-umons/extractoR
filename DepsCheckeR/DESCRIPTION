@@ -1,0 +1,15 @@
+Package: DepsCheckeR
+Type: Package
+Title: CRAN dependencies analysis tool
+Version: 1.0
+Date: 2013-08-21
+Author: Maëlick Claes <himself@maelick.net>
+Maintainer: Maëlick Claes <himself@maelick.net>
+Description: This package contains functions to analyse CRAN packages
+             dependencies using both information in packages
+             DESCRIPTION files and results of R CMD check available on
+             CRAN.
+Depends: RMySQL, hash
+Suggests: extractoR
+License: GPL-3
+Encoding: UTF-8
