@@ -35,13 +35,14 @@ InsertCRANStatus <- function(con, status) {
   InsertDataFrame(con, "cran_status", df)
 }
 
-GetCRANStatus <- function(con) {
+GetCRANStatus <- function(con, date) {
+  date <- FormatString(con, date)
   query <- paste("SELECT s.id, p.name package, v.version,",
                  "f.name flavor, s.date",
                  "FROM package_versions v, packages p,",
                  "flavors f, cran_status s",
                  "WHERE p.id = v.package_id AND v.id = s.version_id",
-                 "AND f.id = s.flavor_id")
+                 sprintf("AND f.id = s.flavor_id AND s.date = %s", date))
   dbGetQuery(con, query)
 }
 
@@ -49,13 +50,13 @@ GetCRANStatusKey <- function(status) {
   paste(status["package"], status["version"], status["flavor"], status["date"])
 }
 
-GetHashCRANStatus <- function(con) {
-  status <- GetCRANStatus(con)
+GetHashCRANStatus <- function(con, date) {
+  status <- GetCRANStatus(con, date)
   hash(apply(status, 1, GetCRANStatusKey), status$id)
 }
 
 InsertCRANChecking <- function(con, checking) {
-  status <- GetHashCRANStatus(con)
+  status <- GetHashCRANStatus(con, unique(checking$date))
   status <- apply(checking, 1, function(s) status[[GetCRANStatusKey(s)]])
   types <- FormatString(con, as.vector(checking$check))
   outputs <- FormatString(con, checking$output)

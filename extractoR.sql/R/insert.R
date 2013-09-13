@@ -89,9 +89,9 @@ InsertRVersions <- function(con, rversions) {
 }
 
 InsertAll <- function(con, rdata) {
+  InsertRVersions(con, rdata$rversions)
   InsertPackages(con, rdata$packages$package)
   InsertVersions(con, rdata$packages)
-  InsertRVersions(con, rdata$rversions)
   InsertDescfiles(con, rdata$descfiles)
   InsertDates(con, rdata$dates)
   InsertDependencies(con, rdata$dependencies)
