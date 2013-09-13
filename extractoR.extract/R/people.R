@@ -61,18 +61,15 @@ ExtractRoles <- function(descfiles, role) {
   dflist2df(people)
 }
 
-ExtractPeople <- function(maintainers, authors) {
+ExtractPeople <- function(roles) {
   # Returns the list of all different people.
   #
   # Args:
-  #   maintainers: The dataframe of maintainers (like the one returned
-  #                by ExtractRoles)
-  #   authors: The dataframe of authors (like the one returned by
-  #            ExtractRoles)
+  #   roles: A dataframe like the one returned by ExtractRoles.
   #
   # Returns:
   #   A two-column dataframe containing the people names and emails.
-  people <- unique(rbind(unique(maintainers[, 4:5]), unique(authors[, 4:5])))
+  people <- unique(roles[, 4:5])
   rownames(people) <- NULL
   people
 }
