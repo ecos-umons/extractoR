@@ -45,13 +45,13 @@ ExtractDependency <- function(package, version, type, dependencies) {
   #
   # Returns:
   #   A six columns dataframe containing package name, version, the
-  #   type of the dependency, the package in depends on (depends.on),
+  #   type of the dependency, the package in depends on (dependency),
   #   the constraint type (constraint.type) which is either >, >=, <,
   #   <=, == or nothing, and the constraint version
   #   (constraint.version) if any.
   deps <- ParseDependencies(dependencies)
   deps[4:6] <- deps[1:3]
-  names(deps) <- c("package", "version", "type", "depends.on",
+  names(deps) <- c("package", "version", "type", "dependency",
                    "constraint.type", "constraint.version")
   if (nrow(deps)) {
     deps$package <- package
@@ -73,7 +73,7 @@ ExtractDependencies <- function(descfiles, type) {
   #
   # Returns:
   #   A six columns dataframe containing package name, version, the
-  #   type of the dependency, the package in depends on (depends.on),
+  #   type of the dependency, the package in depends on (dependency),
   #   the constraint type (constraint.type) which is either >, >=, <,
   #   <=, == or nothing, and the constraint version
   #   (constraint.version) if any.
