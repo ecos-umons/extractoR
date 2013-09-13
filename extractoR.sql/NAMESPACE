@@ -1,0 +1,4 @@
+import(hash)
+import(RMySQL)
+
+exportPattern("^[[:alpha:]]+")
