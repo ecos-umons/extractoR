@@ -1,6 +1,3 @@
- # The size of the dataframe slice to send in
-                      # InsertDataFrameSlice.
-
 FormatString <- function(con, s) {
   # Formats character strings so they can be safely used in SQL
   # queries.

@@ -59,7 +59,9 @@ InsertCRANChecking <- function(con, checking) {
   status <- GetHashCRANStatus(con, unique(checking$date))
   status <- apply(checking, 1, function(s) status[[GetCRANStatusKey(s)]])
   types <- FormatString(con, as.vector(checking$check))
+  status.types <- FormatString(con, as.character(checking$status))
   outputs <- FormatString(con, checking$output)
-  df <- data.frame(status_id=status, type=types, output=outputs)
+  df <- data.frame(status_id=status, type=types,
+                   status=status.types, output=outputs)
   InsertDataFrame(con, "cran_checking", df)
 }
