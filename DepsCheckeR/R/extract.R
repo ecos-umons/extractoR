@@ -74,7 +74,7 @@ ReadCheckings <- function(date, filename, checkdir) {
   df
 }
 
-ReadAndInsert <- function(con, checkdir, from.date="1970-01-01") {
+ReadAndInsertCheckings <- function(con, checkdir, from.date="1970-01-01") {
   # Reads CRAN status and checkings and inserts them into a database
   #
   # Args:
