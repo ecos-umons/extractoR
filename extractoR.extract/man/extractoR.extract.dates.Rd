@@ -7,8 +7,7 @@
 }
 
 \usage{
-SavePackagesList(packages, filename)
-LoadPackagesList(filename)
+ExtractDates(descfiles, type)
 }
 \arguments{
   \item{descfiles}{A dataframe containing DESCRIPTION files (like the
@@ -24,7 +23,5 @@ LoadPackagesList(filename)
   Maëlick Claes <himself@maelick.net>
 }
 
-\keyword{parse}
-\keyword{archive}
-\keyword{name}
-\keyword{package}
+\keyword{dates}
+\keyword{extract}

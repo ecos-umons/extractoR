@@ -1,10 +1,13 @@
-GetTaskViewsDataframe <- function() {
+GetTaskViewsDataframe <- function(cran.mirror="http://cran.r-project.org") {
   # Returns a data frame listing the current task views.
+  #
+  # Args:
+  #   cran.mirror: Root URL of the CRAN mirror to use.
   #
   # Returns:
   #   A five column dataframe containing the name of the taskview, its
   #   topic, its maintainer name and email, and its version.
-  ctv <- CRAN.views()
+  ctv <- CRAN.views(repos=cran.mirror)
   taskviews <- sapply(ctv, function(x) x$name)
   topics <- sapply(ctv, function(x) x$topic)
   names <- sapply(ctv, function(x) x$maintainer)
@@ -31,14 +34,17 @@ GetTaskViewContent <- function(taskview) {
              stringsAsFactors=FALSE)
 }
 
-GetTaskViewsContent <- function() {
+GetTaskViewsContent <- function(cran.mirror="http://cran.r-project.org") {
   # Returns a data frame listing the current content of all task views.
+  #
+  # Args:
+  #   cran.mirror: Root URL of the CRAN mirror to use.
   #
   # Returns:
   #   A four column dataframe containing the name and version of the
   #   taskview, the name of the package a boolean indicating if it is
   #   a core taskview or not.
-  ctv <- CRAN.views()
+  ctv <- CRAN.views(repos=cran.mirror)
   df <- dflist2df(lapply(ctv, GetTaskViewContent))
   df$version <- as.POSIXlt(df$version)
   df

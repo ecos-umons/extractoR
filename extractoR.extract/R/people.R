@@ -34,9 +34,7 @@ ExtractPerson <- function(s) {
   s <- unlist(strsplit(s, "( (with|from|by|/|and) )|[,;&>]"))
   s <- Strip(grep("[[:alpha:]]", s, value=TRUE))
   m <- matrix(unlist(lapply(s, ExtractPersonInfos)), nrow=2)
-  data.frame(package=rep(package, ncol(m)), version=rep(version, ncol(m)),
-             role=rep(role, ncol(m)), name=m[1, ], email=m[2, ],
-             stringsAsFactors=FALSE)
+  data.frame(name=m[1, ], email=m[2, ], stringsAsFactors=FALSE)
 }
 
 ExtractRoles <- function(descfiles, role) {

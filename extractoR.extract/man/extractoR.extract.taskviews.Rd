@@ -9,10 +9,11 @@
 }
 
 \usage{
-GetTaskViewsDataframe()
-GetTaskViewsContent()
+GetTaskViewsDataframe(cran.mirror="http://cran.r-project.org")
+GetTaskViewsContent(cran.mirror="http://cran.r-project.org")
 }
 \arguments{
+  \item{cran.mirror}{Root URL of the CRAN mirror to use.}
 }
 \value{
   \code{GetTaskViewsDataframe} returns a five column data frame

@@ -13,7 +13,7 @@ ExtractDependencies(descfiles, type)
 \arguments{
   \item{descfiles}{A dataframe containing DESCRIPTION files (like the
     one returned by ReadDescFiles).}
-  \item{role}{A type of dependency (either "Depends", "Imports",
+  \item{type}{A type of dependency (either "Depends", "Imports",
     "Suggests" or "Enhances").}
 }
 \value{
