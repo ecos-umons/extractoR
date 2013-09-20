@@ -1,0 +1,10 @@
+con <- dbConnect(MySQL(), user="gnome", password="gnomepass", dbname="rdata")
+dbClearResult(dbSendQuery(con, "SET NAMES utf8"))
+dbClearResult(dbSendQuery(con, "SET collation_connection=utf8_bin"))
+dbClearResult(dbSendQuery(con, "SET collation_server=utf8_bin"))
+
+ctv <- GetTaskViewsDataframe()
+ctv.content <- GetTaskViewsContent()
+InsertTaskViews(con, ctv[, c("taskview", "topic")])
+InsertPeople(con, ctv[, c("name", "email")])
+InsertTaskViewVersions(con, ctv)
