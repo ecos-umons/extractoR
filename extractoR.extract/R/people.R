@@ -20,18 +20,15 @@ ExtractPersonInfos <- function(s) {
   }
 }
 
-ExtractPerson <- function(package, version, role, s) {
+ExtractPerson <- function(s) {
   # Extracts all the people defined in a string.
   #
   # Args:
-  #   package: The package name.
-  #   version: The package version
-  #   role: The role of the extracted people.
   #   s: The string containing the people name and email.
   #
   # Returns:
-  #   A five columns dataframe containing package name, version and
-  #   the role, the name and email of people extracted.
+  #   A two columns dataframe containing the name and email of people
+  #   extracted.
   s <- gsub("(<[a-fA-F0-9]{2}>)", "", s)
   s <- gsub("[[:space:]]+", " ", s)
   s <- unlist(strsplit(s, "( (with|from|by|/|and) )|[,;&>]"))
@@ -55,9 +52,14 @@ ExtractRoles <- function(descfiles, role) {
   #   A five columns dataframe containing package name, version and
   #   the role, the name and email of people extracted.
   roles <- GetDescfilesKey(descfiles, role)
-  people <- apply(roles, 1,
-                  function(d) ExtractPerson(d["package"], d["version"],
-                                            tolower(d["key"]), d["value"]))
+  Extract <- function(d) {
+    df <- ExtractPerson(d["value"])
+    df$package <- d["package"]
+    df$version <- d["version"]
+    df$role <- tolower(d["key"])
+    df[, c(2, 3, 4, 1)]
+  }
+  people <- apply(roles, 1, Extract)
   dflist2df(people)
 }
 
