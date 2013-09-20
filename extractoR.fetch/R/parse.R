@@ -99,7 +99,7 @@ FetchCRANList <- function(cran.mirror="http://cran.r-project.org") {
   # Returns:
   #   A list containing the element last with all non-archived
   #   archives, rversions which is a list where each element is a
-  #   vecotr containing all recommended archives for that R version
+  #   vector containing all recommended archives for that R version
   #   and archived with all archived archives.
   links <- FetchPageLinks(file.path(cran.mirror, "src/contrib/"))
   last <- FetchArchivesList(links)
