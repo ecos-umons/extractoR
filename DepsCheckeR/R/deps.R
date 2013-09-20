@@ -46,8 +46,8 @@ GetCRANDeps <- function(con, flavor, date, types=c("depends", "imports")) {
 }
 
 GetCRANCheckings <- function(con, date, flavor=NULL) {
-  # The error checkings of CRAN (results of R CMD check) for a given
-  # date.
+  # Returns the error checkings of CRAN (results of R CMD check) for a
+  # given date.
   #
   # Args:
   #   con: The connection object to the database.
@@ -69,16 +69,23 @@ GetCRANCheckings <- function(con, date, flavor=NULL) {
                  "AND s.version_id = v.id AND v.package_id = p.id",
                  sprintf("AND s.date = '%s'", date))
   if (!is.null(flavor)) {
-    query <- paste(query, sprint("AND f.name = ''", flavor))
+    query <- paste(query, sprintf("AND f.name = ''", flavor))
   }
   dbGetQuery(con, query)
 }
 
-GetPriority <- function(name) {
+base.packages <- c("R", "base", "compiler", "datasets", "graphics",
+                   "grDevices", "grid", "methods", "parallel", "profile",
+                   "splines", "stats", "stats4", "tcltk", "tools",
+                   "translations", "utils")
+
+GetPriority <- function(name, cran) {
   # Returns an integer for a given priority
   #
   # Args:
   #   name: The priority name string.
+  #   cran: A dataframe with the state of CRAN to use (like the one
+  #         returned by GetCRANState).
   #
   # Returns:
   #   0 for base packages, 1 for recommended and 2 for contributed.
@@ -91,11 +98,12 @@ GetPriority <- function(name) {
   }
 }
 
-GetNumVersions <- function(package) {
+GetNumVersions <- function(package, con) {
   # Returns the number of versions for a given package.
   #
   # Args:
   #   package: The package name.
+  #   con: The connection object to the database
   #
   # Returns:
   #   The number of versions.
@@ -105,10 +113,11 @@ GetNumVersions <- function(package) {
   dbGetQuery(con, sprintf(query, FormatString(con, package), con))[1, 1]
 }
 
-MakeDependencyGraph <- function(cran, deps) {
+MakeDependencyGraph <- function(con, cran, deps) {
   # Makes the depency graph of packages.
   #
   # Args:
+  #   con: The connection object to the database
   #   cran: A dataframe with the state of CRAN to use (like the one
   #         returned by GetCRANState).
   #   deps: A dataframe with the packages depenencies (like the one
@@ -122,8 +131,8 @@ MakeDependencyGraph <- function(cran, deps) {
                             function(e) c(e["p1"], e["p2"])))
   V(g)$dependencies <- degree(g, mode="out")
   V(g)$dependents <- degree(g, mode="in")
-  V(g)$versions <- sapply(V(g)$name, GetNumVersions)
-  V(g)$priority <- sapply(V(g)$name, GetPriority)
+  V(g)$versions <- sapply(V(g)$name, GetNumVersions, con)
+  V(g)$priority <- sapply(V(g)$name, GetPriority, cran)
   V(g)$Label <- V(g)$name
   g
 }

@@ -64,6 +64,7 @@ GetTaskViewMaintainersGraph <- function(con, g, date, flavor, taskview=NULL) {
   #   con: The connection object to the database.
   #   g: The dependency graph object.
   #   date: The date to use as taskviews version number.
+  #   flavor: The flavor to use.
   #   taskview: The taskview to use (if NULL uses all taskviews).
   #
   # Returns:

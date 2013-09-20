@@ -1,5 +1,3 @@
-exportPattern("^[[:alpha:]]+")
-
 export(ListCheckings, ReadCheckings, ReadAndInsertCheckings)
 exportPattern("^Insert")
 exportPattern("^GetHash")
