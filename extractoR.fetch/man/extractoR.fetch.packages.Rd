@@ -33,8 +33,6 @@ cran.mirror="http://cran.r-project.org")
 \dontrun{
 FetchPackages(LoadPackagesList("packages.yml"), "./packages/")
 }
-
-}
 }
 
 \keyword{parse}
