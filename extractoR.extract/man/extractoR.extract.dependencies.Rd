@@ -27,7 +27,5 @@ ExtractDependencies(descfiles, type)
   Maëlick Claes <himself@maelick.net>
 }
 
-\keyword{parse}
-\keyword{archive}
-\keyword{name}
-\keyword{package}
+\keyword{dependencies}
+\keyword{extract}

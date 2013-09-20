@@ -34,7 +34,5 @@ GetTaskViewsDataframe()
 GetTaskViewsContent()
 }
 
-\keyword{parse}
-\keyword{archive}
-\keyword{name}
-\keyword{package}
+\keyword{taskview}
+\keyword{extract}

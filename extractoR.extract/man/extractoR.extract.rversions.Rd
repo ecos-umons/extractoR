@@ -22,7 +22,6 @@ ExtractRversions(packages)
   Maëlick Claes <himself@maelick.net>
 }
 
-\keyword{parse}
-\keyword{archive}
-\keyword{name}
-\keyword{package}
+\keyword{rversion}
+\keyword{recommended}
+\keyword{extract}

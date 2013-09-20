@@ -40,7 +40,6 @@ ExtractPeople(roles)
   Maëlick Claes <himself@maelick.net>
 }
 
-\keyword{parse}
-\keyword{archive}
-\keyword{name}
-\keyword{package}
+\keyword{people}
+\keyword{roles}
+\keyword{extract}

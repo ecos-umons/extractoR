@@ -22,7 +22,5 @@ GetPackagesDataframe(packages)
   Maëlick Claes <himself@maelick.net>
 }
 
-\keyword{parse}
-\keyword{archive}
-\keyword{name}
-\keyword{package}
+\keyword{packages}
+\keyword{extract}

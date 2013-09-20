@@ -41,7 +41,6 @@ GetDescfilesKey(descfiles, key)
   Maëlick Claes <himself@maelick.net>
 }
 
-\keyword{parse}
-\keyword{archive}
-\keyword{name}
-\keyword{package}
+\keyword{description}
+\keyword{descfile}
+\keyword{extract}
