@@ -1,1 +1,10 @@
 exportPattern("^[[:alpha:]]+")
+
+export(ListCheckings, ReadCheckings, ReadAndInsertCheckings)
+exportPattern("^Insert")
+exportPattern("^GetHash")
+exportPattern("^Get[[:alpha:]]+Key$")
+export(GetCRANState, GetCRANDeps, GetCRANCheckings)
+exportPattern("^Make[[:alpha:]]+Graph$")
+exportPattern("^Add[[:alpha:]]+Checkings$")
+export(GetTaskViewPackagesGraph, GetTaskViewMaintainersGraph)

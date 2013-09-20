@@ -12,6 +12,6 @@ Description: extractoR is a set of R packages that can be used to
              packages. Other packages are: extractoR.utils,
              extractoR.fetch, extractoR.extract, extractoR.sql.
 Depends: extractoR.utils, extractoR.fetch, extractoR.extract,
-         extractoR.query
+         extractoR.sql
 License: GPL-3
 Encoding: UTF-8

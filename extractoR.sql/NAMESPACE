@@ -1,4 +1,7 @@
 import(hash)
 import(RMySQL)
 
-exportPattern("^[[:alpha:]]+")
+exportPattern("^Insert")
+exportPattern("^GetHash")
+exportPattern("^Get[[:alpha:]]+Key$")
+export(FormatString)
