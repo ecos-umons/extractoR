@@ -11,6 +11,18 @@ GetDescfileName <- function(package, version, datadir) {
   file.path(datadir, package, version, package, "DESCRIPTION")
 }
 
+GuessEncoding <- function(filename) {
+  # Guesses the encoding of a file.
+  #
+  # Args:
+  #   filename: The name of the file to guess the encoding.
+  #
+  # Returns:
+  #   The encoding of the file.
+  cmd <- sprintf("file --mime-encoding %s", filename)
+  strsplit(system(cmd, intern=TRUE), " ")[[1]][2]
+}
+
 ReadDescfile <- function(package, version, datadir) {
   # Reads and parses the DESCRIPTION file of all packages.
   #

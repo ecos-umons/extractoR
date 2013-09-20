@@ -64,15 +64,3 @@ dflist2df <- function(l) {
   colnames(df) <- names
   df
 }
-
-GuessEncoding <- function(filename) {
-  # Guesses the encoding of a file.
-  #
-  # Args:
-  #   filename: The name of the file to guess the encoding.
-  #
-  # Returns:
-  #   The encoding of the file.
-  cmd <- sprintf("file --mime-encoding %s", filename)
-  strsplit(system(cmd, intern=TRUE), " ")[[1]][2]
-}
