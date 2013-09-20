@@ -1,4 +1,4 @@
-InsertTaskviews <- function(con, taskviews) {
+InsertTaskViews <- function(con, taskviews) {
   taskviews <- unique(taskviews)
   message(sprintf("Inserting %d taskviews", nrow(taskviews)))
   names <- FormatString(con, taskviews$taskview)
