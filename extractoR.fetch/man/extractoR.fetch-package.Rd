@@ -18,3 +18,21 @@ Maintainer: Maëlick Claes <himself@maelick.net>
 }
 \keyword{fetch}
 \keyword{cran}
+
+\examples{
+\dontrun{
+library(extractoR.fetch)
+
+mirror <- "http://cran.parentingamerica.com"
+
+# Fetch the list of all recommended, contributed and archived packages
+# on CRAN
+packages <- FetchCRANList(mirror)
+
+# Save this list to a YAML file so it can be reused later
+SavePackagesList(packages, "packages/packages.yml")
+
+# Download all packages content and extract it in directory "packages"
+res <- FetchPackages(packages, "packages", mirror)
+}
+}

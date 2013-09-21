@@ -15,3 +15,32 @@ Maëlick Claes <himself@maelick.net> & Prateek Rastogi <p.rastogi@outlook.com>
 
 Maintainer: Maëlick Claes <himself@maelick.net>
 }
+
+\examples{
+\dontrun{
+library(extractoR.fetch)
+library(extractoR.extract)
+
+packages.list <- LoadPackagesList("packages/packages.yml")
+packages <- GetPackagesDataframe(packages.list)
+rversions <- ExtractRversions(packages.list)
+
+descfiles <- ReadDescfiles(packages, "packages")
+
+roles <- rbind(ExtractRoles(descfiles, "Maintainer"),
+               ExtractRoles(descfiles, "Author"))
+people <- ExtractPeople(roles)
+
+dependencies <- rbind(ExtractDependencies(descfiles, "Depends"),
+                      ExtractDependencies(descfiles, "Imports"),
+                      ExtractDependencies(descfiles, "Suggests"),
+                      ExtractDependencies(descfiles, "Enhances"))
+
+dates <- rbind(ExtractDates(descfiles, "Packaged"),
+               ExtractDates(descfiles, "Date/Publication"))
+
+tosave <- c("packages.list", "packages", "rversions", "descfiles", "roles",
+            "people", "dependencies", "dates")
+sapply(tosave, SaveRData, "data/rds")
+}
+}
