@@ -1,15 +1,15 @@
 FetchAll <- function(datadir, cran.mirror="http://cran.r-project.org") {
-  print("Fetching package list from CRAN")
-  t <- system.time(packages <- FetchCRANList(mirror))
-  print(sprintf("Package list fetched from CRAN in %.3fs", t[3]))
+  message("Fetching package list from CRAN")
+  t <- system.time(packages <- FetchCRANList(cran.mirror))
+  message(sprintf("Package list fetched from CRAN in %.3fs", t[3]))
 
   pkgdir <- file.path(datadir, "packages")
   SavePackagesList(packages, file.path(pkgdir, "packages.yml"))
-  printf("Package list saved to packages/packages.yml")
+  message("Package list saved to packages/packages.yml")
 
-  printf("Downloading missing packages")
-  t <- system.time(res <- FetchPackages(packages, pkgdir, mirror))[3]
-  print("%n packages downloaded in %.3fs", length(res[res]), t[3])
+  message("Downloading missing packages")
+  t <- system.time(res <- FetchPackages(packages, pkgdir, cran.mirror))[3]
+  message("%n packages downloaded in %.3fs", length(res[res]), t[3])
 
   res
 }
@@ -72,7 +72,7 @@ InsertAll <- function(con, rdata) {
   InsertRoles(con, rdata$roles)
 }
 
-ExtractInsertTaskViews <- function(con, cran.mirror="http://cran.r-project.org")
+UpdateTaskViews <- function(con, cran.mirror="http://cran.r-project.org") {
   ctv <- GetTaskViewsDataframe()
   ctv.content <- GetTaskViewsContent()
   InsertTaskViews(con, ctv[, c("taskview", "topic")])

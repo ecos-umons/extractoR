@@ -1,6 +1,9 @@
 \name{Insert}
 \alias{All}
+\alias{FetchAll}
+\alias{ExtractAll}
 \alias{InsertAll}
+\alias{UpdateTaskViews}
 \encoding{UTF-8}
 \title{Insert}
 \description{
@@ -11,7 +14,7 @@
 FetchAll(datadir, cran.mirror="http://cran.r-project.org")
 ExtractAll(datadir)
 InsertAll(con, rdata)
-ExtractInsertTaskViews(con)
+UpdateTaskViews(con, cran.mirror)
 }
 \arguments{
   \item{datadir}{Directory where to store data}
@@ -30,7 +33,7 @@ ExtractInsertTaskViews(con)
   \code{InsertAll} inserts all data saved into <datadir>/rds in all
   tables (except ones related to taskviews).
 
-  \code{ExtractInsertTaskView} extracts last taskviews from CRAN and
+  \code{UpdateTaskViews} extracts last taskviews from CRAN and
   inserts them into SQL tables.
 }
 
@@ -43,25 +46,3 @@ ExtractInsertTaskViews(con)
 \keyword{extract}
 \keyword{insert}
 \keyword{sql}
-
-\examples{
-library(extractoR)
-
-FetchAll("data")
-ExtractAll("data")
-
-
-dbuser <- "user"
-dbpass <- "password"
-dbname <- "rdata"
-
-con <- dbConnect(MySQL(), user=dbuser, password=dbpass, dbname=dbname)
-dbClearResult(dbSendQuery(con, "SET NAMES utf8"))
-dbClearResult(dbSendQuery(con, "SET collation_connection=utf8_bin"))
-dbClearResult(dbSendQuery(con, "SET collation_server=utf8_bin"))
-
-rdata <- LoadRData("data/rds")
-
-InsertAll(con)
-ExtractInsertTaskViews(con)
-}

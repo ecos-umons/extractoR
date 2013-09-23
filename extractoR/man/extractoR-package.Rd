@@ -12,27 +12,22 @@
 
 \details{
   extractoR is composed of the following packages:
-  \item{extractoR.utils}{Placeholder for helper functions used across
-    different packages.}
-  \item{extractoR.fetch}{Contains functions to fetch raw data from
-    CRAN. Main functions are used to get the list of available packages,
-    download these packages and extract them on local disk. Future
-    versions will include mailing list fetching.}
-  \item{extractoR.extract}{Contains functions to read data extracted
-    with extractoR.fetch and parse them.. Most of those functions return
-    data frames.}
-  \item{extractoR.sql}{Contains functions related to SQL database. Its
-    main purpose is to store dataframes created by extractoR.extract
-    into SQL tables.}
-}
-\tabular{ll}{
-Package: \tab extractoR\cr
-Type: \tab Package\cr
-Version: \tab 1.0\cr
-Date: \tab 2013-08-21\cr
-License: \tab GPL-3\cr
-}
-An overview of how to use the package, including the most important functions
+
+  \code{extractoR.utils} placeholder for helper functions used across
+  different packages.
+
+  \code{extractoR.fetch} contains functions to fetch raw data from
+  CRAN. Main functions are used to get the list of available packages,
+  download these packages and extract them on local disk. Future
+  versions will include mailing list fetching.
+
+  \code{extractoR.extract} contains functions to read data extracted
+  with extractoR.fetch and parse them.. Most of those functions return
+  data frames.
+
+  \code{extractoR.sql} contains functions related to SQL database. Its
+  main purpose is to store dataframes created by extractoR.extract into
+  SQL tables.
 }
 
 \author{
@@ -57,4 +52,28 @@ Maintainer: Maëlick Claes <himself@maelick.net>
   extraction should be automated with a cron job to keep an history of
   this check results. The package contains also functions to analyse
   dependencies of CRAN packages and see how they evolve over time.
+}
+
+\examples{
+\dontrun{
+library(extractoR)
+
+FetchAll("data")
+ExtractAll("data")
+
+
+dbuser <- "user"
+dbpass <- "password"
+dbname <- "rdata"
+
+con <- dbConnect(MySQL(), user=dbuser, password=dbpass, dbname=dbname)
+dbClearResult(dbSendQuery(con, "SET NAMES utf8"))
+dbClearResult(dbSendQuery(con, "SET collation_connection=utf8_bin"))
+dbClearResult(dbSendQuery(con, "SET collation_server=utf8_bin"))
+
+rdata <- LoadRData("data/rds")
+
+InsertAll(con)
+ExtractInsertTaskViews(con)
+}
 }
