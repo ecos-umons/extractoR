@@ -1,33 +1,63 @@
 FetchAll <- function(datadir, cran.mirror="http://cran.r-project.org") {
-  packages <- FetchCRANList(cran.mirror)
+  print("Fetching package list from CRAN")
+  t <- system.time(packages <- FetchCRANList(mirror))
+  print(sprintf("Package list fetched from CRAN in %.3fs", t[3]))
+
   pkgdir <- file.path(datadir, "packages")
   SavePackagesList(packages, file.path(pkgdir, "packages.yml"))
-  FetchPackages(packages, pkgdir, cran.mirror)
+  printf("Package list saved to packages/packages.yml")
+
+  printf("Downloading missing packages")
+  t <- system.time(res <- FetchPackages(packages, pkgdir, mirror))[3]
+  print("%n packages downloaded in %.3fs", length(res[res]), t[3])
+
+  res
 }
 
 ExtractAll <- function(datadir) {
   pkgdir <- file.path(datadir, "packages")
+
   packages.list <- LoadPackagesList(file.path(pkgdir, "packages.yml"))
   packages <- GetPackagesDataframe(packages.list)
   rversions <- ExtractRversions(packages.list)
 
-  descfiles <- ReadDescfiles(packages, pkgdir)
+  message("Reading description files")
+  t <- system.time({
+    descfiles <- ReadDescfiles(packages, pkgdir)
+  })
+  message(sprintf("Description files read in %.3fs", t[3]))
 
-  roles <- rbind(ExtractRoles(descfiles, "Maintainer"),
-                 ExtractRoles(descfiles, "Author"))
-  people <- ExtractPeople(roles)
+  message("Extracting people")
+  t <- system.time({
+    roles <- rbind(ExtractRoles(descfiles, "Maintainer"),
+                   ExtractRoles(descfiles, "Author"))
+    people <- ExtractPeople(roles)
+  })
+  message(sprintf("People extracted in %.3fs", t[3]))
 
-  dependencies <- rbind(ExtractDependencies(descfiles, "Depends"),
-                        ExtractDependencies(descfiles, "Imports"),
-                        ExtractDependencies(descfiles, "Suggests"),
-                        ExtractDependencies(descfiles, "Enhances"))
+  message("Extracting dependencies")
+  t <- system.time({
+    dependencies <- rbind(ExtractDependencies(descfiles, "Depends"),
+                          ExtractDependencies(descfiles, "Imports"),
+                          ExtractDependencies(descfiles, "Suggests"),
+                          ExtractDependencies(descfiles, "Enhances"))
+  })
+  message(sprintf("Dependencies extracted in %.3fs", t[3]))
 
-  dates <- rbind(ExtractDates(descfiles, "Packaged"),
-                 ExtractDates(descfiles, "Date/Publication"))
+  message("Extracting dates")
+  t <- system.time({
+    dates <- rbind(ExtractDates(descfiles, "Packaged"),
+                   ExtractDates(descfiles, "Date/Publication"))
+  })
+  message(sprintf("Dates extracted in %.3fs", t[3]))
 
-  tosave <- c("packages.list", "packages", "rversions", "descfiles", "roles",
-              "people", "dependencies", "dates")
-  sapply(tosave, SaveRData, file.path(datadir, "rds"))
+  message("Saving objects in data/rds")
+  t <- system.time({
+    tosave <- c("packages.list", "packages", "rversions", "descfiles", "roles",
+                "people", "dependencies", "dates")
+    sapply(tosave, SaveRData, file.path(datadir, "rds"))
+  })
+  message(sprintf("Objects saved in %.3fs", t[3]))
 }
 
 InsertAll <- function(con, rdata) {
