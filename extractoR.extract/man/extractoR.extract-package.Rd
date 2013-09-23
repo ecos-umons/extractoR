@@ -42,5 +42,9 @@ dates <- rbind(ExtractDates(descfiles, "Packaged"),
 tosave <- c("packages.list", "packages", "rversions", "descfiles", "roles",
             "people", "dependencies", "dates")
 sapply(tosave, SaveRData, "data/rds")
+
+tosave <- c("packages.list", "packages", "rversions", "descfiles", "roles",
+            "people", "dependencies", "dates")
+sapply(tosave, SaveRData, "data/rds")
 }
 }

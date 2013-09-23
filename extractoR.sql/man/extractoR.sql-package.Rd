@@ -19,10 +19,13 @@ Maintainer: Maëlick Claes <himself@maelick.net>
 \examples{
 \dontrun{
 library(RMySQL)
+library(extractoR.utils)
 library(extractoR.sql)
 
-dbuser <- "gnome"
-dbpass <- "gnomepass"
+rdata <- LoadRData("data/rds")
+
+dbuser <- "user"
+dbpass <- "password"
 dbname <- "rdata"
 
 con <- dbConnect(MySQL(), user=dbuser, password=dbpass, dbname=dbname)
@@ -30,5 +33,6 @@ dbClearResult(dbSendQuery(con, "SET NAMES utf8"))
 dbClearResult(dbSendQuery(con, "SET collation_connection=utf8_bin"))
 dbClearResult(dbSendQuery(con, "SET collation_server=utf8_bin"))
 
+InsertAll(con, rdata)
 }
 }
