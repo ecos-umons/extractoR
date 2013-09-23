@@ -47,7 +47,7 @@ GetTaskViewPackagesGraph <- function(con, g, date, taskview=NULL) {
                  "AND c.package_id = p.id",
                  "AND v.version = (SELECT max(v2.version)",
                  "FROM taskview_versions v2",
-                 sprintf("WHERE v2.version < '%s'", date),
+                 sprintf("WHERE v2.version <= '%s'", date),
                  "AND v2.taskview_id = t.id)")
   if (!is.null(taskview)) {
     query <- paste(query, sprintf("AND t.name = %s",
@@ -78,7 +78,7 @@ GetTaskViewMaintainersGraph <- function(con, g, date, flavor, taskview=NULL) {
                  "AND c.package_id = p.id",
                  "AND tv.version = (SELECT max(tv2.version)",
                  "FROM taskview_versions tv2",
-                 sprintf("WHERE tv2.version < '%s'", date),
+                 sprintf("WHERE tv2.version <= '%s'", date),
                  "AND tv2.taskview_id = t.id)",
                  sprintf("AND f.name = '%s'", flavor),
                  sprintf("AND s.date = '%s' AND s.flavor_id = f.id", date),
