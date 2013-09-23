@@ -22,8 +22,6 @@ library(RMySQL)
 library(extractoR.utils)
 library(extractoR.sql)
 
-rdata <- LoadRData("data/rds")
-
 dbuser <- "user"
 dbpass <- "password"
 dbname <- "rdata"
@@ -33,6 +31,16 @@ dbClearResult(dbSendQuery(con, "SET NAMES utf8"))
 dbClearResult(dbSendQuery(con, "SET collation_connection=utf8_bin"))
 dbClearResult(dbSendQuery(con, "SET collation_server=utf8_bin"))
 
-InsertAll(con, rdata)
+rdata <- LoadRData("data/rds")
+
+InsertRVersions(con, rdata$rversions)
+InsertPackages(con, rdata$packages$package)
+InsertVersions(con, rdata$packages)
+InsertDescfiles(con, rdata$descfiles)
+InsertDates(con, rdata$dates)
+InsertDependencies(con, rdata$dependencies)
+InsertDependencyConstraints(con, rdata$dependencies)
+InsertPeople(con, rdata$people)
+InsertRoles(con, rdata$roles)
 }
 }

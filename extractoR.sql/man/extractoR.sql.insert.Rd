@@ -9,7 +9,6 @@
 \alias{InsertDependencyConstraints}
 \alias{InsertDates}
 \alias{InsertRVersions}
-\alias{InsertAll}
 \alias{InsertTaskViews}
 \alias{InsertTaskViewVersions}
 \alias{InsertTaskViewContent}
@@ -30,7 +29,6 @@ InsertDependencies(con, dependencies)
 InsertDependencyConstraints(con, constraints)
 InsertDates(con, dates)
 InsertRVersions(con, rversions)
-InsertAll(con, rdata)
 InsertTaskViews(con, taskviews)
 InsertTaskViewVersions(con, versions)
 InsertTaskViewContent(con, content)
@@ -46,16 +44,12 @@ InsertTaskViewContent(con, content)
   \item{constraints}{Constraints dataframe.}
   \item{dates}{Dates dataframe.}
   \item{rversions}{RVersions dataframe.}
-  \item{rdata}{Rdata.}
   \item{taskviews}{Taskviews dataframe.}
   \item{content}{Taskview content dataframe.}
 }
 \details{
   Inserts into tables packages, package_versions, description_files,
   roles, package_dependencies, dependency_constraints, dates, rversions.
-
-  \code{InsertAll} inserts all data in all tables (except ones related
-  to taskviews).
 
   Function related to taskviews insert in tables taskviews,
   taskview_versions and taskview_content.
