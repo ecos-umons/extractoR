@@ -12,7 +12,7 @@ FilterGraph <- function(g, nodes, mode="out") {
   #   The sub graph with added nodes and attribute "missing" if some
   #   nodes weren't in the graph.
   GetAllDependencies <- function(node) {
-    paths <- shortest.paths(g, node, mode)[1, ]
+    paths <- shortest.paths(g, node, mode=mode)[1, ]
     names(paths[paths < Inf])
   }
   nodes.missing <- setdiff(nodes, V(g)$name)
