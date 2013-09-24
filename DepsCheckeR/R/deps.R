@@ -113,6 +113,19 @@ GetNumVersions <- function(package, con) {
   dbGetQuery(con, sprintf(query, FormatString(con, package), con))[1, 1]
 }
 
+Entropy <- function(x) {
+  x <- x / sum(x)
+  -sum(x * log(x))
+}
+
+PackageEntropy <- function(p, g) {
+  Entropy(table(V(g)$maintainer[p]))
+}
+
+MaintainerEntropy <- function(m, g) {
+  Entropy(table(V(g)$name[m]))
+}
+
 MakeDependencyGraph <- function(con, cran, deps) {
   # Makes the depency graph of packages.
   #
@@ -125,6 +138,9 @@ MakeDependencyGraph <- function(con, cran, deps) {
   #
   # Returns:
   #   The depenency graph.
+  GetMaintainer <- function(p) {
+    cran[cran$package == p, ]$maintainer
+  }
   packages <- unique(cran$package)
   g <- graph.empty(directed=TRUE) + vertices(packages)
   g <- g + edges(apply(deps[deps$p2 %in% packages, ], 1,
@@ -133,7 +149,9 @@ MakeDependencyGraph <- function(con, cran, deps) {
   V(g)$dependents <- degree(g, mode="in")
   V(g)$versions <- sapply(V(g)$name, GetNumVersions, con)
   V(g)$priority <- sapply(V(g)$name, GetPriority, cran)
+  V(g)$maintainer <- sapply(V(g)$name, GetMaintainer)
   V(g)$Label <- V(g)$name
+  V(g)$entropy <- sapply(get.adjlist(g, mode="in"), PackageEntropy, g)
   g
 }
 
@@ -161,6 +179,7 @@ MakeMaintainersGraph <- function(cran, deps) {
                           function(m) nrow(cran[cran$maintainer == m, ]))
   V(g)$dependencies <- degree(g, mode="out")
   V(g)$dependents <- degree(g, mode="in")
+  V(g)$entropy <- sapply(get.adjlist(g, mode="in"), MaintainerEntropy, g)
   V(g)$Label <- V(g)$name
   g
 }
