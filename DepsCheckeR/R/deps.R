@@ -69,7 +69,7 @@ GetCRANCheckings <- function(con, date, flavor=NULL) {
                  "AND s.version_id = v.id AND v.package_id = p.id",
                  sprintf("AND s.date = '%s'", date))
   if (!is.null(flavor)) {
-    query <- paste(query, sprintf("AND f.name = ''", flavor))
+    query <- paste(query, sprintf("AND f.name = '%s'", flavor))
   }
   dbGetQuery(con, query)
 }
