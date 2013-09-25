@@ -47,7 +47,8 @@ ExtractAll <- function(datadir) {
   message("Extracting dates")
   t <- system.time({
     dates <- rbind(ExtractDates(descfiles, "Packaged"),
-                   ExtractDates(descfiles, "Date/Publication"))
+                   ExtractDates(descfiles, "Date/Publication"),
+                   ExtractDates(descfiles, "Date"))
   })
   message(sprintf("Dates extracted in %.3fs", t[3]))
 
