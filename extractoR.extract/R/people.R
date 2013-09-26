@@ -55,7 +55,7 @@ ExtractRoles <- function(descfiles, role) {
     df$package <- d["package"]
     df$version <- d["version"]
     df$role <- tolower(d["key"])
-    df[, c(2, 3, 4, 1)]
+    df[, c(3, 4, 5, 1, 2)]
   }
   people <- apply(roles, 1, Extract)
   dflist2df(people)
