@@ -57,6 +57,8 @@ GetHashCRANStatus <- function(con, date) {
 
 InsertCRANChecking <- function(con, checking) {
   status <- GetHashCRANStatus(con, unique(checking$date))
+  checking <- checking[sapply(apply(checking, 1, GetCRANStatusKey),
+                              has.key, status), ]
   status <- apply(checking, 1, function(s) status[[GetCRANStatusKey(s)]])
   types <- FormatString(con, as.vector(checking$check))
   status.types <- FormatString(con, as.character(checking$status))
