@@ -1,3 +1,4 @@
+source("scripts/main.R")
 source("scripts/sql.R")
 
-ReadAndInsertCheckings(con, "checks")
+ReadAndInsertCheckings(con, "data/checks")

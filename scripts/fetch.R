@@ -1,4 +1,4 @@
 source("scripts/main.R")
 
 mirror <- "http://cran.parentingamerica.com"
-FetchAll("data", cran.mirror=mirror)
+system.time(res <- FetchAll("data", cran.mirror=mirror))

@@ -1,4 +1,4 @@
 source("scripts/main.R")
 source("scripts/sql.R")
 
-ExtractInsertTaskViews(con)
+UpdateTaskViews(con)
