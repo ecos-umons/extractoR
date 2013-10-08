@@ -44,18 +44,19 @@ ExtractAll <- function(datadir) {
   })
   message(sprintf("Dependencies extracted in %.3fs", t[3]))
 
-  message("Extracting dates")
+  message("Extracting dates and timeline")
   t <- system.time({
     dates <- rbind(ExtractDates(descfiles, "Packaged"),
                    ExtractDates(descfiles, "Date/Publication"),
                    ExtractDates(descfiles, "Date"))
+    timeline <- rbind(ExtractTimeline(dates))
   })
-  message(sprintf("Dates extracted in %.3fs", t[3]))
+  message(sprintf("Dates and timeline extracted in %.3fs", t[3]))
 
   message("Saving objects in data/rds")
   t <- system.time({
     tosave <- c("packages.list", "packages", "rversions", "descfiles", "roles",
-                "people", "dependencies", "dates")
+                "people", "dependencies", "dates", "timeline")
     sapply(tosave, SaveRData, file.path(datadir, "rds"))
   })
   message(sprintf("Objects saved in %.3fs", t[3]))
@@ -67,6 +68,7 @@ InsertAll <- function(con, rdata) {
   InsertVersions(con, rdata$packages)
   InsertDescfiles(con, rdata$descfiles)
   InsertDates(con, rdata$dates)
+  InsertTimeline(con, rdata$timeline)
   InsertDependencies(con, rdata$dependencies)
   InsertDependencyConstraints(con, rdata$dependencies)
   InsertPeople(con, rdata$people)

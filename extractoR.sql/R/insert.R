@@ -81,6 +81,16 @@ InsertDates <- function(con, dates) {
   InsertDataFrame(con, "dates", dates)
 }
 
+InsertTimeline <- function(con, timeline) {
+  dates <- unique(timeline)
+  message(sprintf("Inserting %d timeline dates", nrow(dates)))
+  versions <- GetHashVersions(con)
+  versions <- apply(dates[c(1, 2)], 1, function(v) versions[[GetVersionKey(v)]])
+  dates <- FormatString(con, as.character(dates$date))
+  dates <- data.frame(version_id=versions, date=dates)
+  InsertDataFrame(con, "packages_timeline", dates)
+}
+
 InsertRVersions <- function(con, rversions) {
   InsertPackages(con, "R")
   InsertVersions(con, data.frame(package=rep("R", nrow(rversions)),
