@@ -58,7 +58,7 @@ dflist2df <- function(l) {
   names <- names(l[[1]])
   names(l) <- NULL
   l <- unlist(l, recursive=FALSE)
-  GetColumn <- function (x) unlist(l[names(l) == x])
+  GetColumn <- function (x) unlist(l[names(l) == x], recursive=FALSE)
   df <- as.data.frame(lapply(as.list(names), GetColumn),
                       stringsAsFactors = FALSE)
   colnames(df) <- names
