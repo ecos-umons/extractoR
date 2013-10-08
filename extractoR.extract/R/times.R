@@ -34,3 +34,28 @@ ExtractDates <- function(descfiles, type) {
                    stringsAsFactors=FALSE)
   df[!is.na(df$date), ]
 }
+
+ExtractTimeline <- function(dates) {
+  dates$date <- as.character(dates$date)
+  dates <- split(dates, paste(dates$package, dates$version))
+  dates <- lapply(dates, function(x) {
+    if ("date/publication" %in% x$type) {
+      if (any(x$type == "packaged")) {
+        x[x$type == "packaged", ]$date <- NA
+      }
+      if (any(x$type == "date")) {
+        x[x$type == "date", ]$date <- NA
+      }
+    } else if ("packaged" %in% x$type) {
+      if (any(x$type == "date")) {
+        x[x$type == "date", ]$date <- NA
+      }
+    }
+    x
+  })
+  dates <- dflist2df(dates)
+  dates <- dates[!is.na(dates$date), ]
+  dates$type <- NULL
+  dates$date <- as.POSIXlt(dates$date)
+  dates
+}
