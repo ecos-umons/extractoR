@@ -14,7 +14,7 @@ ListCheckings <- function(checkdir, from.date="1970-01-01", to.date=NA) {
   res <- grep("\\d\\d(-\\d\\d){4}", dir(checkdir), value=TRUE)
   dates <- ParseDates(res)
   res[dates >= as.POSIXlt(from.date) &
-      (is.na(to.date) | dates <= as.POSIXlt(to.date))]
+      (is.na(to.date) | dates < as.POSIXlt(to.date))]
 }
 
 ParseDates <- function(dates) {
