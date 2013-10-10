@@ -12,7 +12,7 @@
 \usage{
 ListCheckings(checkdir, from.date="1970-01-01", to.date=NA)
 ReadCheckings(date, filename, checkdir)
-ReadAndInsertCheckings(con, checkdir, from.date="1970-01-01", to.date=NA)
+ReadAndInsertStatus(con, checkdir, from.date="1970-01-01", to.date=NA)
 }
 \arguments{
   \item{checkdir}{Root dir where all checking files are stored.}
@@ -25,8 +25,8 @@ ReadAndInsertCheckings(con, checkdir, from.date="1970-01-01", to.date=NA)
   \item{con}{Connection object to the database.}
 }
 \details{
-  \code{ReadAndInsert} reads CRAN status and checkings and inserts them
-  into a database.
+  \code{ReadAndInsertStatus} reads CRAN status and checkings and inserts
+  them into a database.
 }
 
 \value{

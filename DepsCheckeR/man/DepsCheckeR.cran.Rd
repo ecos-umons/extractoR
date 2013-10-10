@@ -24,7 +24,7 @@ GetCRANCheckings(con, date, flavor=NULL)
 \value{
   \code{GetCRANState} returns the state of CRAN at a given date as a
   three column dataframe containing the package with their maintainer
-  name and priority.
+  name, priority and status (ERROR, WARNING, NOTE or OK).
 
   \code{GetCRANDeps} returns all the package dependencies for a given
   CRAN state as a three-column dataframe containing all the depencencies

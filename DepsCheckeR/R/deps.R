@@ -9,7 +9,8 @@ GetCRANState <- function(con, flavor, date) {
   # Returns:
   #   A three column dataframe containing the package with their
   #   maintainer name and priority.
-  query <- paste("SELECT p.name package, mp.name maintainer, s.priority",
+  query <- paste("SELECT p.name package, mp.name maintainer,",
+                 "s.priority, s.status",
                  "FROM cran_status s, flavors f, package_versions v,",
                  "packages p, identity_merging im, merged_people mp",
                  sprintf("WHERE f.name = '%s'", flavor),
