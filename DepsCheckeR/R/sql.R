@@ -30,8 +30,10 @@ InsertCRANStatus <- function(con, status) {
   priorities <- FormatString(con, status$priority)
   maintainers <- GetHashPeople(con)
   maintainers <- apply(status, 1, function(m) maintainers[[GetPersonKey(m)]])
+  status <- FormatString(con, status$status)
   df <- data.frame(date=dates, version_id=versions, flavor_id=flavors,
-                   maintainer_id=maintainers, priority=priorities)
+                   maintainer_id=maintainers, priority=priorities,
+                   status=status)
   InsertDataFrame(con, "cran_status", df)
 }
 

@@ -1,18 +1,20 @@
-ListCheckings <- function(checkdir, from.date="1970-01-01") {
+ListCheckings <- function(checkdir, from.date="1970-01-01", to.date=NA) {
   # Lists available checking RDS files.
   #
   # Args:
   #   checkdir: The directory where cheking RDS files are stored.
   #   from.date: Oldest checking to read.
+  #   to.date: Newest checkings to read.
   #
   # Returns:
   #   A vector containing the directories name where the different
   #   checking RDS files are stored for each extraction. Those
   #   directories shoudl be named using the date format
   #   "%y-%m-%d-%H-%M".
-  from.date <- as.POSIXlt(from.date)
   res <- grep("\\d\\d(-\\d\\d){4}", dir(checkdir), value=TRUE)
-  res[ParseDates(res) >= from.date]
+  dates <- ParseDates(res)
+  res[dates >= as.POSIXlt(from.date) &
+      (is.na(to.date) | dates <= as.POSIXlt(to.date))]
 }
 
 ParseDates <- function(dates) {
@@ -23,7 +25,7 @@ ParseDates <- function(dates) {
   #
   # Returns:
   #   The parsed dates as POSIXlt.
-  as.POSIXlt(dates, tz="EST", format="%y-%m-%d-%H-%M")
+  as.POSIXlt(dates, format="%y-%m-%d-%H-%M")
 }
 
 ExtractMaintainers <- function(maintainers) {
@@ -74,22 +76,52 @@ ReadCheckings <- function(date, filename, checkdir) {
   df
 }
 
-ReadAndInsertCheckings <- function(con, checkdir, from.date="1970-01-01") {
+ExtractStatus <- function(status, checkings) {
+  # Extracts status of packages (ERROR, WARNING, NOTE or OK) based on
+  # checking results.
+  #
+  # Args:
+  #   status: CRAN status dataframe like the one returned by
+  #           ReadCheckings on check_results.rds.
+  #   status: CRAN checkings dataframe like the one returned by
+  #           ReadCheckings on check_details.rds.
+  #
+  # Returns:
+  #   status dataframe with an added column "status".
+  keys <- paste(checkings$package, checkings$version, checkings$flavor)
+  checkings <- split(checkings, keys)
+  GetNumStatus <- function(c, type) nrow(c[c$status == type, ])
+  errors <- sapply(checkings, GetNumStatus, "ERROR")
+  warnings <- sapply(checkings, GetNumStatus, "WARNING")
+  notes <- sapply(checkings, GetNumStatus, "NOTE")
+  GetStatus <- function(c) {
+    if (c["errors"]) "ERROR"
+    else if (c["warnings"]) "WARNING"
+    else if (c["notes"]) "NOTE"
+    else "OK"
+  }
+  res <- apply(data.frame(errors, warnings, notes), 1, GetStatus)
+  status$status <- "OK"
+  rownames(status) <- paste(status$package, status$version, status$flavor)
+  status[names(res), ]$status <- res
+  rownames(status) <- NULL
+  status
+}
+
+ReadAndInsertStatus <- function(con, checkdir, from.date="1970-01-01",
+                                to.date=NA) {
   # Reads CRAN status and checkings and inserts them into a database.
   #
   # Args:
   #   con: The database connection object.
   #   checkdir: Root dir where all checking files are stored.
   #   from.date: Oldest checking to read.
-  dates <- ListCheckings(checkdir, from.date)
+  #   to.date: Newest checkings to read.
   status <- lapply(dates, ReadCheckings, "check_results.rds", checkdir)
-  for (i in 1:length(dates)) {
-    message(sprintf("Inserting status %s", dates[i]))
-    InsertCRANStatus(con, status[[i]])
-  }
-  checkings <- lapply(dates, ReadCheckings, "check_details.rds", checkdir)
-  for (i in 1:length(dates)) {
-    message(sprintf("Inserting checkings %s", dates[i]))
-    InsertCRANChecking(con, checkings[[i]])
+  for (date in ListCheckings(checkdir, from.date, to.date)) {
+    status <- ReadCheckings(date, "check_results.rds", checkdir)
+    checkings <- ReadCheckings(date, "check_details.rds", checkdir)
+    message(sprintf("Inserting CRAN status %s", date))
+    InsertCRANStatus(con, ExtractStatus(status, checkings))
   }
 }

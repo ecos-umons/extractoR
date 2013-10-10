@@ -10,13 +10,14 @@
 }
 
 \usage{
-ListCheckings(checkdir, from.date="1970-01-01")
+ListCheckings(checkdir, from.date="1970-01-01", to.date=NA)
 ReadCheckings(date, filename, checkdir)
-ReadAndInsertCheckings(con, checkdir, from.date="1970-01-01")
+ReadAndInsertCheckings(con, checkdir, from.date="1970-01-01", to.date=NA)
 }
 \arguments{
   \item{checkdir}{Root dir where all checking files are stored.}
   \item{from.date}{Oldest checking to read.}
+  \item{to.date}{Newest checking to read.}
   \item{date}{The date of the checking to extract. It must be formatted
     using the format "%y-%m-%d-%H-%M". It is the directory where the RDS
     file is stored.}
