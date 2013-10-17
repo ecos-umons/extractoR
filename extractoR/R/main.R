@@ -101,3 +101,14 @@ ExtractAndInsertStatus <- function(con, checkdir, from.date="1970-01-01",
     InsertCRANChecking(con, checkings)
   }
 }
+
+ExtractAndInsertChanges <- function(con) {
+  flavors <- dbGetQuery(con, "SELECT name FROM flavors")$name
+  flavors <- flavors[grep("linux-ix86", flavors, invert=TRUE)]
+
+  for (flavor in flavors) {
+    message(sprintf("Extracting changes for flavor %s", flavor))
+    changes <- ExtractChanges(con, flavor)
+    InsertChanges(con, flavor, changes)
+  }
+}

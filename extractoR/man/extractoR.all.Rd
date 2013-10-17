@@ -5,6 +5,7 @@
 \alias{InsertAll}
 \alias{UpdateTaskViews}
 \alias{ExtractAndInsertCheckings}
+\alias{ExtractAndInsertChanges}
 \encoding{UTF-8}
 \title{Insert}
 \description{
@@ -17,6 +18,7 @@ ExtractAll(datadir)
 InsertAll(con, rdata)
 UpdateTaskViews(con, cran.mirror)
 ExtractAndInsertStatus(con, datadir, from.date="1970-01-01", to.date=NA)
+ExtractAndInsertChanges(con)
 }
 \arguments{
   \item{datadir}{Directory where to store data}
@@ -42,6 +44,9 @@ ExtractAndInsertStatus(con, datadir, from.date="1970-01-01", to.date=NA)
 
   \code{ExtractAndInsertStatus} extracts CRAN status and checkings and
   inserts them into a database.
+
+  \code{ExtractAndInsertChanges} extracts CRAN changes and inserts them
+  into a database.
 }
 
 \author{

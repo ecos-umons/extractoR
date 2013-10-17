@@ -6,7 +6,7 @@
 \encoding{UTF-8}
 \title{Insert}
 \description{
-  Functions used to insert extractoR.extract's dataframes into SQL
+  Functions used to insert extractoR.checkings dataframes into SQL
   tables.
 }
 
