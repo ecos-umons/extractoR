@@ -1,0 +1,4 @@
+export(ListCheckings, ReadCheckings, ReadAndInsertStatus)
+exportPattern("^Insert")
+exportPattern("^GetHash")
+exportPattern("^Get[[:alpha:]]+Key$")
