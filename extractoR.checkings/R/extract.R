@@ -107,22 +107,3 @@ ExtractStatus <- function(status, checkings) {
   rownames(status) <- NULL
   status
 }
-
-ReadAndInsertStatus <- function(con, checkdir, from.date="1970-01-01",
-                                to.date=NA) {
-  # Reads CRAN status and checkings and inserts them into a database.
-  #
-  # Args:
-  #   con: The database connection object.
-  #   checkdir: Root dir where all checking files are stored.
-  #   from.date: Oldest checking to read.
-  #   to.date: Newest checkings to read.
-  for (date in ListCheckings(checkdir, from.date, to.date)) {
-    status <- ReadCheckings(date, "check_results.rds", checkdir)
-    checkings <- ReadCheckings(date, "check_details.rds", checkdir)
-    message(sprintf("Inserting CRAN status %s", date))
-    InsertCRANStatus(con, ExtractStatus(status, checkings))
-    message(sprintf("Inserting CRAN checkings %s", date))
-    InsertCRANChecking(con, checkings)
-  }
-}

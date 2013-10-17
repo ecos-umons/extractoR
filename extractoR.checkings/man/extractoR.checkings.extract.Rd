@@ -2,7 +2,6 @@
 \alias{Checks}
 \alias{ListCheckings}
 \alias{ReadCheckings}
-\alias{ReadAndInsertCheckings}
 \encoding{UTF-8}
 \title{Checks}
 \description{
@@ -12,7 +11,6 @@
 \usage{
 ListCheckings(checkdir, from.date="1970-01-01", to.date=NA)
 ReadCheckings(date, filename, checkdir)
-ReadAndInsertStatus(con, checkdir, from.date="1970-01-01", to.date=NA)
 }
 \arguments{
   \item{checkdir}{Root dir where all checking files are stored.}
@@ -24,20 +22,16 @@ ReadAndInsertStatus(con, checkdir, from.date="1970-01-01", to.date=NA)
   \item{filename}{Name of the RDS file to read.}
   \item{con}{Connection object to the database.}
 }
-\details{
-  \code{ReadAndInsertStatus} reads CRAN status and checkings and inserts
-  them into a database.
-}
 
 \value{
   \code{ReadCheckings} reads checking RDS files and returns adataframe
   containing the row of the read rds file plus a column with the date of
   the check.
 
-  \code{} lists available checking RDS file and returns a vector
-  containing the directories name where the different checking RDS files
-  are stored for each extraction. Those directories shoudl be named
-  using the date format "%y-%m-%d-%H-%M".
+  \code{ListCheckings} lists available checking RDS file and returns a
+  vector containing the directories name where the different checking
+  RDS files are stored for each extraction. Those directories shoudl be
+  named using the date format "%y-%m-%d-%H-%M".
 }
 
 \author{
