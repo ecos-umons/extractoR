@@ -1,5 +1,5 @@
-GetCRANState <- function(con, flavor, date) {
-  # Returns the state of CRAN at a given date.
+GetCRANStatus <- function(con, flavor, date) {
+  # Returns the status of CRAN at a given date for a given flavor.
   #
   # Args:
   #   con: The connection object to the database.
@@ -7,8 +7,8 @@ GetCRANState <- function(con, flavor, date) {
   #   date: The date of the state to get.
   #
   # Returns:
-  #   A three column dataframe containing the package with their
-  #   maintainer name and priority.
+  #   A four column dataframe containing the package with their
+  #   maintainer name, priority and status.
   query <- paste("SELECT p.name package, mp.name maintainer,",
                  "s.priority, s.status",
                  "FROM cran_status s, flavors f, package_versions v,",
@@ -46,8 +46,8 @@ GetCRANDeps <- function(con, flavor, date, types=c("depends", "imports")) {
   dbGetQuery(con, query)
 }
 
-GetCRANCheckings <- function(con, date, flavor=NULL) {
-  # Returns the error checkings of CRAN (results of R CMD check) for a
+GetCRANChanges <- function(con, date, flavor=NULL) {
+  # Returns the changes of status of CRAN (results of R CMD check) for a
   # given date.
   #
   # Args:
@@ -56,18 +56,17 @@ GetCRANCheckings <- function(con, date, flavor=NULL) {
   #   flavor: The flavor to get the state. If NULL (default) then all
   #           flavors are used.
   # Returns
-  #   A dataframe with the error checkings of CRAN containing on each
+  #   A dataframe with the changes of CRAN status containing on each
   #   row the name of the maintainer, the flavor name, the package
-  #   name, the checking type, the checking status (ERROR, WARNING or
-  #   NOTE) and the ouput.
+  #   name, the change type and the old and new value.
   query <- paste("SELECT mp.name maintainer, f.name flavor, p.name package,",
-                 "c.type, c.status, c.output",
+                 "c.type, c.old, c.new",
                  "FROM merged_people mp, identity_merging im, flavors f,",
-                 "cran_status s, cran_checking c,",
+                 "cran_changes c,",
                  "package_versions v, packages p",
-                 "WHERE mp.id = im.merged_id AND im.orig_id = s.maintainer_id",
-                 "AND s.id = c.status_id AND s.flavor_id = f.id",
-                 "AND s.version_id = v.id AND v.package_id = p.id",
+                 "WHERE mp.id = im.merged_id AND im.orig_id = c.maintainer_id",
+                 "AND c.flavor_id = f.id",
+                 "AND c.version_id = v.id AND v.package_id = p.id",
                  sprintf("AND s.date = '%s'", date))
   if (!is.null(flavor)) {
     query <- paste(query, sprintf("AND f.name = '%s'", flavor))
@@ -182,92 +181,5 @@ MakeMaintainersGraph <- function(cran, deps) {
   V(g)$dependents <- degree(g, mode="in")
   V(g)$entropy <- sapply(get.adjlist(g, mode="in"), MaintainerEntropy, g)
   V(g)$Label <- V(g)$name
-  g
-}
-
-AddPackagesGraphCheckings <- function(g, checkings) {
-  # Adds number of errors, warnings and notes to each nodes in the
-  # package dependencies graph.
-  #
-  # Args:
-  #   g: The dependencies graph.
-  #   checkings: A dataframe with the error checkings of CRAN (like
-  #              the one returned by GetCRANCheckings).
-  #
-  # Returns:
-  #   The graph with added attributes (num.errors, num.warnings and
-  #   num.notes).
-  GetNum <- function(package, checkings, type) {
-    nrow(checkings[checkings$package == package & checkings$status == type, ])
-  }
-  V(g)$num.errors <- sapply(V(g)$name, GetNum, checkings, "ERROR")
-  V(g)$num.warnings <- sapply(V(g)$name, GetNum, checkings, "WARNING")
-  V(g)$num.notes <- sapply(V(g)$name, GetNum, checkings, "NOTE")
-  g
-}
-
-AddMaintainersGraphCheckings <- function(g, checkings) {
-  # Adds number of errors, warnings and notes to each nodes in the
-  # maintainers dependencies graph.
-  #
-  # Args:
-  #   g: The maintainers dependencies graph.
-  #   checkings: A dataframe with the error checkings of CRAN (like
-  #              the one returned by GetCRANCheckings).
-  #
-  # Returns:
-  #   The graph with added attributes (num.errors, num.warnings and
-  #   num.notes).
-  GetNum <- function(maintainer, checkings, type) {
-    nrow(checkings[checkings$maintainer == maintainer &
-                   checkings$status == type, ])
-  }
-  V(g)$num.errors <- sapply(V(g)$name, GetNum, checkings, "ERROR")
-  V(g)$num.warnings <- sapply(V(g)$name, GetNum, checkings, "WARNING")
-  V(g)$num.notes <- sapply(V(g)$name, GetNum, checkings, "NOTE")
-  g
-}
-
-AddMaintainersGraphPackagesCheckings <- function(g, checkings) {
-  # Adds number of packages with errors, warnings and notes to each
-  # nodes in the maintainers dependencies graph.
-  #
-  # Args:
-  #   g: The maintainers dependencies graph.
-  #   checkings: A dataframe with the error checkings of CRAN (like
-  #              the one returned by GetCRANCheckings).
-  #
-  # Returns:
-  #   The graph with added attributes (num.perrors, num.pwarnings and
-  #   num.pnotes).
-  GetNum <- function(maintainer, checkings, type) {
-    cond <- checkings$maintainer == maintainer & checkings$status == type
-    length(unique(checkings[cond, ]$package))
-  }
-  V(g)$num.perrors <- sapply(V(g)$name, GetNum, checkings, "ERROR")
-  V(g)$num.pwarnings <- sapply(V(g)$name, GetNum, checkings, "WARNING")
-  V(g)$num.pnotes <- sapply(V(g)$name, GetNum, checkings, "NOTE")
-  g
-}
-
-AddMaintainersGraphRelativePackagesCheckings <- function(g, checkings) {
-  # Adds relative number of packages with errors, warnings and notes
-  # to each nodes in the maintainers dependencies graph.
-  #
-  # Args:
-  #   g: The maintainers dependencies graph.
-  #   checkings: A dataframe with the error checkings of CRAN (like
-  #              the one returned by GetCRANCheckings).
-  #
-  # Returns:
-  #   The graph with added attributes (num.perrors.rel,
-  #   num.pwarnings.rel and num.pnotes.rel).
-  GetNum <- function(maintainer, g, checkings, type) {
-    cond <- checkings$maintainer == maintainer & checkings$status == type
-    length(unique(checkings[cond, ]$package)) / V(g)[maintainer]$packages
-  }
-  V(g)$num.perrors.rel <- sapply(V(g)$name, GetNum, g, checkings, "ERROR")
-  V(g)$num.pwarnings.rel <- sapply(V(g)$name, GetNum, g, checkings, "WARNING")
-  V(g)$num.pnotes.rel <- sapply(V(g)$name, GetNum, g, checkings, "NOTE")
   g
 }

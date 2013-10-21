@@ -1,8 +1,8 @@
 \name{CRANState}
 \alias{CRANState}
-\alias{GetCRANState}
+\alias{GetCRANStatus}
 \alias{GetCRANDeps}
-\alias{GetCRANCheckings}
+\alias{GetCRANChanges}
 \encoding{UTF-8}
 \title{CRANState}
 \description{
@@ -12,7 +12,7 @@
 \usage{
 GetCRANState(con, flavor, date)
 GetCRANDeps(con, flavor, date, types=c("depends", "imports"))
-GetCRANCheckings(con, date, flavor=NULL)
+GetCRANChanges(con, date, flavor=NULL)
 }
 \arguments{
   \item{con}{Connection object to the database.}
@@ -30,11 +30,10 @@ GetCRANCheckings(con, date, flavor=NULL)
   CRAN state as a three-column dataframe containing all the depencencies
   from p1 to p2 and the dependency type.
 
-  Returns the error checkings of CRAN (results of R CMD check) for a
-  given date as a dataframe with the error checkings of CRAN containing
-  on each row the name of the maintainer, the flavor name, the package
-  name, the checking type, the checking status (ERROR, WARNING or NOTE)
-  and the ouput.
+  \code{GetCRANChanges} returns the changes of status of CRAN (results
+  of R CMD check) for a given date as a dataframe containing on each row
+  the name of the maintainer, the flavor name, the package name, the
+  change type and the old and new values.
 }
 
 \author{
