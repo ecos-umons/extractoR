@@ -8,8 +8,8 @@ Author: Maëlick Claes <himself@maelick.net> &
 Maintainer: Maëlick Claes <himself@maelick.net>
 Description: This package is part of extractoR which is a set of R
              packages that can be used to fetch, extract and query
-             CRAN packages metadata. extractoR.sql queries the
-             dataframes. extractoR.sql exports data to SQL databases.
+             CRAN packages metadata. extractoR.sql exports data to SQL
+             databases.
 Depends: RMySQL, hash
 License: GPL-3
 Encoding: UTF-8
