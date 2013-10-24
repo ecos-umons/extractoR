@@ -1,3 +1,5 @@
 library(devtools)
 library(extractoR)
-library(DepsCheckeR)
+
+mirrors <- getCRANmirrors()
+mirror <- mirrors[mirrors$City == "Bonn", ]$URL

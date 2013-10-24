@@ -1,4 +1,4 @@
 source("scripts/main.R")
 source("scripts/sql.R")
 
-UpdateTaskViews(con)
+UpdateTaskViews(con, mirror)

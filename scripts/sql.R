@@ -1,8 +1,8 @@
 library(RMySQL)
 
-dbuser <- "gnome"
-dbpass <- "gnomepass"
-dbname <- "rdata"
+dbuser <- "user"
+dbpass <- "password"
+dbname <- "database"
 
 con <- dbConnect(MySQL(), user=dbuser, password=dbpass, dbname=dbname)
 dbClearResult(dbSendQuery(con, "SET NAMES utf8"))
