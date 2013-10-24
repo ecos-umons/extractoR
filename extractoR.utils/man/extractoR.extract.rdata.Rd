@@ -10,7 +10,7 @@
 
 \usage{
 SaveRData(object, datadir)
-LoadRData(object, datadir)
+LoadRData(datadir)
 }
 \arguments{
   \item{object}{A character string with the name of the variable of the
