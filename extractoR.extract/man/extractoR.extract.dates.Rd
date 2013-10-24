@@ -1,5 +1,6 @@
 \name{ExtractDates}
 \alias{ExtractDates}
+\alias{ExtractTimeline}
 \encoding{UTF-8}
 \title{ExtractDates}
 \description{
