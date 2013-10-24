@@ -1,6 +1,3 @@
-source("scripts/main.R")
-source("scripts/sql.R")
-
 GetCRANStatus <- function(con, flavor) {
   query <- paste("SELECT s.date, p.name package, v.version version,",
                  "f.name flavor, mp.name maintainer, s.status",
