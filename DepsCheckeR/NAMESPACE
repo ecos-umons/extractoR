@@ -1,3 +1,0 @@
-export(GetCRANStatus, GetCRANDeps, GetCRANChanges)
-exportPattern("^Make[[:alpha:]]+Graph$")
-export(GetTaskViewPackagesGraph, GetTaskViewMaintainersGraph)
