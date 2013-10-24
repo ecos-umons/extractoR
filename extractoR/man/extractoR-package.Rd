@@ -71,7 +71,7 @@ dbClearResult(dbSendQuery(con, "SET collation_server=utf8_bin"))
 
 rdata <- LoadRData("data/rds")
 
-InsertAll(con)
+InsertAll(con, rdata)
 ExtractInsertTaskViews(con)
 }
 }
