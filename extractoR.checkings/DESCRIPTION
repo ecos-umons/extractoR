@@ -14,6 +14,6 @@ Description: This package contains functions to read and insert in SQL
              extraction (using the format "%y-%m-%d-%H-%M"). Ideally
              this manual extraction should be automated with a cron
              job to keep an history of this check results.
-Depends: RMySQL, hash, extractoR.sql
+Depends: RMySQL, hash, extractoR.utils, extractoR.sql
 License: GPL-3
 Encoding: UTF-8

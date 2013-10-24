@@ -2,6 +2,7 @@
 \alias{Checks}
 \alias{ListCheckings}
 \alias{ReadCheckings}
+\alias{ExtractStatus}
 \encoding{UTF-8}
 \title{Checks}
 \description{
@@ -11,6 +12,7 @@
 \usage{
 ListCheckings(checkdir, from.date="1970-01-01", to.date=NA)
 ReadCheckings(date, filename, checkdir)
+ExtractStatus(status, checkings)
 }
 \arguments{
   \item{checkdir}{Root dir where all checking files are stored.}
@@ -20,7 +22,10 @@ ReadCheckings(date, filename, checkdir)
     using the format "%y-%m-%d-%H-%M". It is the directory where the RDS
     file is stored.}
   \item{filename}{Name of the RDS file to read.}
-  \item{con}{Connection object to the database.}
+  \item{status}{CRAN status dataframe like the one returned by
+    ReadCheckings on check_results.rds.}
+  \item{checkings}{CRAN checkings dataframe like the one returned by
+    ReadCheckings on check_details.rds.}
 }
 
 \value{
@@ -32,6 +37,10 @@ ReadCheckings(date, filename, checkdir)
   vector containing the directories name where the different checking
   RDS files are stored for each extraction. Those directories shoudl be
   named using the date format "%y-%m-%d-%H-%M".
+
+  \code{ExtractStatus} extracts status of packages (ERROR, WARNING, NOTE
+  or OK) based on the result of "R CMD check" got from checkings
+  dataframe. Returns the status dataframe with an added column "status".
 }
 
 \author{

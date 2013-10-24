@@ -83,8 +83,8 @@ ExtractStatus <- function(status, checkings) {
   # Args:
   #   status: CRAN status dataframe like the one returned by
   #           ReadCheckings on check_results.rds.
-  #   status: CRAN checkings dataframe like the one returned by
-  #           ReadCheckings on check_details.rds.
+  #   checkings: CRAN checkings dataframe like the one returned by
+  #              ReadCheckings on check_details.rds.
   #
   # Returns:
   #   status dataframe with an added column "status".
