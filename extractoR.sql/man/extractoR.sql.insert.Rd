@@ -8,6 +8,7 @@
 \alias{InsertDependencies}
 \alias{InsertDependencyConstraints}
 \alias{InsertDates}
+\alias{InsertTimeline}
 \alias{InsertRVersions}
 \alias{InsertTaskViews}
 \alias{InsertTaskViewVersions}
