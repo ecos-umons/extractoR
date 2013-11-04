@@ -59,6 +59,7 @@ dflist2df <- function(l) {
   names(l) <- NULL
   rownames <- as.vector(unlist(sapply(l, rownames)))
   l <- unlist(l, recursive=FALSE)
+  l <- lapply(l, function(x) if (class(x) == "factor") as.character(x) else x)
   ## GetColumn <- function (x) unlist(l[names(l) == x], recursive=FALSE)
   GetColumn <- function (x) do.call(c, l[names(l) == x])
   df <- as.data.frame(lapply(as.list(names), GetColumn),
