@@ -57,12 +57,15 @@ dflist2df <- function(l) {
   #   dataframes contained in the list.
   names <- names(l[[1]])
   names(l) <- NULL
-  rownames <- unlist(sapply(l, rownames))
+  rownames <- as.vector(unlist(sapply(l, rownames)))
   l <- unlist(l, recursive=FALSE)
-  GetColumn <- function (x) unlist(l[names(l) == x], recursive=FALSE)
+  ## GetColumn <- function (x) unlist(l[names(l) == x], recursive=FALSE)
+  GetColumn <- function (x) do.call(c, l[names(l) == x])
   df <- as.data.frame(lapply(as.list(names), GetColumn),
-                      stringsAsFactors = FALSE)
+                      stringsAsFactors=FALSE)
   colnames(df) <- names
-  rownames(df) <- rownames
+  if (length(unique(rownames)) == nrow(df)) {
+    rownames(df) <- rownames
+  }
   df
 }
