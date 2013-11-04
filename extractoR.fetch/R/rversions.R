@@ -39,18 +39,16 @@ FetchRecommdedList <- function(rversion,
                                cran.mirror="http://cran.r-project.org") {
   # Fetches the list of recommended package archives for a specific
   # R's version.
-  #
-  # Args:
-  #   rversion: The R's version.
-  #   cran.mirror: Root URL of the CRAN mirror to use.
-  #
-  # Returns:
-  #   A list of package archives.
   url <- file.path(cran.mirror, "src/contrib/%s/Recommended")
-  FetchArchivesList(FetchPageLinks(sprintf(url, rversion)))
+  packages <- FetchArchivesList(FetchPageLinks(sprintf(url, rversion)))
+  res <- data.frame(size=rep(NA, length(packages)),
+                    mtime=rep(NA, length(packages)), filename=packages)
+  res$type <- rversion
+  rownames(res)
+  res
 }
 
 FetchRVersions <- function(cran.mirror="http://cran.r-project.org") {
   links <- FetchPageLinks(file.path(cran.mirror, "src/contrib/"))
-  sapply(FetchRVersionsList(links), FetchRecommdedList, cran.mirror)
+  dflist2df(lapply(FetchRVersionsList(links), FetchRecommdedList, cran.mirror))
 }

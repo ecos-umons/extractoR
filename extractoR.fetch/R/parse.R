@@ -5,6 +5,7 @@ FetchCurrent <- function(cran.mirror="http://cran.r-project.org") {
   res <- readRDS(dest)[c("size", "mtime")]
   file.remove(dest)
   res$filename <- rownames(res)
+  res$type <- "current"
   res
 }
 
@@ -23,6 +24,7 @@ FetchArchived <- function(current=NULL,
   if (!is.null(current)) {
     res <- res[!rownames(res) %in% intersect(rownames(current), rownames(res)), ]
   }
+  res$type <- "archived"
   res
 }
 
@@ -32,5 +34,5 @@ FetchCRANList <- function(cran.mirror="http://cran.r-project.org") {
   current <- FetchCurrent(cran.mirror)
   archived <- FetchArchived(cran.mirror)
   rversions <- FetchRVersions(cran.mirror)
-  list(current=current, rversions=rversions, archived=archived)
+  rbind(current, rversions, archived)
 }
