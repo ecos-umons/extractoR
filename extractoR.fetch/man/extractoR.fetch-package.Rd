@@ -29,5 +29,6 @@ mirror <- "http://cran.parentingamerica.com"
 # on CRAN
 cran <- FetchCRANList(mirror)
 saveRDS(cran, "data/packages/packages.rds")
+FetchPackages(cran, "data/packages/")
 }
 }

@@ -31,7 +31,7 @@ cran.mirror="http://cran.r-project.org")
 
 \examples{
 \dontrun{
-FetchPackages(LoadPackagesList("packages.yml"), "./packages/")
+FetchPackages(readRDS("data/packages/packages.rds"), "data/packages/")
 }
 }
 
