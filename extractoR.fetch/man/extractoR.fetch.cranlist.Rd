@@ -14,10 +14,12 @@ FetchCRANList(cran.mirror="http://cran.r-project.org")
   \item{cran.mirror}{Root URL of the CRAN mirror to use.}
 }
 \value{
-  \item{last}{All non-archived archives.}
+  \item{current}{All non-archived packages in a dataframe containing the
+    size, mtime and filename.}
   \item{rversions}{A list where each element is a vector containing all
     recommended archives for that R version.}
-  \item{archived}{All archived archives.}
+  \item{archived}{All archived packages in a dataframe containing the
+    size, mtime and filename.}
 }
 
 \author{

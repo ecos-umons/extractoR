@@ -18,10 +18,10 @@ Maintainer: Maëlick Claes <himself@maelick.net>
 
 \examples{
 \dontrun{
-library(extractoR.fetch)
 library(extractoR.extract)
 
-packages.list <- LoadPackagesList("packages/packages.yml")
+# Packages list got from FetchCRANList from extractoR.fetch
+packages.list <- readRDS("data/packages/packages.rds")
 packages <- GetPackagesDataframe(packages.list)
 rversions <- ExtractRversions(packages.list)
 

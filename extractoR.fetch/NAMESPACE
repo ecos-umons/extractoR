@@ -4,5 +4,5 @@ importFrom(yaml, as.yaml, yaml.load_file)
 
 importFrom(extractoR.utils, ParseArchiveName)
 
-export(FetchCRANList, SavePackagesList, LoadPackagesList)
+export(FetchCRANList)
 export(FetchPackages)
