@@ -15,47 +15,47 @@ FetchAll <- function(datadir, cran.mirror="http://cran.r-project.org") {
 ExtractAll <- function(datadir) {
   pkgdir <- file.path(datadir, "packages")
 
-  cran <- readRDS(file.path(pkgdir, "cran.rds"))
-  packages <- cran$packages
-  rversions <- cran$rversions
+  rdata <- list()
+
+  rdata$cran <- readRDS(file.path(pkgdir, "cran.rds"))
+  rdata$packages <- rdata$cran$packages
+  rdata$rversions <- rdata$cran$rversions
 
   message("Reading description files")
   t <- system.time({
-    descfiles <- ReadDescfiles(packages, pkgdir)
+    rdata$descfiles <- ReadDescfiles(rdata$packages, pkgdir)
   })
   message(sprintf("Description files read in %.3fs", t[3]))
 
   message("Extracting people")
   t <- system.time({
-    roles <- rbind(ExtractRoles(descfiles, "Maintainer"),
-                   ExtractRoles(descfiles, "Author"))
-    people <- ExtractPeople(roles)
+    rdata$roles <- rbind(ExtractRoles(rdata$descfiles, "Maintainer"),
+                         ExtractRoles(rdata$descfiles, "Author"))
+    rdata$people <- ExtractPeople(rdata$roles)
   })
   message(sprintf("People extracted in %.3fs", t[3]))
 
   message("Extracting dependencies")
   t <- system.time({
-    dependencies <- rbind(ExtractDependencies(descfiles, "Depends"),
-                          ExtractDependencies(descfiles, "Imports"),
-                          ExtractDependencies(descfiles, "Suggests"),
-                          ExtractDependencies(descfiles, "Enhances"))
+    rdata$deps <- rbind(ExtractDependencies(rdata$descfiles, "Depends"),
+                        ExtractDependencies(rdata$descfiles, "Imports"),
+                        ExtractDependencies(rdata$descfiles, "Suggests"),
+                        ExtractDependencies(rdata$descfiles, "Enhances"))
   })
   message(sprintf("Dependencies extracted in %.3fs", t[3]))
 
   message("Extracting dates and timeline")
   t <- system.time({
-    dates <- rbind(ExtractDates(descfiles, "Packaged"),
-                   ExtractDates(descfiles, "Date/Publication"),
-                   ExtractDates(descfiles, "Date"))
-    timeline <- rbind(ExtractTimeline(dates))
+    rdata$dates <- rbind(ExtractDates(rdata$descfiles, "Packaged"),
+                         ExtractDates(rdata$descfiles, "Date/Publication"),
+                         ExtractDates(rdata$descfiles, "Date"))
+    rdata$timeline <- rbind(ExtractTimeline(rdata$dates))
   })
   message(sprintf("Dates and timeline extracted in %.3fs", t[3]))
 
   message("Saving objects in data/rds")
   t <- system.time({
-    tosave <- c("cran", "packages", "rversions", "descfiles", "roles",
-                "people", "dependencies", "dates", "timeline")
-    sapply(tosave, SaveRData, file.path(datadir, "rds"))
+    SaveRData(rdata, file.path(datadir, "rds"))
   })
   message(sprintf("Objects saved in %.3fs", t[3]))
 }

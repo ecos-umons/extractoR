@@ -1,7 +1,9 @@
-SaveRData <- function(object, datadir) {
-  dir.create("data/rds", recursive=TRUE, showWarnings=FALSE)
-  filename <- file.path("data/rds", sprintf("%s.rds", object))
-  saveRDS(get(object), file=filename)
+SaveRData <- function(rdata, datadir) {
+  dir.create(datadir, recursive=TRUE, showWarnings=FALSE)
+  for (name in names(rdata)) {
+    filename <- file.path(datadir, sprintf("%s.rds", name))
+    saveRDS(rdata[[name]], file=filename)
+  }
 }
 
 LoadRData <- function(datadir) {
