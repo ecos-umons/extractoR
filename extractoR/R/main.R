@@ -4,14 +4,12 @@ FetchAll <- function(datadir, cran.mirror="http://cran.r-project.org") {
   message(sprintf("Package list fetched from CRAN in %.3fs", t[3]))
 
   pkgdir <- file.path(datadir, "packages")
-  SavePackagesList(packages, file.path(pkgdir, "packages.yml"))
-  message("Package list saved to packages/packages.yml")
+  saveRDS(packages, file.path(pkgdir, "packages.rds"))
+  message("Package list saved to packages/packages.rds")
 
   message("Downloading missing packages")
-  t <- system.time(res <- FetchPackages(packages, pkgdir, cran.mirror))[3]
-  message("%n packages downloaded in %.3fs", length(res[res]), t[3])
-
-  res
+  t <- system.time(res <- FetchPackages(packages, pkgdir, cran.mirror))
+  message(sprintf("%d packages downloaded in %.3fs", length(res[res]), t[3]))
 }
 
 ExtractAll <- function(datadir) {
