@@ -1,6 +1,5 @@
 importFrom(extractoR.utils, ParseArchiveName, dflist2df)
 
-export(GetPackagesDataframe, ExtractRversions)
 export(ReadDescfile, ReadDescfiles, GetDescfilesKeys, GetDescfilesKey)
 export(ExtractPerson, ExtractRoles, ExtractPeople)
 export(ExtractDependencies)

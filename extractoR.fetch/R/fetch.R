@@ -50,6 +50,7 @@ FetchArchive <- function(package, filename, rversions,
   # Returns:
   #   The path of the downloaded archive if any else NULL.
   dest <- tempfile()
+  message(sprintf("Fetching package %s", filename))
   url <- GetURL(package, filename, rversions, cran.mirror)
   if (length(url)) {
     download.file(url, dest, method="wget")
