@@ -41,10 +41,9 @@ FetchRecommendedList <- function(rversion,
   # R's version.
   url <- file.path(cran.mirror, "src/contrib/%s/Recommended")
   packages <- FetchArchivesList(FetchPageLinks(sprintf(url, rversion)))
-  res <- data.frame(size=rep(NA, length(packages)),
-                    mtime=rep(NA, length(packages)), filename=packages)
-  res$type <- rversion
-  rownames(res) <- packages
+  res <- data.frame(filename=packages, size=NA, mtime=NA,
+                    stringsAsFactors=FALSE)
+  res$rversion <- rversion
   res
 }
 

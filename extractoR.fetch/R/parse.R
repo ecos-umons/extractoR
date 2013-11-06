@@ -5,8 +5,7 @@ FetchCurrent <- function(cran.mirror="http://cran.r-project.org") {
   res <- readRDS(dest)[c("size", "mtime")]
   file.remove(dest)
   res$filename <- rownames(res)
-  res$type <- "current"
-  res
+  res[c("filename", "size", "mtime")]
 }
 
 FetchArchived <- function(current=NULL,
@@ -18,21 +17,28 @@ FetchArchived <- function(current=NULL,
   download.file(src, dest)
   res <- dflist2df(readRDS(dest))[c("size", "mtime")]
   file.remove(dest)
-  rownames(res) <- sapply(strsplit(rownames(res), "/"),
-                          function(x) x[length(x)])
-  res$filename <- rownames(res)
+  res$filename <- sapply(strsplit(rownames(res), "/"),
+                         function(x) x[length(x)])
   if (!is.null(current)) {
-    res <- res[!rownames(res) %in% intersect(rownames(current), rownames(res)), ]
+    res <- res[!res$filename %in% intersect(current$filename, res$filename), ]
   }
-  res$type <- "archived"
-  res
+  res[c("filename", "size", "mtime")]
 }
 
 FetchCRANList <- function(cran.mirror="http://cran.r-project.org") {
   # Fetches the list of all package archives (archived, non-archived
   # and recommded in all R's versions) of CRAN.
   current <- FetchCurrent(cran.mirror)
-  archived <- FetchArchived(cran.mirror)
+  archived <- FetchArchived(current, cran.mirror)
+  archived <- archived[!archived$filename %in% current$filename, ]
+  packages <- rbind(current, archived)
   rversions <- FetchRVersions(cran.mirror)
-  rbind(current, rversions, archived)
+  recommended <- rversions[!rversions$filename %in% packages$filename, ]
+  packages <- rbind(packages, data.frame(filename=unique(recommended$filename),
+                                         size=NA, mtime=NA))
+  pnames <- sapply(packages$filename, ParseArchiveName)
+  packages$package <- as.character(pnames[1, ])
+  packages$version <- as.character(pnames[2, ])
+  cols <- c("package", "version", "filename", "size", "mtime")
+  list(packages=packages[cols], rversions=unique(rversions$rversion))
 }
