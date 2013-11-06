@@ -35,7 +35,7 @@ FetchArchivesList <- function(links) {
   grep("\\.tar\\.gz$", links, value=TRUE)
 }
 
-FetchRecommdedList <- function(rversion,
+FetchRecommendedList <- function(rversion,
                                cran.mirror="http://cran.r-project.org") {
   # Fetches the list of recommended package archives for a specific
   # R's version.
@@ -44,11 +44,12 @@ FetchRecommdedList <- function(rversion,
   res <- data.frame(size=rep(NA, length(packages)),
                     mtime=rep(NA, length(packages)), filename=packages)
   res$type <- rversion
-  rownames(res)
+  rownames(res) <- packages
   res
 }
 
 FetchRVersions <- function(cran.mirror="http://cran.r-project.org") {
   links <- FetchPageLinks(file.path(cran.mirror, "src/contrib/"))
-  dflist2df(lapply(FetchRVersionsList(links), FetchRecommdedList, cran.mirror))
+  res <- lapply(FetchRVersionsList(links), FetchRecommendedList, cran.mirror)
+  dflist2df(res)
 }

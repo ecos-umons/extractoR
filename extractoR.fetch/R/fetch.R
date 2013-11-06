@@ -35,7 +35,7 @@ GetURL <- function(package, filename, rversions,
   }
 }
 
-FetchArchive <- function(package, filename, rversions, datadir,
+FetchArchive <- function(package, filename, rversions,
                          cran.mirror="http://cran.r-project.org") {
   # Downloads a package archive if there is any available.
   #
@@ -45,12 +45,11 @@ FetchArchive <- function(package, filename, rversions, datadir,
   #   rversions: If this archive is not in src/contrib and
   #              src/contrib/Archive, this vector of rversions will be
   #              used for searching for in the recommended packages.
-  #   datadir: Directory where to store the downloaded archive.
   #   cran.mirror: Root URL of the CRAN mirror to use.
   #
   # Returns:
   #   The path of the downloaded archive if any else NULL.
-  dest <- file.path(datadir, filename)
+  dest <- tempfile()
   url <- GetURL(package, filename, rversions, cran.mirror)
   if (length(url)) {
     download.file(url, dest, method="wget")
@@ -82,8 +81,7 @@ FetchPackage <- function(filename, rversions, datadir,
   archive <- ParseArchiveName(filename)
   dest <- file.path(datadir, archive$package, archive$version)
   if (!file.exists(dest)) {
-    res <- FetchArchive(archive$package, filename, rversions,
-                        datadir, cran.mirror)
+    res <- FetchArchive(archive$package, filename, rversions, cran.mirror)
     if (length(res)) {
       untar(res, exdir=dest)
       file.remove(res)
@@ -93,20 +91,21 @@ FetchPackage <- function(filename, rversions, datadir,
   FALSE
 }
 
-FetchPackages <- function(packages, datadir,
+FetchPackages <- function(cran, datadir,
                           cran.mirror="http://cran.r-project.org") {
   # Downloads and extracts a list packages in datadir.
   #
   # Args:
-  #   packages: A list of package archives (like the one returned by
-  #   FetchCRANList).
+  #   cran: A dataframe of package archives (like the one returned by
+  #         FetchCRANList).
   #   datadir: Directory where to store and extract the packages.
   #   cran.mirror: Root URL of the CRAN mirror to use.
   #
   # Returns:
   #   A logical vector telling where a value is TRUE iff the package
   #   has been donwloaded.
-  rversions <- names(packages$rversions)
-  sapply(unique(unlist(packages)),
-         FetchPackage, rversions, datadir, cran.mirror)
+  packages <- unique(cran$filename)
+  rversion.re <- "^[0-9]+\\.[0-9]+.*$"
+  rversions <- unique(grep(rversion.re, cran$type, value=TRUE))
+  sapply(packages, FetchPackage, rversions, datadir, cran.mirror)
 }
