@@ -21,9 +21,9 @@ Maintainer: Maëlick Claes <himself@maelick.net>
 library(extractoR.extract)
 
 # Packages list got from FetchCRANList from extractoR.fetch
-packages.list <- readRDS("data/packages/packages.rds")
-packages <- GetPackagesDataframe(packages.list)
-rversions <- ExtractRversions(packages.list)
+cran <- readRDS(file.path(pkgdir, "cran.rds"))
+packages <- cran$packages
+rversions <- cran$rversions
 
 descfiles <- ReadDescfiles(packages, "packages")
 

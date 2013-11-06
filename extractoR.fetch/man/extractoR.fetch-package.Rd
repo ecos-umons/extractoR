@@ -28,7 +28,7 @@ mirror <- "http://cran.parentingamerica.com"
 # Fetch the list of all recommended, contributed and archived packages
 # on CRAN
 cran <- FetchCRANList(mirror)
-saveRDS(cran, "data/packages/packages.rds")
+saveRDS(cran, "data/packages/cran.rds")
 FetchPackages(cran, "data/packages/")
 }
 }

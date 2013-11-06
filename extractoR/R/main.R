@@ -15,8 +15,9 @@ FetchAll <- function(datadir, cran.mirror="http://cran.r-project.org") {
 ExtractAll <- function(datadir) {
   pkgdir <- file.path(datadir, "packages")
 
-  packagesa <- readRDS(file.path(pkgdir, "packages.yml"))
-  rversions <- ExtractRversions(packages)
+  cran <- readRDS(file.path(pkgdir, "cran.rds"))
+  packages <- cran$packages
+  rversions <- cran$rversions
 
   message("Reading description files")
   t <- system.time({
@@ -52,7 +53,7 @@ ExtractAll <- function(datadir) {
 
   message("Saving objects in data/rds")
   t <- system.time({
-    tosave <- c("packages.list", "packages", "rversions", "descfiles", "roles",
+    tosave <- c("cran", "packages", "rversions", "descfiles", "roles",
                 "people", "dependencies", "dates", "timeline")
     sapply(tosave, SaveRData, file.path(datadir, "rds"))
   })
