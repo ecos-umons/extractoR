@@ -61,14 +61,13 @@ ExtractAll <- function(datadir) {
 }
 
 InsertAll <- function(con, rdata) {
-  InsertRVersions(con, rdata$rversions)
   InsertPackages(con, rdata$packages$package)
   InsertVersions(con, rdata$packages)
   InsertDescfiles(con, rdata$descfiles)
   InsertDates(con, rdata$dates)
   InsertTimeline(con, rdata$timeline)
-  InsertDependencies(con, rdata$dependencies)
-  InsertDependencyConstraints(con, rdata$dependencies)
+  InsertDependencies(con, rdata$deps)
+  InsertDependencyConstraints(con, rdata$deps)
   InsertPeople(con, rdata$people)
   InsertRoles(con, rdata$roles)
 }

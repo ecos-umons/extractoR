@@ -23,7 +23,7 @@ InsertDataFrameAll <- function(con, table, df) {
   rows <- MakeList(apply(df, 1, function(r) sprintf("(%s)", MakeList(r))))
   query <- sprintf("INSERT IGNORE INTO %s (%s) VALUES %s",
                    table, columns, rows)
-  dbClearResult(dbSendQuery(con, query))
+  dbSendQuery(con, query)
 }
 
 InsertDataFrameSlice <- function(con, table, df, df.send.limit=1000) {

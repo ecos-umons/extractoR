@@ -11,8 +11,12 @@ InsertVersions <- function(con, versions) {
   message(sprintf("Inserting %d package versions", nrow(versions)))
   packages <- GetHashPackages(con)
   packages <- sapply(versions$package, function(p) packages[[p]])
-  versions <- FormatString(con, versions$version)
-  versions <- data.frame(package_id=packages, version=versions)
+  mtimes <- sapply(FormatString(con, format(versions$mtime)),
+                   function(x) if (is.na(x)) "NULL" else x)
+  sizes <- sapply(versions$size, function(x) if (is.na(x)) "NULL" else x)
+  versions <- data.frame(package_id=packages,
+                         version=FormatString(con, versions$version),
+                         mtime=mtimes, size=sizes)
   InsertDataFrame(con, "package_versions", versions)
 }
 
@@ -89,11 +93,4 @@ InsertTimeline <- function(con, timeline) {
   dates <- FormatString(con, as.character(dates$date))
   dates <- data.frame(version_id=versions, date=dates)
   InsertDataFrame(con, "packages_timeline", dates)
-}
-
-InsertRVersions <- function(con, rversions) {
-  InsertPackages(con, "R")
-  InsertVersions(con, data.frame(package=rep("R", nrow(rversions)),
-                                 version=as.character(rversions$rversion),
-                                 stringsAsFactors=FALSE))
 }
