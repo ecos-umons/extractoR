@@ -16,18 +16,17 @@ GetHashFlavors <- function(con) {
 }
 
 InsertCRANStatus <- function(con, status) {
-  InsertFlavors(con, unique(status$flavor))
-  InsertPackages(con, unique(status$package))
-  InsertVersions(con, unique(data.frame(package=status$package,
-                                        version=status$version,
-                                        stringsAsFactors=FALSE)))
-  InsertPeople(con, unique(status[, c("name", "email")]))
+  status <- status[!is.na(status$version), ]
   versions <- GetHashVersions(con)
   versions <- apply(status, 1, function(v) versions[[GetVersionKey(v)]])
+  status <- status[!sapply(versions, is.null), ]
+  versions <- as.numeric(versions[!sapply(versions, is.null)])
+  InsertFlavors(con, unique(status$flavor))
   flavors <- GetHashFlavors(con)
   flavors <- sapply(as.vector(status$flavor), function(f) flavors[[f]])
   dates <- sprintf("'%s'", as.character(status$date))
   priorities <- FormatString(con, status$priority)
+  InsertPeople(con, unique(status[, c("name", "email")]))
   maintainers <- GetHashPeople(con)
   maintainers <- apply(status, 1, function(m) maintainers[[GetPersonKey(m)]])
   status <- FormatString(con, status$status)

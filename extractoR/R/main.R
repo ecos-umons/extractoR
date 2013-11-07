@@ -94,8 +94,6 @@ ExtractAndInsertStatus <- function(con, checkdir, from.date="1970-01-01",
     checkings <- ReadCheckings(date, "check_details.rds", checkdir)
     message(sprintf("Inserting CRAN status %s", date))
     InsertCRANStatus(con, ExtractStatus(status, checkings))
-    message(sprintf("Inserting CRAN checkings %s", date))
-    InsertCRANChecking(con, checkings)
   }
 }
 

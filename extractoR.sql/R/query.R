@@ -34,7 +34,10 @@ GetPersonKey <- function(person) {
 }
 
 GetHashPeople <- function(con) {
+  # Dirty fix for weird bug with UTF8
+  dbClearResult(dbSendQuery(con, "SET NAMES utf8"))
   people <- GetPeople(con)
+  dbClearResult(dbSendQuery(con, "SET NAMES utf8"))
   hash(apply(people, 1, GetPersonKey), people$id)
 }
 
