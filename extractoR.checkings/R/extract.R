@@ -38,6 +38,10 @@ ExtractMaintainers <- function(maintainers) {
   #
   # Returns:
   #   A list containings the names and emails extracted.
+  re <- "^(.*>)[^[:alpha:]]*([[:alpha:]].*)$"
+  multi <- grep(re, maintainers)
+  maintainers[multi] <- sapply(strsplit(gsub(re, "\\1|\\2", maintainers[multi]),
+                                        "[|]"), function(x) x[1])
   maintainer.re <- "^(.*)\\s*<(.*@.*)>$"
   errors <- grep(maintainer.re, maintainers, invert=TRUE)
   names <- Strip(sub(maintainer.re, "\\1", maintainers))
