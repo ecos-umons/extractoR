@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.5.32, for debian-linux-gnu (x86_64)
+-- MySQL dump 10.13  Distrib 5.5.34, for debian-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: rdata
 -- ------------------------------------------------------
--- Server version	5.5.32-0ubuntu7
+-- Server version	5.5.34-0ubuntu0.13.10.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -32,9 +32,9 @@ CREATE TABLE `cran_changes` (
   `new` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_idx` (`type`,`flavor_id`,`date`,`package_id`),
-  KEY `fk_cran_changes_packages1` (`package_id`),
-  KEY `fk_cran_changes_flavors1` (`flavor_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=20592 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+  KEY `fk_cran_changes_packages1_idx` (`package_id`),
+  KEY `fk_cran_changes_flavors1_idx` (`flavor_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -75,12 +75,12 @@ CREATE TABLE `cran_status` (
   `status` varchar(10) COLLATE utf8_bin DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_idx` (`date`,`version_id`,`flavor_id`),
-  KEY `fk_cran_status_flavors1` (`flavor_id`),
-  KEY `fk_cran_status_package_versions1` (`version_id`),
-  KEY `fk_cran_status_people1` (`maintainer_id`),
+  KEY `fk_cran_status_flavors1_idx` (`flavor_id`),
+  KEY `fk_cran_status_package_versions1_idx` (`version_id`),
+  KEY `fk_cran_status_people1_idx` (`maintainer_id`),
   KEY `priority_idx` (`priority`),
   KEY `status_idx` (`status`)
-) ENGINE=MyISAM AUTO_INCREMENT=4697208 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -98,7 +98,7 @@ CREATE TABLE `dates` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_idx` (`version_id`,`type`),
   KEY `fk_package_versions` (`version_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=90519 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=MyISAM AUTO_INCREMENT=92520 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -131,9 +131,9 @@ CREATE TABLE `description_files` (
   `value` text COLLATE utf8_bin,
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_idx` (`version_id`,`keyword`),
-  KEY `fk_version` (`version_id`),
+  KEY `fk_version_idx` (`version_id`),
   KEY `key_idx` (`keyword`)
-) ENGINE=MyISAM AUTO_INCREMENT=507916 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=MyISAM AUTO_INCREMENT=519288 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -148,7 +148,7 @@ CREATE TABLE `flavors` (
   `name` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name_UNIQUE` (`name`)
-) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -179,7 +179,7 @@ CREATE TABLE `merged_people` (
   `name` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name_idx` (`name`)
-) ENGINE=MyISAM AUTO_INCREMENT=3363 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -198,7 +198,7 @@ CREATE TABLE `package_dependencies` (
   UNIQUE KEY `unique_idx` (`version_id`,`dependency`,`type`),
   KEY `fk_version_idx` (`version_id`),
   KEY `dependency_idx` (`dependency`)
-) ENGINE=MyISAM AUTO_INCREMENT=163984 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=MyISAM AUTO_INCREMENT=167976 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -212,10 +212,14 @@ CREATE TABLE `package_versions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `package_id` int(11) NOT NULL,
   `version` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `size` int(11) DEFAULT NULL,
+  `mtime` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_idx` (`package_id`,`version`),
-  KEY `fk_package` (`package_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=38048 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='		';
+  KEY `fk_package_idx` (`package_id`),
+  KEY `mtime_idx` (`mtime`),
+  KEY `size_idx` (`size`)
+) ENGINE=MyISAM AUTO_INCREMENT=38189 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='		';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -230,7 +234,7 @@ CREATE TABLE `packages` (
   `name` varchar(255) COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name_idx` (`name`)
-) ENGINE=MyISAM AUTO_INCREMENT=5815 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=MyISAM AUTO_INCREMENT=5760 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -241,12 +245,13 @@ DROP TABLE IF EXISTS `packages_timeline`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `packages_timeline` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `date` datetime DEFAULT NULL,
   `version_id` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_package_timelines_package_versions1` (`version_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+  UNIQUE KEY `unique_idx` (`version_id`),
+  KEY `fk_package_timelines_package_versions1_idx` (`version_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=37114 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -262,7 +267,7 @@ CREATE TABLE `people` (
   `email` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name_email_idx` (`name`(200),`email`(50))
-) ENGINE=MyISAM AUTO_INCREMENT=13759 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=MyISAM AUTO_INCREMENT=14168 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -310,8 +315,8 @@ CREATE TABLE `taskview_content` (
   `package_id` int(11) DEFAULT NULL,
   `core` tinyint(1) DEFAULT NULL,
   UNIQUE KEY `unique_idx` (`taskview_id`,`package_id`),
-  KEY `fk_taskview_content_taskview_versions1` (`taskview_id`),
-  KEY `fk_taskview_content_packages1` (`package_id`)
+  KEY `fk_taskview_content_taskview_versions1_idx` (`taskview_id`),
+  KEY `fk_taskview_content_packages1_idx` (`package_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -330,9 +335,9 @@ CREATE TABLE `taskview_versions` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_idx` (`version`,`taskview_id`),
   KEY `version_idx` (`version`),
-  KEY `fk_taskview_versions_taskviews1` (`taskview_id`),
-  KEY `fk_taskview_versions_people1` (`maintainer_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=44 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+  KEY `fk_taskview_versions_taskviews1_idx` (`taskview_id`),
+  KEY `fk_taskview_versions_people1_idx` (`maintainer_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -348,7 +353,7 @@ CREATE TABLE `taskviews` (
   `topic` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name_idx` (`name`)
-) ENGINE=MyISAM AUTO_INCREMENT=33 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -360,4 +365,4 @@ CREATE TABLE `taskviews` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-10-24 23:28:21
+-- Dump completed on 2013-11-07 13:40:07
