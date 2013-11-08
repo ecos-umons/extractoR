@@ -1,4 +1,4 @@
-GetCRANStatus <- function(con, flavor) {
+GetCRANState <- function(con, flavor) {
   query <- paste("SELECT s.date, p.name package, v.version version,",
                  "f.name flavor, mp.name maintainer, s.status",
                  "FROM package_versions v, packages p, flavors f,",
@@ -76,7 +76,7 @@ InsertChanges <- function(con, flavor, changes) {
 }
 
 ExtractChanges <- function(con, flavor) {
-  cran <- GetCRANStatus(con, flavor)
+  cran <- GetCRANState(con, flavor)
   dates <- sort(unique(cran$date))
   ExtractPackagesStatusChanges(cran)
 }
