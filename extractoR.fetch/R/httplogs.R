@@ -10,7 +10,8 @@ FetchLogsList <- function(url) {
 DownloadLog <- function(log, datadir) {
   tmpfile <- tempfile()
   download.file(log, tmpfile, method="wget")
-  write.csv2(read.csv(gzfile(tmpfile)), file.path(datadir, names(log)))
+  write.csv2(read.csv(gzfile(tmpfile)), file.path(datadir, names(log)),
+             row.names=FALSE)
   file.remove(tmpfile)
 }
 
