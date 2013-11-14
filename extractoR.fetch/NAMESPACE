@@ -5,3 +5,5 @@ importFrom(extractoR.utils, ParseArchiveName)
 
 export(FetchCRANList)
 export(FetchPackages)
+export(FetchLogsList)
+export(DownloadMissingLogs)
