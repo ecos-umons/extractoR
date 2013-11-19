@@ -34,7 +34,7 @@ CREATE TABLE `cran_changes` (
   UNIQUE KEY `unique_idx` (`type`,`flavor_id`,`date`,`package_id`),
   KEY `fk_cran_changes_packages1_idx` (`package_id`),
   KEY `fk_cran_changes_flavors1_idx` (`flavor_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=MyISAM AUTO_INCREMENT=31930 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -59,6 +59,29 @@ CREATE TABLE `cran_checking` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `cran_mirror_log`
+--
+
+DROP TABLE IF EXISTS `cran_mirror_log`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `cran_mirror_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `date` datetime DEFAULT NULL,
+  `version_id` int(11) DEFAULT NULL,
+  `size` int(11) DEFAULT NULL,
+  `ip_id` int(11) DEFAULT NULL,
+  `country` varchar(2) COLLATE utf8_bin DEFAULT NULL,
+  `rversion` varchar(45) COLLATE utf8_bin DEFAULT NULL,
+  `arch` varchar(45) COLLATE utf8_bin DEFAULT NULL,
+  `os` varchar(45) COLLATE utf8_bin DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_idx` (`date`,`ip_id`,`version_id`),
+  KEY `fk_cran_mirror_log_package_versions1_idx` (`version_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `cran_status`
 --
 
@@ -80,7 +103,7 @@ CREATE TABLE `cran_status` (
   KEY `fk_cran_status_people1_idx` (`maintainer_id`),
   KEY `priority_idx` (`priority`),
   KEY `status_idx` (`status`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=MyISAM AUTO_INCREMENT=7355620 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -148,7 +171,7 @@ CREATE TABLE `flavors` (
   `name` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name_UNIQUE` (`name`)
-) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -179,7 +202,7 @@ CREATE TABLE `merged_people` (
   `name` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name_idx` (`name`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=MyISAM AUTO_INCREMENT=3405 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -267,7 +290,7 @@ CREATE TABLE `people` (
   `email` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name_email_idx` (`name`(200),`email`(50))
-) ENGINE=MyISAM AUTO_INCREMENT=14168 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=MyISAM AUTO_INCREMENT=14172 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -365,4 +388,4 @@ CREATE TABLE `taskviews` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-11-07 13:40:07
+-- Dump completed on 2013-11-14 15:08:18
