@@ -19,6 +19,7 @@ InsertAll(con, rdata)
 UpdateTaskViews(con, cran.mirror)
 ExtractAndInsertStatus(con, datadir, from.date="1970-01-01", to.date=NA)
 ExtractAndInsertChanges(con)
+ExtractAndInsertLogs(con, datadir, from.date="1970-01-01")
 }
 \arguments{
   \item{datadir}{Directory where to store data}
@@ -47,6 +48,9 @@ ExtractAndInsertChanges(con)
 
   \code{ExtractAndInsertChanges} extracts CRAN changes and inserts them
   into a database.
+
+  \code{ExtractAndInsertLogs} extract CRAN mirror http logs and inserts
+  them into a database.
 }
 
 \author{

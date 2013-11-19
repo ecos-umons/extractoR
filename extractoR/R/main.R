@@ -107,3 +107,14 @@ ExtractAndInsertChanges <- function(con) {
     InsertChanges(con, flavor, changes)
   }
 }
+
+ExtractAndInsertLogs <- function(con, datadir, from.date="1970-01-01") {
+  path <- file.path(datadir, "logs")
+  from.date <- file.path(path, paste0(from.date, ".csv"))
+  logs <- dir(path, full.names=TRUE)
+  for (log in logs[from.date <= logs]) {
+    message(sprintf("Extracting %s", log))
+    log <- ExtractHttpLog(log)
+    InsertHttpLog(con, log)
+  }
+}

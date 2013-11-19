@@ -30,7 +30,6 @@
   main purpose is to store dataframes created by extractoR.extract into
   SQL tables.
 
-
   \code{extractoR.checkings} contains functions to read and insert in
   SQL table results of "R CMD check" commands run on CRAN (see
   http://cran.r-project.org/web/checks/). It requires that one manually
