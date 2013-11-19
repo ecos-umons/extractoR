@@ -94,3 +94,21 @@ InsertTimeline <- function(con, timeline) {
   dates <- data.frame(version_id=versions, date=dates)
   InsertDataFrame(con, "packages_timeline", dates)
 }
+
+InsertHttpLog <- function(con, log) {
+  message(sprintf("Inserting %d log", nrow(log)))
+  versions <- GetHashVersions(con)
+  versions <- apply(log[c("package", "version")], 1,
+                    function(v) versions[[GetVersionKey(v)]])
+  log <- log[!sapply(versions, is.null), ]
+  versions <- as.numeric(versions[!sapply(versions, is.null)])
+  dates <- FormatString(con, log$date)
+  rversion <- FormatString(con, log$r_version)
+  arch <- FormatString(con, log$r_arch)
+  os <- FormatString(con, log$r_os)
+  country <- FormatString(con, log$country)
+  log <- data.frame(date=dates, version_id=versions, ip_id=log$ip_id,
+                    size=log$size, country=country, rversion=rversion,
+                    arch=arch, os=os)
+  InsertDataFrame(con, "cran_mirror_log", log)
+}

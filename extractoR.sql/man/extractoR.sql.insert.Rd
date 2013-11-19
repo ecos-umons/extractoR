@@ -34,6 +34,7 @@ InsertRVersions(con, rversions)
 InsertTaskViews(con, taskviews)
 InsertTaskViewVersions(con, versions)
 InsertTaskViewContent(con, content)
+InsertHttpLog(con, log)
 }
 \arguments{
   \item{con}{Connection object to the database.}
@@ -45,15 +46,16 @@ InsertTaskViewContent(con, content)
   \item{dependencies}{Dependencies dataframe.}
   \item{constraints}{Constraints dataframe.}
   \item{dates}{Dates dataframe.}
-  \item{timeline}{TImeline dataframe.}
+  \item{timeline}{Timeline dataframe.}
   \item{rversions}{RVersions dataframe.}
   \item{taskviews}{Taskviews dataframe.}
   \item{content}{Taskview content dataframe.}
+  \item{log}{CRAN http mirror log.}
 }
 \details{
   Inserts into tables packages, package_versions, description_files,
   roles, package_dependencies, dependency_constraints, dates,
-  packages_timeline, rversions.
+  packages_timeline, rversions, cran_mirror_log.
 
   Function related to taskviews insert in tables taskviews,
   taskview_versions and taskview_content.
