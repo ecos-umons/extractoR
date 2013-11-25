@@ -30,7 +30,7 @@ InsertPeople <- function(con, people) {
 
 InsertDescfiles <- function(con, descfiles) {
   descfiles <- unique(descfiles)
-  message(sprintf("Inserting %d DESCRIPTION files", nrow(descfiles)))
+  message(sprintf("Inserting %d DESCRIPTION file entries", nrow(descfiles)))
   versions <- GetHashVersions(con)
   versions <- apply(descfiles, 1, function(v) versions[[GetVersionKey(v)]])
   keys <- FormatString(con, descfiles$key)
