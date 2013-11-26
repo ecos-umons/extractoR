@@ -90,10 +90,9 @@ ExtractAndInsertStatus <- function(con, checkdir, from.date="1970-01-01",
   #   from.date: Oldest checking to read.
   #   to.date: Newest checkings to read.
   for (date in ListCheckings(checkdir, from.date, to.date)) {
-    status <- ReadCheckings(date, "check_results.rds", checkdir)
-    checkings <- ReadCheckings(date, "check_details.rds", checkdir)
+    status <- ExtractStatus(date, checkdir)
     message(sprintf("Inserting CRAN status %s", date))
-    InsertCRANStatus(con, ExtractStatus(status, checkings))
+    InsertCRANStatus(con, status)
   }
 }
 

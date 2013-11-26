@@ -51,7 +51,7 @@ ExtractMaintainers <- function(maintainers) {
   list(names=names, emails=emails)
 }
 
-ReadCheckings <- function(date, filename, checkdir) {
+ReadCheckings <- function(date, filename, checkdir, flavors=NULL) {
   # Reads checking RDS files.
   #
   # Args:
@@ -77,10 +77,14 @@ ReadCheckings <- function(date, filename, checkdir) {
     df$name <- maintainers$names
     df$email <- maintainers$emails
   }
-  df
+  if (is.null(flavors)) {
+    df
+  } else {
+    df[df$flavor %in% flavors, ]
+  }
 }
 
-ExtractStatus <- function(status, checkings) {
+ExtractPackageStatus <- function(status, checkings) {
   # Extracts status of packages (ERROR, WARNING, NOTE or OK) based on
   # checking results.
   #
@@ -110,4 +114,22 @@ ExtractStatus <- function(status, checkings) {
   status[names(res), ]$status <- res
   rownames(status) <- NULL
   status
+}
+
+ExtractStatus <- function(date, checkdir) {
+  flavors <- c("r-devel-windows-ix86+x86_64",
+               "r-patched-solaris-x86",
+               "r-release-linux-x86_64",
+               "r-release-macosx-x86_64",
+               "r-release-windows-ix86+x86_64",
+               "r-oldrel-windows-ix86+x86_64",
+               "r-devel-macosx-x86_64",
+               "r-devel-linux-x86_64-debian",
+               "r-devel-linux-x86_64-debian-gcc")
+  status <- ReadCheckings(date, "check_results.rds", checkdir, flavors)
+  status$flavor <- sub("^(r-[a-z]+-[a-z]+)-.*$", "\\1", status$flavor)
+  checkings <- ReadCheckings(date, "check_details.rds", checkdir)
+  checkings$flavor <- sub("^(r-[a-z]+-[a-z]+)-.*$", "\\1", checkings$flavor)
+  ExtractPackageStatus(status[!is.na(status$flavor), ],
+                       checkings[!is.na(checkings$flavor), ])
 }
