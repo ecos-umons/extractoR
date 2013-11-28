@@ -128,7 +128,7 @@ ExtractStatus <- function(date, checkdir) {
                "r-devel-linux-x86_64-debian-gcc")
   status <- ReadCheckings(date, "check_results.rds", checkdir, flavors)
   status$flavor <- sub("^(r-[a-z]+-[a-z]+)-.*$", "\\1", status$flavor)
-  checkings <- ReadCheckings(date, "check_details.rds", checkdir)
+  checkings <- ReadCheckings(date, "check_details.rds", checkdir, flavors)
   checkings$flavor <- sub("^(r-[a-z]+-[a-z]+)-.*$", "\\1", checkings$flavor)
   ExtractPackageStatus(status[!is.na(status$flavor), ],
                        checkings[!is.na(checkings$flavor), ])
