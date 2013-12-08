@@ -106,6 +106,5 @@ FetchPackages <- function(cran, datadir,
   #   A logical vector telling where a value is TRUE iff the package
   #   has been donwloaded.
   packages <- unique(cran$packages$filename)
-  rversion.re <- "^[0-9]+\\.[0-9]+.*$"
   sapply(packages, FetchPackage, cran$rversions, datadir, cran.mirror)
 }
