@@ -13,6 +13,7 @@ dflist2df(l)
 \arguments{
   \item{l}{A list where all elements are dataframes with the same
     columns.}
+  \item{keep.rownames}{Keep rownames if TRUE.}
 }
 \value{
   The dataframe which is the concatenation of all rows of all dataframes

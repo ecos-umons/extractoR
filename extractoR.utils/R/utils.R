@@ -45,28 +45,36 @@ ParseArchiveName <- function(archive) {
   list(package=archive[1], version=strsplit(archive[2], "\\.tar\\.gz")[[1]][1])
 }
 
-dflist2df <- function(l) {
+dflist2df <- function(l, keep.rownames=FALSE) {
   # Converts a list of dataframes which have the same columns to a
   # single dataframe.
   #
   # Args:
   #   l: The list of dataframes.
+  #   keep.rownames: Keep rownames if TRUE.
   #
   # Returns:
   #   The new dataframe which is the concatenation of all rows of the
   #   dataframes contained in the list.
-  names <- names(l[[1]])
   names(l) <- NULL
-  rownames <- as.vector(unlist(sapply(l, rownames)))
-  l <- unlist(l, recursive=FALSE)
-  l <- lapply(l, function(x) if (is.factor(x)) as.character(x) else x)
-  ## GetColumn <- function (x) unlist(l[names(l) == x], recursive=FALSE)
-  GetColumn <- function (x) do.call(c, l[names(l) == x])
-  df <- as.data.frame(lapply(as.list(names), GetColumn),
-                      stringsAsFactors=FALSE)
-  colnames(df) <- names
-  if (length(unique(rownames)) == nrow(df)) {
-    rownames(df) <- rownames
+  classes <- sapply(l[[1]], class)
+  if (keep.rownames) {
+    rownames <- as.vector(unlist(sapply(l, rownames)))
+  }
+  c.row <- function(n) {
+    is.factor <- classes[n] == "factor"
+    res <- do.call(base::c, lapply(l, function(x) {
+      if (is.factor) as.character(x[[n]]) else x[[n]]
+    }))
+    if (is.factor) factor(res) else res
+  }
+  df <- lapply(names(classes), c.row)
+  df <- as.data.frame(df, stringsAsFactors=FALSE)
+  colnames(df) <- names(classes)
+  if (keep.rownames) {
+    if (length(unique(rownames)) == nrow(df)) {
+      rownames(df) <- rownames
+    }
   }
   df
 }
