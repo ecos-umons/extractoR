@@ -84,38 +84,6 @@ ReadCheckings <- function(date, filename, checkdir, flavors=NULL) {
   }
 }
 
-ExtractPackageStatus <- function(status, checkings) {
-  # Extracts status of packages (ERROR, WARNING, NOTE or OK) based on
-  # checking results.
-  #
-  # Args:
-  #   status: CRAN status dataframe like the one returned by
-  #           ReadCheckings on check_results.rds.
-  #   checkings: CRAN checkings dataframe like the one returned by
-  #              ReadCheckings on check_details.rds.
-  #
-  # Returns:
-  #   status dataframe with an added column "status".
-  keys <- paste(checkings$package, checkings$version, checkings$flavor)
-  checkings <- split(checkings, keys)
-  GetNumStatus <- function(c, type) nrow(c[c$status == type, ])
-  errors <- sapply(checkings, GetNumStatus, "ERROR")
-  warnings <- sapply(checkings, GetNumStatus, "WARNING")
-  notes <- sapply(checkings, GetNumStatus, "NOTE")
-  GetStatus <- function(c) {
-    if (c["errors"]) "ERROR"
-    else if (c["warnings"]) "WARNING"
-    else if (c["notes"]) "NOTE"
-    else "OK"
-  }
-  res <- apply(data.frame(errors, warnings, notes), 1, GetStatus)
-  status$status <- "OK"
-  rownames(status) <- paste(status$package, status$version, status$flavor)
-  status[names(res), ]$status <- res
-  rownames(status) <- NULL
-  status
-}
-
 ExtractStatus <- function(date, checkdir) {
   flavors <- c("r-devel-windows-ix86+x86_64",
                "r-patched-solaris-x86",
@@ -128,8 +96,5 @@ ExtractStatus <- function(date, checkdir) {
                "r-devel-linux-x86_64-debian-gcc")
   status <- ReadCheckings(date, "check_results.rds", checkdir, flavors)
   status$flavor <- sub("^(r-[a-z]+-[a-z]+)-.*$", "\\1", status$flavor)
-  checkings <- ReadCheckings(date, "check_details.rds", checkdir, flavors)
-  checkings$flavor <- sub("^(r-[a-z]+-[a-z]+)-.*$", "\\1", checkings$flavor)
-  ExtractPackageStatus(status[!is.na(status$flavor), ],
-                       checkings[!is.na(checkings$flavor), ])
+  status
 }
