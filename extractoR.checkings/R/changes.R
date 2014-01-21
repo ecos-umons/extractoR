@@ -1,63 +1,41 @@
-GetCRANState <- function(con, flavor) {
-  query <- paste("SELECT s.date, p.name package, v.version version,",
-                 "f.name flavor, mp.name maintainer, s.status",
-                 "FROM package_versions v, packages p, flavors f,",
-                 "identity_merging im, merged_people mp, cran_status s",
+CRANStatus <- function(con, date, flavor) {
+  query <- paste("SELECT s.date, p.name package, v.version version, s.status",
+                 "FROM package_versions v, packages p,",
+                 "flavors f, cran_status s",
                  sprintf("WHERE f.name = '%s'", flavor),
                  "AND s.version_id = v.id AND v.package_id = p.id",
-                 "AND s.maintainer_id = im.orig_id AND im.merged_id = mp.id",
-                 "AND f.id = s.flavor_id",
+                 sprintf("AND f.id = s.flavor_id AND s.date = '%s'", date),
                  "ORDER BY p.id, s.date")
   dbGetQuery(con, query)
 }
 
-AddArchived <- function(package, dates) {
-  dates <- setdiff(dates, package$date)
-  if (length(dates)) {
-    archived <- data.frame(date=dates)
-    archived$package <- package$package[1]
-    archived$version <- ""
-    archived$flavor <- package$flavor[1]
-    archived$maintainer <- ""
-    archived$status <- "ARCHIVED"
-    package <- rbind(package, archived)
-    package[with(package, order(date)), ]
-  } else {
-    package
+Missings <- function(cran, packages) {
+  n <- length(packages)
+  rbind(data.frame(date=rep(unique(cran$date), n),
+                   package=packages, version=as.character(rep("", n)),
+                   status=rep("ARCHIVED", n), stringsAsFactors=FALSE), cran)
+}
+
+DiffCol <- function(packages, col) {
+  col1 <- paste0(col, ".x")
+  col2 <- paste0(col, ".y")
+  packages <- packages[packages[[col1]] != packages[[col2]],
+                       c("date.y", "package", col1, col2)]
+  if (nrow(packages)) {
+    names(packages) <- c("date", "package", "old", "new")
+    packages$type <- col
+    packages
   }
 }
 
-ExtractStatusChanges <- function(package) {
-  p1 <- package[2:nrow(package), ]
-  p2 <- package[1:(nrow(package) - 1), ]
-  ExtractUpdates <- function(col) {
-    updates <- p1[col] != p2[col]
-    data.frame(date=p1$date[updates], package=p1$package[updates],
-               type=rep(col, length(updates[updates])),
-               old=p2[col][updates], new=p1[col][updates],
-               stringsAsFactors=FALSE)
-  }
-  status <- ExtractUpdates("status")
-  versions <- ExtractUpdates("version")
-  maintainers <- ExtractUpdates("maintainer")
-  archived <- status$date[status$old == "ARCHIVED" | status$new == "ARCHIVED"]
-  res <- rbind(status, versions, maintainers)
-  # Used to remove versions & maintainers changes when versions is
-  # archived or unarchived. TODO maybe we don't want to loose this
-  # information as a version can (or will surely?) change when a
-  # package is first archived and then unarchived.
-  ## res <- rbind(status, versions[!versions$date %in% archived, ],
-  ##              maintainers[!maintainers$date %in% archived, ])
-  res <- res[with(res, order(date, package)), ]
-  res
-}
-
-ExtractPackagesStatusChanges <- function(packages) {
-  dates <- sort(unique(packages$date))
-  packages <- split(packages, packages$package)
-  packages <- lapply(packages, AddArchived, dates)
-  packages <- lapply(packages, ExtractStatusChanges)
-  dflist2df(packages)
+DiffStatus <- function(prev, current) {
+  print(dim(prev))
+  print(dim(current))
+  packages <- merge(Missings(prev, setdiff(current$package, prev$package)),
+                    Missings(current, setdiff(prev$package, current$package)),
+                    by="package")
+  rbind(DiffCol(packages, "version"),
+        DiffCol(packages, "status"))
 }
 
 InsertChanges <- function(con, flavor, changes) {
@@ -75,8 +53,19 @@ InsertChanges <- function(con, flavor, changes) {
   InsertDataFrame(con, "cran_changes", changes)
 }
 
-ExtractChanges <- function(con, flavor) {
-  cran <- GetCRANState(con, flavor)
-  dates <- sort(unique(cran$date))
-  ExtractPackagesStatusChanges(cran)
+ExtractAndInsertFlavorChanges <- function(con, flavor, from.date="1970-01-01",
+                                          to.date=NA) {
+  dates <- dbGetQuery(con, "SELECT DISTINCT date FROM cran_status")$date
+  dates <- dates[dates >= as.POSIXlt(from.date) &
+                 (is.na(to.date) | dates < as.POSIXlt(to.date))]
+  prev <- CRANStatus(con, dates[1], flavor)
+  for (date in dates[-1]) {
+    message(sprintf("Inserting changes for date %s", date))
+    cran <- CRANStatus(con, date, flavor)
+    res <- DiffStatus(prev, cran)
+    if (!is.null(res)) {
+      InsertChanges(con, flavor, res)
+    }
+    prev <- cran
+  }
 }

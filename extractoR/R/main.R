@@ -29,8 +29,7 @@ ExtractAll <- function(datadir) {
 
   message("Extracting people")
   t <- system.time({
-    rdata$roles <- rbind(ExtractRoles(rdata$descfiles, "Maintainer"),
-                         ExtractRoles(rdata$descfiles, "Author"))
+    rdata$roles <- ExtractRoles(rdata$descfiles, "Maintainer")
     rdata$people <- ExtractPeople(rdata$roles)
   })
   message(sprintf("People extracted in %.3fs", t[3]))
@@ -81,29 +80,20 @@ UpdateTaskViews <- function(con, cran.mirror="http://cran.r-project.org") {
 }
 
 ExtractAndInsertStatus <- function(con, checkdir, from.date="1970-01-01",
-                                   to.date=NA) {
-  # Extracts CRAN status and checkings and inserts them into a database.
-  #
-  # Args:
-  #   con: The database connection object.
-  #   checkdir: Root dir where all checking files are stored.
-  #   from.date: Oldest checking to read.
-  #   to.date: Newest checkings to read.
+                                   to.date=NA, extract.maintainers=FALSE) {
   for (date in ListCheckings(checkdir, from.date, to.date)) {
-    status <- ExtractStatus(date, checkdir)
+    status <- ExtractStatus(date, checkdir, extract.maintainers)
     message(sprintf("Inserting CRAN status %s", date))
     InsertCRANStatus(con, status)
   }
 }
 
-ExtractAndInsertChanges <- function(con) {
+ExtractAndInsertChanges <- function(con, from.date="1970-01-01", to.date=NA) {
   flavors <- dbGetQuery(con, "SELECT name FROM flavors")$name
-  flavors <- flavors[grep("linux-ix86", flavors, invert=TRUE)]
 
   for (flavor in flavors) {
     message(sprintf("Extracting changes for flavor %s", flavor))
-    changes <- ExtractChanges(con, flavor)
-    InsertChanges(con, flavor, changes)
+    ExtractAndInsertFlavorChanges(con, flavor, from.date, to.date)
   }
 }
 
