@@ -51,7 +51,8 @@ ExtractMaintainers <- function(maintainers) {
   list(names=names, emails=emails)
 }
 
-ReadCheckings <- function(date, filename, checkdir, flavors=NULL) {
+ReadCheckings <- function(date, filename, checkdir,
+                          flavors=NULL, extract.maintainer=FALSE) {
   # Reads checking RDS files.
   #
   # Args:
@@ -72,7 +73,7 @@ ReadCheckings <- function(date, filename, checkdir, flavors=NULL) {
   if ("priority" %in% colnames(df)) {
     df$priority[is.na(df$priority)] <- "contributed"
   }
-  if ("maintainer" %in% colnames(df)) {
+  if (extract.maintainer & "maintainer" %in% colnames(df)) {
     maintainers <- ExtractMaintainers(df$maintainer)
     df$name <- maintainers$names
     df$email <- maintainers$emails
@@ -84,7 +85,7 @@ ReadCheckings <- function(date, filename, checkdir, flavors=NULL) {
   }
 }
 
-ExtractStatus <- function(date, checkdir) {
+ExtractStatus <- function(date, checkdir, extract.maintainer=FALSE) {
   flavors <- c("r-devel-windows-ix86+x86_64",
                "r-patched-solaris-x86",
                "r-release-linux-x86_64",
@@ -94,7 +95,8 @@ ExtractStatus <- function(date, checkdir) {
                "r-devel-macosx-x86_64",
                "r-devel-linux-x86_64-debian",
                "r-devel-linux-x86_64-debian-gcc")
-  status <- ReadCheckings(date, "check_results.rds", checkdir, flavors)
+  status <- ReadCheckings(date, "check_results.rds", checkdir,
+                          flavors, extract.maintainer)
   status$flavor <- sub("^(r-[a-z]+-[a-z]+)-.*$", "\\1", status$flavor)
   status
 }

@@ -26,13 +26,18 @@ InsertCRANStatus <- function(con, status) {
   flavors <- sapply(as.vector(status$flavor), function(f) flavors[[f]])
   dates <- sprintf("'%s'", as.character(status$date))
   priorities <- FormatString(con, status$priority)
-  InsertPeople(con, unique(status[, c("name", "email")]))
-  maintainers <- GetHashPeople(con)
-  maintainers <- apply(status, 1, function(m) maintainers[[GetPersonKey(m)]])
-  status <- FormatString(con, status$status)
-  df <- data.frame(date=dates, version_id=versions, flavor_id=flavors,
-                   maintainer_id=maintainers, priority=priorities,
-                   status=status)
+  st <- FormatString(con, status$status)
+  if ("name" %in% colnames(status) & "email" %in% colnames(status)) {
+    InsertPeople(con, unique(status[, c("name", "email")]))
+    maintainers <- GetHashPeople(con)
+    maintainers <- apply(status, 1, function(m) maintainers[[GetPersonKey(m)]])
+    df <- data.frame(date=dates, version_id=versions, flavor_id=flavors,
+                     maintainer_id=maintainers, priority=priorities,
+                     status=st)
+  } else {
+    df <- data.frame(date=dates, version_id=versions, flavor_id=flavors,
+                     priority=priorities, status=st)
+  }
   InsertDataFrame(con, "cran_status", df)
 }
 
