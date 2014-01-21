@@ -29,8 +29,6 @@ DiffCol <- function(packages, col) {
 }
 
 DiffStatus <- function(prev, current) {
-  print(dim(prev))
-  print(dim(current))
   packages <- merge(Missings(prev, setdiff(current$package, prev$package)),
                     Missings(current, setdiff(prev$package, current$package)),
                     by="package")
