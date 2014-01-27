@@ -53,7 +53,9 @@ InsertChanges <- function(con, flavor, changes) {
 
 ExtractAndInsertFlavorChanges <- function(con, flavor, from.date="1970-01-01",
                                           to.date=NA) {
-  dates <- dbGetQuery(con, "SELECT DISTINCT date FROM cran_status")$date
+  query <- paste("SELECT DISTINCT s.date FROM cran_status s, flavors f",
+                 sprintf("WHERE s.flavor_id = f.id AND f.name = '%s'", flavor))
+  dates <- dbGetQuery(con, query)$date
   dates <- dates[dates >= as.POSIXlt(from.date) &
                  (is.na(to.date) | dates < as.POSIXlt(to.date))]
   prev <- CRANStatus(con, dates[1], flavor)
