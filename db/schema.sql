@@ -2,15 +2,13 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
-CREATE SCHEMA IF NOT EXISTS `rdata` DEFAULT CHARACTER SET utf8 COLLATE utf8_bin ;
-USE `rdata` ;
 
 -- -----------------------------------------------------
--- Table `rdata`.`packages`
+-- Table `packages`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `rdata`.`packages` ;
+DROP TABLE IF EXISTS `packages` ;
 
-CREATE  TABLE IF NOT EXISTS `rdata`.`packages` (
+CREATE  TABLE IF NOT EXISTS `packages` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `name` VARCHAR(255) NOT NULL ,
   PRIMARY KEY (`id`) ,
@@ -19,11 +17,11 @@ ENGINE = MyISAM;
 
 
 -- -----------------------------------------------------
--- Table `rdata`.`package_versions`
+-- Table `package_versions`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `rdata`.`package_versions` ;
+DROP TABLE IF EXISTS `package_versions` ;
 
-CREATE  TABLE IF NOT EXISTS `rdata`.`package_versions` (
+CREATE  TABLE IF NOT EXISTS `package_versions` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `package_id` INT NOT NULL ,
   `version` VARCHAR(255) NULL ,
@@ -31,7 +29,7 @@ CREATE  TABLE IF NOT EXISTS `rdata`.`package_versions` (
   `mtime` DATETIME NULL ,
   PRIMARY KEY (`id`) ,
   INDEX `fk_package_idx` (`package_id` ASC) ,
-  UNIQUE INDEX `unique_idx` (`package_id` ASC, `version` ASC) ,
+  UNIQUE INDEX `UNIQUE` (`package_id` ASC, `version` ASC) ,
   INDEX `mtime_idx` (`mtime` ASC) ,
   INDEX `size_idx` (`size` ASC) )
 ENGINE = MyISAM
@@ -39,11 +37,11 @@ COMMENT = '		';
 
 
 -- -----------------------------------------------------
--- Table `rdata`.`people`
+-- Table `people`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `rdata`.`people` ;
+DROP TABLE IF EXISTS `people` ;
 
-CREATE  TABLE IF NOT EXISTS `rdata`.`people` (
+CREATE  TABLE IF NOT EXISTS `people` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `name` VARCHAR(255) NULL ,
   `email` VARCHAR(255) NULL ,
@@ -53,26 +51,26 @@ ENGINE = MyISAM;
 
 
 -- -----------------------------------------------------
--- Table `rdata`.`roles`
+-- Table `roles`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `rdata`.`roles` ;
+DROP TABLE IF EXISTS `roles` ;
 
-CREATE  TABLE IF NOT EXISTS `rdata`.`roles` (
+CREATE  TABLE IF NOT EXISTS `roles` (
   `version_id` INT NOT NULL ,
   `person_id` INT NOT NULL ,
   `role` VARCHAR(45) NULL ,
   INDEX `fk_person_idx` (`person_id` ASC) ,
   INDEX `fk_version_idx` (`version_id` ASC) ,
-  UNIQUE INDEX `unique_idx` (`person_id` ASC, `version_id` ASC, `role` ASC) )
+  UNIQUE INDEX `UNIQUE` (`person_id` ASC, `version_id` ASC, `role` ASC) )
 ENGINE = MyISAM;
 
 
 -- -----------------------------------------------------
--- Table `rdata`.`merged_people`
+-- Table `merged_people`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `rdata`.`merged_people` ;
+DROP TABLE IF EXISTS `merged_people` ;
 
-CREATE  TABLE IF NOT EXISTS `rdata`.`merged_people` (
+CREATE  TABLE IF NOT EXISTS `merged_people` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `name` VARCHAR(255) NULL ,
   PRIMARY KEY (`id`) ,
@@ -81,11 +79,11 @@ ENGINE = MyISAM;
 
 
 -- -----------------------------------------------------
--- Table `rdata`.`identity_merging`
+-- Table `identity_merging`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `rdata`.`identity_merging` ;
+DROP TABLE IF EXISTS `identity_merging` ;
 
-CREATE  TABLE IF NOT EXISTS `rdata`.`identity_merging` (
+CREATE  TABLE IF NOT EXISTS `identity_merging` (
   `merged_id` INT NOT NULL ,
   `orig_id` INT NOT NULL ,
   INDEX `fk_orig_idx` (`orig_id` ASC) ,
@@ -95,11 +93,11 @@ ENGINE = MyISAM;
 
 
 -- -----------------------------------------------------
--- Table `rdata`.`package_dependencies`
+-- Table `package_dependencies`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `rdata`.`package_dependencies` ;
+DROP TABLE IF EXISTS `package_dependencies` ;
 
-CREATE  TABLE IF NOT EXISTS `rdata`.`package_dependencies` (
+CREATE  TABLE IF NOT EXISTS `package_dependencies` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `version_id` INT NULL ,
   `dependency` VARCHAR(255) NULL ,
@@ -112,28 +110,28 @@ ENGINE = MyISAM;
 
 
 -- -----------------------------------------------------
--- Table `rdata`.`description_files`
+-- Table `description_files`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `rdata`.`description_files` ;
+DROP TABLE IF EXISTS `description_files` ;
 
-CREATE  TABLE IF NOT EXISTS `rdata`.`description_files` (
+CREATE  TABLE IF NOT EXISTS `description_files` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `version_id` INT(11) NULL ,
   `keyword` VARCHAR(255) NULL ,
   `value` TEXT NULL ,
   PRIMARY KEY (`id`) ,
   INDEX `fk_version_idx` (`version_id` ASC) ,
-  INDEX `key_idx` (`keyword` ASC) ,
-  UNIQUE INDEX `unique_idx` (`version_id` ASC, `keyword` ASC) )
+  INDEX `keyword_idx` (`keyword` ASC) ,
+  UNIQUE INDEX `UNIQUE` (`version_id` ASC, `keyword` ASC) )
 ENGINE = MyISAM;
 
 
 -- -----------------------------------------------------
--- Table `rdata`.`flavors`
+-- Table `flavors`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `rdata`.`flavors` ;
+DROP TABLE IF EXISTS `flavors` ;
 
-CREATE  TABLE IF NOT EXISTS `rdata`.`flavors` (
+CREATE  TABLE IF NOT EXISTS `flavors` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `name` VARCHAR(255) NULL ,
   PRIMARY KEY (`id`) ,
@@ -142,78 +140,79 @@ ENGINE = MyISAM;
 
 
 -- -----------------------------------------------------
--- Table `rdata`.`cran_status`
+-- Table `cran_status`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `rdata`.`cran_status` ;
+DROP TABLE IF EXISTS `cran_status` ;
 
-CREATE  TABLE IF NOT EXISTS `rdata`.`cran_status` (
+CREATE  TABLE IF NOT EXISTS `cran_status` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `date` DATETIME NULL ,
   `version_id` INT NULL ,
   `flavor_id` INT NULL ,
-  `maintainer_id` INT NULL ,
+  `maintainer_id` INT NULL DEFAULT NULL ,
   `priority` VARCHAR(45) NULL ,
   `status` VARCHAR(10) NULL ,
   PRIMARY KEY (`id`) ,
-  UNIQUE INDEX `unique_idx` (`date` ASC, `version_id` ASC, `flavor_id` ASC) ,
-  INDEX `fk_cran_status_flavors1_idx` (`flavor_id` ASC) ,
-  INDEX `fk_cran_status_package_versions1_idx` (`version_id` ASC) ,
-  INDEX `fk_cran_status_people1_idx` (`maintainer_id` ASC) ,
+  UNIQUE INDEX `UNIQUE` (`date` ASC, `version_id` ASC, `flavor_id` ASC) ,
+  INDEX `fk_flavor_idx` (`flavor_id` ASC) ,
+  INDEX `fk_version_idx` (`version_id` ASC) ,
+  INDEX `fk_maintainer_idx` (`maintainer_id` ASC) ,
   INDEX `priority_idx` (`priority` ASC) ,
-  INDEX `status_idx` (`status` ASC) )
+  INDEX `status_idx` (`status` ASC) ,
+  INDEX `date_idx` (`date` ASC) )
 ENGINE = MyISAM;
 
 
 -- -----------------------------------------------------
--- Table `rdata`.`dependency_constraints`
+-- Table `dependency_constraints`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `rdata`.`dependency_constraints` ;
+DROP TABLE IF EXISTS `dependency_constraints` ;
 
-CREATE  TABLE IF NOT EXISTS `rdata`.`dependency_constraints` (
-  `dependency_id` INT NULL ,
-  `type` VARCHAR(2) NULL ,
+CREATE  TABLE IF NOT EXISTS `dependency_constraints` (
+  `dependency_id` INT NOT NULL ,
+  `type` VARCHAR(2) NOT NULL ,
   `version` VARCHAR(45) NULL ,
   INDEX `fk_dependency_idx` (`dependency_id` ASC) ,
-  UNIQUE INDEX `unique_idx` (`dependency_id` ASC, `type` ASC) )
+  PRIMARY KEY (`dependency_id`, `type`) )
 ENGINE = MyISAM;
 
 
 -- -----------------------------------------------------
--- Table `rdata`.`dates`
+-- Table `dates`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `rdata`.`dates` ;
+DROP TABLE IF EXISTS `dates` ;
 
-CREATE  TABLE IF NOT EXISTS `rdata`.`dates` (
+CREATE  TABLE IF NOT EXISTS `dates` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `version_id` INT NULL ,
   `type` VARCHAR(45) NULL ,
   `date` DATETIME NULL ,
   PRIMARY KEY (`id`) ,
-  INDEX `fk_package_versions` (`version_id` ASC) ,
-  UNIQUE INDEX `unique_idx` (`version_id` ASC, `type` ASC) )
+  INDEX `fk_version_idx` (`version_id` ASC) ,
+  UNIQUE INDEX `UNIQUE` (`version_id` ASC, `type` ASC) )
 ENGINE = MyISAM;
 
 
 -- -----------------------------------------------------
--- Table `rdata`.`recommended_packages`
+-- Table `recommended_packages`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `rdata`.`recommended_packages` ;
+DROP TABLE IF EXISTS `recommended_packages` ;
 
-CREATE  TABLE IF NOT EXISTS `rdata`.`recommended_packages` (
+CREATE  TABLE IF NOT EXISTS `recommended_packages` (
   `version_id` INT NULL ,
   `rversion_id` INT NULL ,
-  UNIQUE INDEX `unique_idx` (`version_id` ASC, `rversion_id` ASC) ,
+  UNIQUE INDEX `UNIQUE` (`version_id` ASC, `rversion_id` ASC) ,
   INDEX `fk_version_idx` (`version_id` ASC) ,
   INDEX `fk_rversion_idx` (`rversion_id` ASC) )
 ENGINE = MyISAM;
 
 
 -- -----------------------------------------------------
--- Table `rdata`.`taskviews`
+-- Table `taskviews`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `rdata`.`taskviews` ;
+DROP TABLE IF EXISTS `taskviews` ;
 
-CREATE  TABLE IF NOT EXISTS `rdata`.`taskviews` (
+CREATE  TABLE IF NOT EXISTS `taskviews` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `name` VARCHAR(45) NULL ,
   `topic` VARCHAR(255) NULL ,
@@ -223,29 +222,29 @@ ENGINE = MyISAM;
 
 
 -- -----------------------------------------------------
--- Table `rdata`.`taskview_versions`
+-- Table `taskview_versions`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `rdata`.`taskview_versions` ;
+DROP TABLE IF EXISTS `taskview_versions` ;
 
-CREATE  TABLE IF NOT EXISTS `rdata`.`taskview_versions` (
+CREATE  TABLE IF NOT EXISTS `taskview_versions` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `version` VARCHAR(45) NULL ,
   `taskview_id` INT NULL ,
   `maintainer_id` INT NULL ,
   PRIMARY KEY (`id`) ,
   INDEX `version_idx` (`version` ASC) ,
-  INDEX `fk_taskview_versions_taskviews1_idx` (`taskview_id` ASC) ,
-  INDEX `fk_taskview_versions_people1_idx` (`maintainer_id` ASC) ,
-  UNIQUE INDEX `unique_idx` (`version` ASC, `taskview_id` ASC) )
+  INDEX `fk_taskview_idx` (`taskview_id` ASC) ,
+  INDEX `fk_maintainer_idx` (`maintainer_id` ASC) ,
+  UNIQUE INDEX `UNIQUE` (`version` ASC, `taskview_id` ASC) )
 ENGINE = MyISAM;
 
 
 -- -----------------------------------------------------
--- Table `rdata`.`taskview_content`
+-- Table `taskview_content`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `rdata`.`taskview_content` ;
+DROP TABLE IF EXISTS `taskview_content` ;
 
-CREATE  TABLE IF NOT EXISTS `rdata`.`taskview_content` (
+CREATE  TABLE IF NOT EXISTS `taskview_content` (
   `taskview_id` INT NULL ,
   `package_id` INT NULL ,
   `core` TINYINT(1) NULL ,
@@ -256,26 +255,26 @@ ENGINE = MyISAM;
 
 
 -- -----------------------------------------------------
--- Table `rdata`.`packages_timeline`
+-- Table `packages_timeline`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `rdata`.`packages_timeline` ;
+DROP TABLE IF EXISTS `packages_timeline` ;
 
-CREATE  TABLE IF NOT EXISTS `rdata`.`packages_timeline` (
+CREATE  TABLE IF NOT EXISTS `packages_timeline` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `date` DATETIME NULL ,
   `version_id` INT UNSIGNED NULL ,
   PRIMARY KEY (`id`) ,
-  INDEX `fk_package_timelines_package_versions1_idx` (`version_id` ASC) ,
-  UNIQUE INDEX `unique_idx` (`version_id` ASC) )
+  INDEX `fk_version_idx` (`version_id` ASC) ,
+  UNIQUE INDEX `UNIQUE` (`version_id` ASC) )
 ENGINE = MyISAM;
 
 
 -- -----------------------------------------------------
--- Table `rdata`.`cran_changes`
+-- Table `cran_changes`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `rdata`.`cran_changes` ;
+DROP TABLE IF EXISTS `cran_changes` ;
 
-CREATE  TABLE IF NOT EXISTS `rdata`.`cran_changes` (
+CREATE  TABLE IF NOT EXISTS `cran_changes` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `flavor_id` INT NULL ,
   `date` DATETIME NULL ,
@@ -291,11 +290,11 @@ ENGINE = MyISAM;
 
 
 -- -----------------------------------------------------
--- Table `rdata`.`cran_mirror_log`
+-- Table `cran_mirror_log`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `rdata`.`cran_mirror_log` ;
+DROP TABLE IF EXISTS `cran_mirror_log` ;
 
-CREATE  TABLE IF NOT EXISTS `rdata`.`cran_mirror_log` (
+CREATE  TABLE IF NOT EXISTS `cran_mirror_log` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `date` DATETIME NULL ,
   `version_id` INT NULL ,
@@ -306,8 +305,8 @@ CREATE  TABLE IF NOT EXISTS `rdata`.`cran_mirror_log` (
   `arch` VARCHAR(45) NULL ,
   `os` VARCHAR(45) NULL ,
   PRIMARY KEY (`id`) ,
-  INDEX `fk_cran_mirror_log_package_versions1_idx` (`version_id` ASC) ,
-  UNIQUE INDEX `unique_idx` (`date` ASC, `ip_id` ASC, `version_id` ASC) ,
+  INDEX `fk_version_idx` (`version_id` ASC) ,
+  UNIQUE INDEX `UNIQUE` (`date` ASC, `ip_id` ASC, `version_id` ASC) ,
   INDEX `rversion_idx` (`rversion` ASC) ,
   INDEX `os_idx` (`os` ASC) ,
   INDEX `ip_idx` (`ip_id` ASC) ,
@@ -315,7 +314,6 @@ CREATE  TABLE IF NOT EXISTS `rdata`.`cran_mirror_log` (
   INDEX `arch_idx` (`arch` ASC) )
 ENGINE = MyISAM;
 
-USE `rdata` ;
 
 
 SET SQL_MODE=@OLD_SQL_MODE;
