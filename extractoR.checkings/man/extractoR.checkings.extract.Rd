@@ -11,8 +11,8 @@
 
 \usage{
 ListCheckings(checkdir, from.date="1970-01-01", to.date=NA)
-ReadCheckings(date, filename, checkdir)
-ExtractStatus(date, checkdir)
+ReadCheckings(date, filename, checkdir, flavors=NULL, extract.maintainer=FALSE)
+ExtractStatus(date, checkdir, extract.maintainer=FALSE)
 }
 \arguments{
   \item{checkdir}{Root dir where all checking files are stored.}
@@ -22,6 +22,9 @@ ExtractStatus(date, checkdir)
     using the format "%y-%m-%d-%H-%M". It is the directory where the RDS
     file is stored.}
   \item{filename}{Name of the RDS file to read.}
+  \item{flavors}{Flavors to extract (all if NULL)}
+  \item{extract.maintainer}{Boolean flag for extracting information
+    about maintainers}
 }
 
 \value{
