@@ -4,7 +4,7 @@ delim.close <- "([]>)},\"' ]|$)"
 email.pattern <- sprintf("%s(%s+([ ]?(\\@|\\[at\\])+[ ]?%s+)+)%s",
                          delim.open, email.chars, email.chars, delim.close)
 
-ExtractPersonInfos <- function(s) {
+ExtractPerson <- function(s) {
   # Extracts a name and an email from a string containing them.
   #
   # Args:
@@ -20,7 +20,7 @@ ExtractPersonInfos <- function(s) {
   }
 }
 
-ExtractPerson <- function(s) {
+ExtractPeople <- function(s) {
   # Extracts all the people defined in a string.
   #
   # Args:
@@ -33,7 +33,7 @@ ExtractPerson <- function(s) {
   s <- gsub("[[:space:]]+", " ", s)
   s <- unlist(strsplit(s, "( (with|from|by|/|and) )|[,;&>]"))
   s <- Strip(grep("[[:alpha:]]", s, value=TRUE))
-  m <- matrix(unlist(lapply(s, ExtractPersonInfos)), nrow=2)
+  m <- matrix(unlist(lapply(s, ExtractPerson)), nrow=2)
   data.frame(name=m[1, ], email=m[2, ], stringsAsFactors=FALSE)
 }
 
@@ -49,9 +49,9 @@ ExtractRoles <- function(descfiles, role) {
   # Returns:
   #   A five columns dataframe containing package name, version and
   #   the role, the name and email of people extracted.
-  roles <- GetDescfilesKey(descfiles, role)
+  roles <- descfiles[descfiles$key==role, ]
   Extract <- function(d) {
-    df <- ExtractPerson(d["value"])
+    df <- ExtractPeople(d["value"])
     df$package <- d["package"]
     df$version <- d["version"]
     df$role <- tolower(d["key"])
@@ -59,30 +59,4 @@ ExtractRoles <- function(descfiles, role) {
   }
   people <- apply(roles, 1, Extract)
   FlattenDF(people)
-}
-
-ExtractPeople <- function(roles) {
-  # Returns the list of all different people.
-  #
-  # Args:
-  #   roles: A dataframe like the one returned by ExtractRoles.
-  #
-  # Returns:
-  #   A two-column dataframe containing the people names and emails.
-  people <- unique(roles[, 4:5])
-  rownames(people) <- NULL
-  people
-}
-
-People2CSV <- function(people, file) {
-  # Exports people to a CSV file.
-  #
-  # Args:
-  #   people: The dataframe people (like the one returned by
-  #           ExtractPeople)
-  #   file: The name of the file to save identities into.
-  #
-  # Returns:
-  #   Nothing
-  write.csv2(people, file=file, row.names=FALSE)
 }

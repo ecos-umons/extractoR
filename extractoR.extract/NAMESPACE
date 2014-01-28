@@ -1,8 +1,9 @@
 importFrom(extractoR.utils, ParseArchiveName, FlattenDF)
+importFrom(ctv, CRAN.views)
 
-export(ReadDescfile, ReadDescfiles, GetDescfilesKeys, GetDescfilesKey)
-export(ExtractPerson, ExtractRoles, ExtractPeople)
+export(ExtractDescfiles)
+export(ExtractPeople, ExtractRoles)
 export(ExtractDependencies)
 export(ExtractDates, ExtractTimeline)
-export(GetTaskViewsDataframe, GetTaskViewsContent)
+export(ExtractTaskViews, ExtractTaskViewsContent)
 export(ExtractHttpLog)

@@ -77,12 +77,10 @@ ExtractDependencies <- function(descfiles, type) {
   #   the constraint type (constraint.type) which is either >, >=, <,
   #   <=, == or nothing, and the constraint version
   #   (constraint.version) if any.
-  dep <- GetDescfilesKey(descfiles, type)
-  dep <- dep[grep(dependencies.re, dep$value),]
-  dependencies <- apply(dep, 1,
-                        function(d) ExtractDependency(d["package"],
-                                                      d["version"],
-                                                      tolower(d["key"]),
-                                                      d["value"]))
-  FlattenDF(dependencies)
+  deps <- descfiles[descfiles$key==type, ]
+  deps <- deps[grep(dependencies.re, deps$value),]
+  FlattenDF(apply(deps, 1, function(d) {
+    ExtractDependency(d["package"], d["version"],
+                      tolower(d["key"]), d["value"])
+  }))
 }

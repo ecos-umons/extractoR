@@ -1,8 +1,5 @@
-GetTaskViewsDataframe <- function(cran.mirror="http://cran.r-project.org") {
+ExtractTaskViews <- function(cran.mirror="http://cran.r-project.org") {
   # Returns a data frame listing the current task views.
-  #
-  # Args:
-  #   cran.mirror: Root URL of the CRAN mirror to use.
   #
   # Returns:
   #   A five column dataframe containing the name of the taskview, its
@@ -17,24 +14,7 @@ GetTaskViewsDataframe <- function(cran.mirror="http://cran.r-project.org") {
              version=as.POSIXlt(versions), stringsAsFactors=FALSE)
 }
 
-GetTaskViewContent <- function(taskview) {
-  # Returns a data frame listing the current content of a task view.
-  #
-  # Arg:
-  #   taskview: The taskview object.
-  #
-  # Returns:
-  #   A four column dataframe containing the name and version of the
-  #   taskview, the name of the package a boolean indicating if it is
-  #   a core taskview or not.
-  n <- nrow(taskview$package)
-  data.frame(taskview=rep(taskview$name, n),
-             version=rep(taskview$version, n),
-             package=taskview$package$name, core=taskview$package$core,
-             stringsAsFactors=FALSE)
-}
-
-GetTaskViewsContent <- function(cran.mirror="http://cran.r-project.org") {
+ExtractTaskViewsContent <- function(cran.mirror="http://cran.r-project.org") {
   # Returns a data frame listing the current content of all task views.
   #
   # Args:
@@ -45,7 +25,13 @@ GetTaskViewsContent <- function(cran.mirror="http://cran.r-project.org") {
   #   taskview, the name of the package a boolean indicating if it is
   #   a core taskview or not.
   ctv <- CRAN.views(repos=cran.mirror)
-  df <- FlattenDF(lapply(ctv, GetTaskViewContent))
+  df <- FlattenDF(lapply(ctv, function(taskview) {
+    n <- nrow(taskview$package)
+    data.frame(taskview=rep(taskview$name, n),
+               version=rep(taskview$version, n),
+               package=taskview$package$name, core=taskview$package$core,
+               stringsAsFactors=FALSE)
+  }))
   df$version <- as.POSIXlt(df$version)
   df
 }

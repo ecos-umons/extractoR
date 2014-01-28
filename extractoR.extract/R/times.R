@@ -26,7 +26,7 @@ ExtractDates <- function(descfiles, type) {
   # Returns:
   #    A four column dataframe with package name, version, date type
   #    and the date.
-  d <- GetDescfilesKey(descfiles, type)
+  d <- descfiles[descfiles$key==type, ]
   dates <- sapply(strsplit(d$value, ";"), function(x) strftime(ParseDate(x[1])))
   df <- data.frame(package=d$package, version=d$version,
                    type=rep(tolower(type), nrow(d)),
