@@ -7,11 +7,10 @@
 }
 
 \usage{
-FetchPackages(packages, datadir,
-cran.mirror="http://cran.r-project.org")
+FetchPackages(cran, datadir, cran.mirror="http://cran.r-project.org")
 }
 \arguments{
-  \item{packages}{A list of packages like the one returned by
+  \item{cran}{A dataframe of packages like the one returned by
     \code{FetchCRANList}}
   \item{datadir}{Directory where to store and extract the packages.}
   \item{cran.mirror}{Root URL of the CRAN mirror to use.}

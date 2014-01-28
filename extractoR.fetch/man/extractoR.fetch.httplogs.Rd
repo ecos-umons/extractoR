@@ -1,7 +1,6 @@
 \name{HttpLogs}
 \alias{HttpLogs}
-\alias{FetchLogsList}
-\alias{DownloadMissingLogs}
+\alias{FetchLogs}
 \encoding{UTF-8}
 \title{HttpLogs}
 \description{
@@ -9,13 +8,10 @@
 }
 
 \usage{
-FetchLogsList(url)
-DownloadMissingLogs(logs, datadir)
+FetchLogs(url, datadir)
 }
 \arguments{
   \item{url}{URL of the http mirror server to fetch log from.}
-  \item{logs}{Logs vector like the one returned by
-    \code{FetchLogsList}.}
   \item{datadir}{Directory where to store downloaded logs.}
 }
 
