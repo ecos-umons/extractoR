@@ -2,7 +2,7 @@
 \alias{CRANChanges}
 \alias{ExtractChanges}
 \alias{InsertChanges}
-\alias{ExtractAndInsertFlavorChanges}
+\alias{ExtractChanges}
 \encoding{UTF-8}
 \title{CRANChanges}
 \description{
@@ -11,7 +11,7 @@
 }
 
 \usage{
-ExtractAndInsertFlavorChanges(con, flavor, from.date="1970-01-01", to.date=NA)
+ExtractChanges(con, flavor, from.date="1970-01-01", to.date=NA)
 InsertChanges(con, flavor, changes)
 }
 \arguments{

@@ -51,8 +51,7 @@ InsertChanges <- function(con, flavor, changes) {
   InsertDataFrame(con, "cran_changes", changes)
 }
 
-ExtractAndInsertFlavorChanges <- function(con, flavor, from.date="1970-01-01",
-                                          to.date=NA) {
+ExtractChanges <- function(con, flavor, from.date="1970-01-01", to.date=NA) {
   query <- paste("SELECT DISTINCT s.date FROM cran_status s, flavors f",
                  sprintf("WHERE s.flavor_id = f.id AND f.name = '%s'", flavor))
   dates <- dbGetQuery(con, query)$date
