@@ -9,16 +9,15 @@
 }
 
 \usage{
-SaveRData(object, datadir)
+SaveRData(rdata, datadir)
 LoadRData(datadir)
 }
 \arguments{
-  \item{object}{A character string with the name of the variable of the
-    object to save}
+  \item{rdata}{A list containing objects to be saved}
   \item{datadir}{Directory where to save/load objects}
 }
 \value{
-  \code{SaveRData} saves a single object in a RDS file in datadir.
+  \code{SaveRData} saves elements each element of a list to a RDS file.
 
   \code{LoadRData} reads all RDS files and returns a list where all
   elements are the objects contained into the RDS files.

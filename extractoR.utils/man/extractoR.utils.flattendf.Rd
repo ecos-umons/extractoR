@@ -8,7 +8,7 @@
 }
 
 \usage{
-FlattenDF(l)
+FlattenDF(l, keep.rownames)
 }
 \arguments{
   \item{l}{A list where all elements are dataframes with the same
