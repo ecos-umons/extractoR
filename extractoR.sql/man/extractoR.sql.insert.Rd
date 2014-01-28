@@ -9,10 +9,10 @@
 \alias{InsertDependencyConstraints}
 \alias{InsertDates}
 \alias{InsertTimeline}
-\alias{InsertRVersions}
 \alias{InsertTaskViews}
 \alias{InsertTaskViewVersions}
 \alias{InsertTaskViewContent}
+\alias{InsertHttpLog}
 \encoding{UTF-8}
 \title{Insert}
 \description{
@@ -30,7 +30,6 @@ InsertDependencies(con, dependencies)
 InsertDependencyConstraints(con, constraints)
 InsertDates(con, dates)
 InsertTimeline(con, timeline)
-InsertRVersions(con, rversions)
 InsertTaskViews(con, taskviews)
 InsertTaskViewVersions(con, versions)
 InsertTaskViewContent(con, content)
@@ -47,7 +46,6 @@ InsertHttpLog(con, log)
   \item{constraints}{Constraints dataframe.}
   \item{dates}{Dates dataframe.}
   \item{timeline}{Timeline dataframe.}
-  \item{rversions}{RVersions dataframe.}
   \item{taskviews}{Taskviews dataframe.}
   \item{content}{Taskview content dataframe.}
   \item{log}{CRAN http mirror log.}
@@ -55,7 +53,7 @@ InsertHttpLog(con, log)
 \details{
   Inserts into tables packages, package_versions, description_files,
   roles, package_dependencies, dependency_constraints, dates,
-  packages_timeline, rversions, cran_mirror_log.
+  packages_timeline, cran_mirror_log.
 
   Function related to taskviews insert in tables taskviews,
   taskview_versions and taskview_content.
