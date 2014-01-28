@@ -1,6 +1,6 @@
 \name{Descfiles}
 \alias{Descfiles}
-\alias{ReadDescfiles}
+\alias{ExtractDescfiles}
 \encoding{UTF-8}
 \title{Descfiles}
 \description{
@@ -8,10 +8,11 @@
 }
 
 \usage{
-ReadDescfiles(packages, datadir)
+ExtractDescfiles(packages, datadir)
 }
 \arguments{
-  \item{package}{A package name.}
+  \item{packages}{A list of packages like the one returned by
+    \code{FetchCRANList}}
   \item{datadir}{Directory where to store and extract the packages.}
 }
 \value{
