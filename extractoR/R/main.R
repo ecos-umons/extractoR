@@ -30,7 +30,8 @@ ExtractAll <- function(datadir) {
   message("Extracting people")
   t <- system.time({
     rdata$roles <- ExtractRoles(rdata$descfiles, "Maintainer")
-    rdata$people <- ExtractPeople(rdata$roles)
+    rdata$people <- unique(rdata$roles[, 4:5])
+    rownames(radata$people) <- NULL
   })
   message(sprintf("People extracted in %.3fs", t[3]))
 
