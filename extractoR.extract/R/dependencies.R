@@ -84,5 +84,5 @@ ExtractDependencies <- function(descfiles, type) {
                                                       d["version"],
                                                       tolower(d["key"]),
                                                       d["value"]))
-  dflist2df(dependencies)
+  FlattenDF(dependencies)
 }

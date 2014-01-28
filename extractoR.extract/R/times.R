@@ -53,7 +53,7 @@ ExtractTimeline <- function(dates) {
     }
     x
   })
-  dates <- dflist2df(dates)
+  dates <- FlattenDF(dates)
   dates <- dates[!is.na(dates$date), ]
   dates$type <- NULL
   dates$date <- as.POSIXlt(dates$date)

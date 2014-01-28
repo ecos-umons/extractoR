@@ -45,7 +45,7 @@ GetTaskViewsContent <- function(cran.mirror="http://cran.r-project.org") {
   #   taskview, the name of the package a boolean indicating if it is
   #   a core taskview or not.
   ctv <- CRAN.views(repos=cran.mirror)
-  df <- dflist2df(lapply(ctv, GetTaskViewContent))
+  df <- FlattenDF(lapply(ctv, GetTaskViewContent))
   df$version <- as.POSIXlt(df$version)
   df
 }

@@ -45,7 +45,7 @@ ParseArchiveName <- function(archive) {
   list(package=archive[1], version=strsplit(archive[2], "\\.tar\\.gz")[[1]][1])
 }
 
-dflist2df <- function(l, keep.rownames=FALSE) {
+FlattenDF <- function(l, keep.rownames=FALSE) {
   # Converts a list of dataframes which have the same columns to a
   # single dataframe.
   #

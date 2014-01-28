@@ -15,7 +15,7 @@ FetchArchived <- function(current=NULL,
   dest <- tempfile()
   src <- file.path(cran.mirror, "src", "contrib", "Meta", "archive.rds")
   download.file(src, dest)
-  res <- dflist2df(readRDS(dest), keep.rownames=TRUE)[c("size", "mtime")]
+  res <- FlattenDF(readRDS(dest), keep.rownames=TRUE)[c("size", "mtime")]
   file.remove(dest)
   res$filename <- sapply(strsplit(rownames(res), "/"),
                          function(x) x[length(x)])

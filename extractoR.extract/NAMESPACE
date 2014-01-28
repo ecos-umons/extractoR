@@ -1,4 +1,4 @@
-importFrom(extractoR.utils, ParseArchiveName, dflist2df)
+importFrom(extractoR.utils, ParseArchiveName, FlattenDF)
 
 export(ReadDescfile, ReadDescfiles, GetDescfilesKeys, GetDescfilesKey)
 export(ExtractPerson, ExtractRoles, ExtractPeople)

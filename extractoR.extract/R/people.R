@@ -58,7 +58,7 @@ ExtractRoles <- function(descfiles, role) {
     df[, c(3, 4, 5, 1, 2)]
   }
   people <- apply(roles, 1, Extract)
-  dflist2df(people)
+  FlattenDF(people)
 }
 
 ExtractPeople <- function(roles) {

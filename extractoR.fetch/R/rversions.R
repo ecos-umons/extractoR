@@ -50,5 +50,5 @@ FetchRecommendedList <- function(rversion,
 FetchRVersions <- function(cran.mirror="http://cran.r-project.org") {
   links <- FetchPageLinks(file.path(cran.mirror, "src/contrib/"))
   res <- lapply(FetchRVersionsList(links), FetchRecommendedList, cran.mirror)
-  dflist2df(res)
+  FlattenDF(res)
 }

@@ -1,7 +1,7 @@
 importFrom(RCurl, getCurlHandle, getURL, getCurlInfo)
 importFrom(XML, htmlTreeParse, xpathSApply, xmlValue)
 
-importFrom(extractoR.utils, ParseArchiveName)
+importFrom(extractoR.utils, ParseArchiveName, FlattenDF)
 
 export(FetchCRANList)
 export(FetchPackages)

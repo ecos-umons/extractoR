@@ -1,14 +1,14 @@
-\name{dflist2df}
-\alias{dflist2df}
+\name{FlattenDF}
+\alias{FlattenDF}
 \encoding{UTF-8}
-\title{dflist2df}
+\title{FlattenDF}
 \description{
   Converts a list of dataframes having the same columns to a single
   dataframe.
 }
 
 \usage{
-dflist2df(l)
+FlattenDF(l)
 }
 \arguments{
   \item{l}{A list where all elements are dataframes with the same
@@ -27,10 +27,10 @@ dflist2df(l)
 
 \examples{
 l <- sapply(1:3, function(n) data.frame(x=n, y=n:(n*n)))
-dflist2df(l)
+FlattenDF(l)
 }
 
-\keyword{parse}
-\keyword{archive}
-\keyword{name}
-\keyword{package}
+\keyword{data.frame}
+\keyword{df}
+\keyword{flatten}
+\keyword{list}
