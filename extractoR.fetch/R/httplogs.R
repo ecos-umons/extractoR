@@ -23,3 +23,9 @@ DownloadMissingLogs <- function(logs, datadir) {
     DownloadLog(missings[missing], path)
   }
 }
+
+FetchLogs <- function(url, datadir) {
+  logs <- FetchLogsList(url)
+  DownloadMissingLogs(logs, datadir)
+  logs
+}
