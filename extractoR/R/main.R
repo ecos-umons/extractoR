@@ -23,7 +23,7 @@ ExtractAll <- function(datadir) {
 
   message("Reading description files")
   t <- system.time({
-    rdata$descfiles <- ReadDescfiles(rdata$packages, pkgdir)
+    rdata$descfiles <- ExtractDescfiles(rdata$packages, pkgdir)
   })
   message(sprintf("Description files read in %.3fs", t[3]))
 
@@ -31,7 +31,7 @@ ExtractAll <- function(datadir) {
   t <- system.time({
     rdata$roles <- ExtractRoles(rdata$descfiles, "Maintainer")
     rdata$people <- unique(rdata$roles[, 4:5])
-    rownames(radata$people) <- NULL
+    rownames(rdata$people) <- NULL
   })
   message(sprintf("People extracted in %.3fs", t[3]))
 
@@ -73,8 +73,8 @@ InsertAll <- function(con, rdata) {
 }
 
 UpdateTaskViews <- function(con, cran.mirror="http://cran.r-project.org") {
-  ctv <- GetTaskViewsDataframe()
-  ctv.content <- GetTaskViewsContent()
+  ctv <- ExtractTaskViews()
+  ctv.content <- ExtractTaskViewsContent()
   InsertTaskViews(con, ctv[, c("taskview", "topic")])
   InsertPeople(con, ctv[, c("name", "email")])
   InsertTaskViewVersions(con, ctv)
@@ -94,7 +94,7 @@ ExtractAndInsertChanges <- function(con, from.date="1970-01-01", to.date=NA) {
 
   for (flavor in flavors) {
     message(sprintf("Extracting changes for flavor %s", flavor))
-    ExtractAndInsertFlavorChanges(con, flavor, from.date, to.date)
+    ExtractChanges(con, flavor, from.date, to.date)
   }
 }
 
