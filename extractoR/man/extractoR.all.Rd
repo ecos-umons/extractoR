@@ -1,11 +1,13 @@
-\name{Insert}
+\name{ExtractoR}
+\alias{ExtractoR}
 \alias{All}
 \alias{FetchAll}
 \alias{ExtractAll}
 \alias{InsertAll}
 \alias{UpdateTaskViews}
-\alias{ExtractAndInsertCheckings}
+\alias{ExtractAndInsertStatus}
 \alias{ExtractAndInsertChanges}
+\alias{ExtractAndInsertLogs}
 \encoding{UTF-8}
 \title{Insert}
 \description{
@@ -17,8 +19,8 @@ FetchAll(datadir, cran.mirror="http://cran.r-project.org")
 ExtractAll(datadir)
 InsertAll(con, rdata)
 UpdateTaskViews(con, cran.mirror)
-ExtractAndInsertStatus(con, datadir, from.date="1970-01-01", to.date=NA)
-ExtractAndInsertChanges(con)
+ExtractAndInsertStatus(con, checkdir, from.date="1970-01-01", to.date=NA, extract.maintainers=FALSE)
+ExtractAndInsertChanges(con, from.date="1970-01-01", to.date=NA)
 ExtractAndInsertLogs(con, datadir, from.date="1970-01-01")
 }
 \arguments{
@@ -26,8 +28,11 @@ ExtractAndInsertLogs(con, datadir, from.date="1970-01-01")
   \item{cran.mirror}{Root URL of the CRAN mirror to use.}
   \item{con}{Connection object to the database.}
   \item{rdata}{Rdata.}
+  \item{checkdir}{Directory where checkings are stored.}
   \item{from.date}{Oldest checking to read.}
   \item{to.date}{Newest checking to read.}
+  \item{extract.maintainers}{Boolean flags to extract maintainers from
+    status or not.}
 }
 \details{
   \code{FetchAll} fetches last package list from CRAN and downloads
