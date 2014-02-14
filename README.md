@@ -55,10 +55,16 @@ devtools package to automatically fetch last Github release:
 Usage
 -----
 
-The sub directory "scripts" contains simple example scripts. Example
-of code downloading all packages (may be very long...) and dumping
-everything in MySQL database. The database must be initialized with
-the schema given in the "data" directory as a MySQL
+The sub directory "scripts" contains simple example scripts which can
+be reused for various tasks. Here's an example of code which downloads
+all packages (may be very long...) and dumps everything in a MySQL
+database. Before running the script, the database must be initialized
+with the schema given in the "db" directory. Then the script will
+fetch the list of packages and download all packages inside the
+packages subdirectory in data directory, then extract information
+about packages, versions, maintainers, dates and dependencies in RDS
+files in data/rds. Finally it inserts this information in MySQL
+tables.
 
     library(extractoR)
 
@@ -77,8 +83,16 @@ the schema given in the "data" directory as a MySQL
     rdata <- LoadRData("data/rds")
 
     InsertAll(con, rdata)
-    ExtractInsertTaskViews(con)
 
+There are also functions to extract task views (using ctv package) and
+HTTP log of mirrors (like the one provided by the RStudio mirror).
+There is also functions to insert in the DB information related to
+CRAN state and checking (http://cran.r-project.org/web/checks/).
+However this requires to regularly (e.g. daily) run a script which
+will extract a snapshot of CRAN "R CMD check" results.
+[CRANData](https://github.com/maelick/CRANData) repository contains
+such a script for CRAN state extraction along with the data we
+previously extracted (starting in September 2013).
 
 
 
