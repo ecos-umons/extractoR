@@ -89,10 +89,19 @@ HTTP log of mirrors (like the one provided by the RStudio mirror).
 There is also functions to insert in the DB information related to
 CRAN state and checking (http://cran.r-project.org/web/checks/).
 However this requires to regularly (e.g. daily) run a script which
-will extract a snapshot of CRAN "R CMD check" results.
-[CRANData](https://github.com/maelick/CRANData) repository contains
-such a script for CRAN state extraction along with the data we
-previously extracted (starting in September 2013).
+will extract a snapshot of CRAN "R CMD check" results. Such a script
+can be found in [CRANData](https://github.com/maelick/CRANData).
+
+
+
+CRAN Data
+---------
+
+[CRANData](https://github.com/maelick/CRANData) repository the data we
+previously extracted (starting in September 2013). It contains both
+all RDS files resulting from the extraction of CRAN packages with
+extractoR and a daily snapshot of
+[CRAN R CMD check results](http://cran.r-project.org/web/checks/).
 
 
 
