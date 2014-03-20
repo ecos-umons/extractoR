@@ -33,14 +33,13 @@ ParseDependencies <- function(string) {
              version=versions, stringsAsFactors=FALSE)
 }
 
-ExtractDependency <- function(package, version, type, dependencies) {
+ExtractDependency <- function(package, version, type.name, dependencies) {
   # Extracts the dependencies defined in a dependencies string.
   #
   # Args:
   #   package: The package name.
   #   version: The package version
-  #   type: The type of dependency to extract (either Depends,
-  #         Imports, Suggests or Enhances).
+  #   type.name: Name of of the extracted dependency type.
   #   dependencies: The dependencies string.
   #
   # Returns:
@@ -61,7 +60,7 @@ ExtractDependency <- function(package, version, type, dependencies) {
   deps
 }
 
-ExtractDependencies <- function(descfiles, type) {
+ExtractDependencies <- function(descfiles, type, type.name=tolower(type)) {
   # Extracts all the dependencies defined in DESCRIPTION files for a
   # given dependency type.
   #
@@ -69,7 +68,9 @@ ExtractDependencies <- function(descfiles, type) {
   #   descfiles: A dataframe containing DESCRIPTION files (like the
   #              one returned by ReadDescFiles)
   #   type: The type of dependency to extract (either Depends,
-  #         Imports, Suggests or Enhances).
+  #         Imports, Suggests, Enhances or LinkingTo) as it appears
+  #         in the DESCRIPTION file.
+  #   type.name: Name to give to the extracted dependency type.
   #
   # Returns:
   #   A six columns dataframe containing package name, version, the
@@ -80,7 +81,6 @@ ExtractDependencies <- function(descfiles, type) {
   deps <- descfiles[descfiles$key==type, ]
   deps <- deps[grep(dependencies.re, deps$value),]
   FlattenDF(apply(deps, 1, function(d) {
-    ExtractDependency(d["package"], d["version"],
-                      tolower(d["key"]), d["value"])
+    ExtractDependency(d["package"], d["version"], type.name, d["value"])
   }))
 }
