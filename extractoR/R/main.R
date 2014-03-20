@@ -37,10 +37,21 @@ ExtractAll <- function(datadir) {
 
   message("Extracting dependencies")
   t <- system.time({
-    rdata$deps <- rbind(ExtractDependencies(rdata$descfiles, "Depends"),
-                        ExtractDependencies(rdata$descfiles, "Imports"),
-                        ExtractDependencies(rdata$descfiles, "Suggests"),
-                        ExtractDependencies(rdata$descfiles, "Enhances"))
+    rdata$deps <- rbind(ExtractDependencies(rdata$descfiles,
+                                            c("Depends", "Depents", "%Depends",
+                                              "Dependes", "Depens",
+                                              "Dependencies", "DependsSplus",
+                                              "DependsTERR")),
+                        ExtractDependencies(rdata$descfiles,
+                                            c("Imports", "#Imports", "Import")),
+                        ExtractDependencies(rdata$descfiles,
+                                            c("Suggests", "SUGGESTS",
+                                              "suggests", "Suggets", "Suggest",
+                                              "%Suggests", "Recommends")),
+                        ExtractDependencies(rdata$descfiles,
+                                            c("Enhances", "Enhanves")),
+                        ExtractDependencies(rdata$descfiles,
+                                            c("LinkingTo", "LinkingdTo")))
   })
   message(sprintf("Dependencies extracted in %.3fs", t[3]))
 
