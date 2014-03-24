@@ -1,6 +1,7 @@
 ParsePackage <- function(package, version, path, fcode, fnull, ferr) {
   Parse <- function(path) {
-    src <- dir(file.path(path, "R"), full.names=TRUE)
+    src <- grep("\\.R$", dir(file.path(path, "R"), full.names=TRUE),
+                ignore.case=TRUE, value=TRUE)
     if (length(src)) {
       do.call(c, lapply(src, parse))
     }
