@@ -1,0 +1,15 @@
+Package: extractoR.content
+Type: Package
+Title: CRAN packages metadata extractor (content)
+Version: 1.0
+Date: 2013-08-21
+Author: Maëlick Claes <himself@maelick.net>
+Maintainer: Maëlick Claes <himself@maelick.net>
+Description: This package is part of extractoR which is a set of R
+             packages that can be used to fetch, extract and query
+             CRAN packages metadata. extractoR.content browses
+             packages and aggregates informations about packages
+             content.
+Imports: extractoR.utils
+License: GPL-3
+Encoding: UTF-8
