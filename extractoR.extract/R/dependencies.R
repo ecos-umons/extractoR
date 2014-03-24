@@ -39,8 +39,7 @@ ExtractDependency <- function(package, version, type, dependencies) {
   # Args:
   #   package: The package name.
   #   version: The package version
-  #   type: The type of dependency to extract (either Depends,
-  #         Imports, Suggests or Enhances).
+  #   type: Name of of the extracted dependency type.
   #   dependencies: The dependencies string.
   #
   # Returns:
@@ -61,15 +60,17 @@ ExtractDependency <- function(package, version, type, dependencies) {
   deps
 }
 
-ExtractDependencies <- function(descfiles, type) {
+ExtractDependencies <- function(descfiles, types, type=tolower(types[1])) {
   # Extracts all the dependencies defined in DESCRIPTION files for a
   # given dependency type.
   #
   # Args:
   #   descfiles: A dataframe containing DESCRIPTION files (like the
   #              one returned by ReadDescFiles)
-  #   type: The type of dependency to extract (either Depends,
-  #         Imports, Suggests or Enhances).
+  #   types: The types of dependency to extract (either Depends,
+  #          Imports, Suggests, Enhances or LinkingTo) as it appears
+  #          in the DESCRIPTION file.
+  #   type: Name to give to the extracted dependency type.
   #
   # Returns:
   #   A six columns dataframe containing package name, version, the
@@ -77,10 +78,9 @@ ExtractDependencies <- function(descfiles, type) {
   #   the constraint type (constraint.type) which is either >, >=, <,
   #   <=, == or nothing, and the constraint version
   #   (constraint.version) if any.
-  deps <- descfiles[descfiles$key==type, ]
+  deps <- descfiles[descfiles$key %in% types, ]
   deps <- deps[grep(dependencies.re, deps$value),]
   FlattenDF(apply(deps, 1, function(d) {
-    ExtractDependency(d["package"], d["version"],
-                      tolower(d["key"]), d["value"])
+    ExtractDependency(d["package"], d["version"], type, d["value"])
   }))
 }

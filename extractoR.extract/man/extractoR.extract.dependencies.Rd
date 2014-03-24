@@ -8,13 +8,15 @@
 }
 
 \usage{
-ExtractDependencies(descfiles, type)
+ExtractDependencies(descfiles, types, type.name=tolower(type[1]))
 }
 \arguments{
   \item{descfiles}{A dataframe containing DESCRIPTION files (like the
     one returned by ReadDescFiles).}
-  \item{type}{A type of dependency (either "Depends", "Imports",
-    "Suggests" or "Enhances").}
+  \item{types}{The type of dependency to extract (either Depends,
+    Imports, Suggests, Enhances or LinkingTo) as it appears in the
+    DESCRIPTION file.}
+  \item{type}{Name to give to the extracted dependency type.}
 }
 \value{
   A six columns dataframe containing package name, version, the type of
