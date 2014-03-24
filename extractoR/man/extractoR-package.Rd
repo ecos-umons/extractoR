@@ -8,7 +8,7 @@
   and dump CRAN packages metadata. This main package acts as a glue for
   functions defined in other packages. Other packages are:
   extractoR.utils, extractoR.fetch, extractoR.extract, extractoR.query,
-  extractoR.checkings.
+  extractoR.checkings, extractoR.content.
 }
 
 \details{
@@ -38,6 +38,9 @@
   based on the date of extraction (using the format "%y-%m-%d-%H-%M").
   Ideally this manual extraction should be automated with a cron job to
   keep an history of this check results.
+
+  \code{extractoR.content} browses packages and aggregates informations
+  about packages content.
 }
 
 \author{
