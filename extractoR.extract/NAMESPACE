@@ -1,4 +1,4 @@
-importFrom(extractoR.utils, ParseArchiveName, FlattenDF, Strip)
+importFrom(extractoR.utils, ParseArchiveName, FlattenDF, Strip, GuessEncoding)
 importFrom(ctv, CRAN.views)
 
 export(ExtractDescfiles)
