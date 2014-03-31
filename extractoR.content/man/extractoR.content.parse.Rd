@@ -7,7 +7,8 @@
 }
 
 \usage{
-ParsePackage(package, version, path, fcode, fnull, ferr)
+ParsePackage(package, version, path, fcode, fnull, ferr,
+             guess.encoding=FALSE)
 }
 \arguments{
   \item{package}{Name of the package.}
@@ -18,6 +19,8 @@ ParsePackage(package, version, path, fcode, fnull, ferr)
   \item{fnull}{Function to call when package doesn't contain code.}
   \item{ferr}{Function to call when package code parsing produced an
     error.}
+  \item{guess.encoding}{If TRUE try to guess file encoding. This might
+    be useless and will drastically slow down the execution.}
 }
 \value{
   Returns the value that fcode, fnull or ferr produced depending on

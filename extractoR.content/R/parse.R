@@ -1,9 +1,15 @@
-ParsePackage <- function(package, version, path, fcode, fnull, ferr) {
+ParsePackage <- function(package, version, path, fcode, fnull, ferr,
+                         guess.encoding=FALSE) {
+  ParseFile <- function(filename) {
+    endoing <- "utf-8"
+    if (guess.encoding) encoding <- GuessEncoding(filename)
+    parse(filename, encoding=encoding)
+  }
   Parse <- function(path) {
     src <- grep("\\.R$", dir(file.path(path, "R"), full.names=TRUE),
                 ignore.case=TRUE, value=TRUE)
     if (length(src)) {
-      do.call(c, lapply(src, parse))
+      do.call(c, lapply(src, ParseFile))
     }
   }
   res <- tryCatch(Parse(path), error=function(e) e[[1]])
