@@ -1,7 +1,7 @@
 ParsePackage <- function(package, version, path, fcode, fnull, ferr,
                          guess.encoding=FALSE) {
   ParseFile <- function(filename) {
-    encoding <- "utf-8"
+    encoding <- "unknown"
     if (guess.encoding) encoding <- GuessEncoding(filename)
     parse(filename, encoding=encoding)
   }
