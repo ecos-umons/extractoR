@@ -3,7 +3,7 @@ ParsePackage <- function(package, version, path, fcode, fnull, ferr,
   ParseFile <- function(filename) {
     encoding <- "unknown"
     if (guess.encoding) encoding <- GuessEncoding(filename)
-    parse(filename, encoding=encoding)
+    parse(filename, keep.source=TRUE, encoding=encoding)
   }
   Parse <- function(path) {
     src <- grep("\\.R$", dir(file.path(path, "R"), full.names=TRUE),
