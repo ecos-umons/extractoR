@@ -19,7 +19,7 @@ Those R packages are the followings:
 * extractoR.sql contains functions related to SQL database. Its main
   purpose is to store dataframes created by extractoR.extract into SQL
   tables.
-* extractoR.checkings: contains functions to read and insert in SQL
+* extractoR.checkings contains functions to read and insert in SQL
   table results of "R CMD check" commands run on CRAN (see
   http://cran.r-project.org/web/checks/). It requires that one
   manually download the files check_flavors.rds, check_details.rds and
@@ -27,6 +27,7 @@ Those R packages are the followings:
   based on the date of extraction (using the format "%y-%m-%d-%H-%M").
   Ideally this manual extraction should be automated with a cron job
   to keep an history of this check results.
+ * extractoR.content contains functions to read package content.
 
 
 
@@ -49,6 +50,7 @@ devtools package to automatically fetch last Github release:
     install_github("maelick/extractoR", subdir="extractoR.extract")
     install_github("maelick/extractoR", subdir="extractoR.sql")
     install_github("maelick/extractoR", subdir="extractoR.checkings")
+    install_github("maelick/extractoR", subdir="extractoR.content")
 
 
 
