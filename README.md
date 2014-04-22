@@ -27,7 +27,7 @@ Those R packages are the followings:
   based on the date of extraction (using the format "%y-%m-%d-%H-%M").
   Ideally this manual extraction should be automated with a cron job
   to keep an history of this check results.
- * extractoR.content contains functions to read package content.
+* extractoR.content contains functions to read package content.
 
 
 
