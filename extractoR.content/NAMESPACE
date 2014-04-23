@@ -1,4 +1,4 @@
-importFrom(extractoR.utils, FlattenDF, GuessEncoding)
+importFrom(CloneR, ParsePackage)
 
 export(VisitPackages)
 export(ParsePackage)
