@@ -27,7 +27,7 @@ GetURL <- function(package, filename, rversions,
   # Returns:
   #   The URL if any, else NULL.
   urls <- file.path(cran.mirror, "src/contrib",
-                    c(file.path("Archive", package), "",
+                    c("", file.path("Archive", package),
                       file.path(rversions, "Recommended")))
   urls <- file.path(urls, filename)
   for(url in urls) {
