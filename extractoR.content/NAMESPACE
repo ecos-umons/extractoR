@@ -1,4 +1,6 @@
-importFrom(CloneR, ParsePackage)
+importFrom(CloneR, ParsePackage, FindFunctions)
+importFrom(hash, hash)
 
 export(VisitPackages)
 export(ParsePackage)
+export(BrowseFunctions)

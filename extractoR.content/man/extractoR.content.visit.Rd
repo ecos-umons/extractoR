@@ -7,12 +7,12 @@
 }
 
 \usage{
-VisitPackages(packages, pkgdir, FUNC, ..., simplify=TRUE)
+VisitPackages(packages, pkg.dir, FUNC, ..., simplify=TRUE)
 }
 \arguments{
   \item{packages}{A list of packages like the one returned by
     \code{FetchCRANList}}
-  \item{pkgdir}{Directory where packages are stored.}
+  \item{pkg.dir}{Directory where packages are stored.}
   \item{FUNC}{Functions that will be applied on each package. Takes the
     package name, version and path as parameters.}
   \item{...}{Additional parameters to pass to \code{FUNC}.}
