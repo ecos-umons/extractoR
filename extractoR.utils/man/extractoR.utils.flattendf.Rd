@@ -4,7 +4,8 @@
 \title{FlattenDF}
 \description{
   Converts a list of dataframes having the same columns to a single
-  dataframe.
+  dataframe. This function is more efficient on large list of dataframes
+  than calling do.call on rbind.
 }
 
 \usage{

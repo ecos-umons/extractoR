@@ -47,7 +47,8 @@ ParseArchiveName <- function(archive) {
 
 FlattenDF <- function(l, keep.rownames=FALSE) {
   # Converts a list of dataframes which have the same columns to a
-  # single dataframe.
+  # single dataframe. This function is more efficient on large
+  # list of dataframes than calling do.call on rbind.
   #
   # Args:
   #   l: The list of dataframes.
