@@ -1,6 +1,6 @@
 ParsePackage <- function(package, version, path, fcode, fnull, ferr,
                          guess.encoding=FALSE) {
-  res <- tryCatch(CloneR::ParsePackage(path), error=function(e) e[[1]])
+  res <- tryCatch(cloneR::ParsePackage(path), error=function(e) e[[1]])
   data <- list(package=package, version=version, path=path)
   if (is.null(res)) {
     fnull(data)
