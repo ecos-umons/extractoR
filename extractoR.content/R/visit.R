@@ -20,7 +20,7 @@ VisitPackages <- function(packages, pkg.dir, FUNC, ..., simplify=TRUE) {
 
 BrowseFunctions <- function(packages, pkg.dir, func.dir, log.dir=NULL) {
   fcode <- function(data) {
-    saveRDS(FindFunctions(data$code, use.hash=TRUE),
+    saveRDS(FindFunctions(data$code),
             file.path(func.dir, PackageRDSFile(data)))
     list(res="code")
   }
