@@ -2,7 +2,7 @@ source("scripts/main.R")
 
 options(expressions = 100000)
 
-library(CloneR)
+library(cloneR)
 library(extractoR.content)
 
 rdata <- LoadRData("/data/cran/rds")
