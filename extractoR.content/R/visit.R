@@ -35,7 +35,7 @@ BrowseFunctions <- function(packages, pkg.dir, func.dir, log.dir=NULL) {
   }
 
   fnull <- function(data) {
-    saveRDS(hash(), file.path(func.dir, PackageRDSFile(data)))
+    saveRDS(data.table(), file.path(func.dir, PackageRDSFile(data)))
     list(res="nocode")
   }
 
