@@ -7,7 +7,7 @@ CheckURL <- function(url) {
   #
   # Returns:
   #   TRUE iff the HTTP return code is 200.
-  h = getCurlHandle()
+  h <- getCurlHandle()
   getURL(url, header=1, nobody=1, curl = h)
   as.logical(getCurlInfo(h, "response.code") == 200)
 }
