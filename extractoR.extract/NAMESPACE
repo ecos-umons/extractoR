@@ -1,4 +1,5 @@
 importFrom(ctv, CRAN.views)
+importFrom(stringr, str_trim)
 import(data.table)
 
 export(ReadDescfile, CRANDescfiles)

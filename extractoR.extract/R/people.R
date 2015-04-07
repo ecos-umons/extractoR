@@ -13,7 +13,7 @@ ExtractPerson <- function(s) {
   # Returns:
   #   A list with the name and email.
   if (grepl(email.pattern, s)) {
-    list(name=Strip(gsub(email.pattern, "", s)),
+    list(name=str_trim(gsub(email.pattern, "", s)),
          email=gsub(paste("^.*", email.pattern, ".*$", sep=""), "\\2", s))
   } else {
     list(name=s, email="")
@@ -32,7 +32,7 @@ ExtractPeople <- function(s) {
   s <- gsub("(<[a-fA-F0-9]{2}>)", "", s)
   s <- gsub("[[:space:]]+", " ", s)
   s <- unlist(strsplit(s, "( (with|from|by|/|and) )|[,;&>]"))
-  s <- Strip(grep("[[:alpha:]]", s, value=TRUE))
+  s <- str_trim(grep("[[:alpha:]]", s, value=TRUE))
   m <- matrix(unlist(lapply(s, ExtractPerson)), nrow=2)
   data.table(name=m[1, ], email=m[2, ])
 }

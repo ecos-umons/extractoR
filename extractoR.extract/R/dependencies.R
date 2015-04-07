@@ -15,12 +15,12 @@ ParseDependencies <- function(string) {
   #    A three column dataframe containing a dependency on each row
   #    with package name, compare symbol and version.
   pieces <- strsplit(string, ",")[[1]]
-  names <- Strip(gsub("\\s*\\(.*?\\)", "", pieces))
+  names <- str_trim(gsub("\\s*\\(.*?\\)", "", pieces))
 
   versions.str <- pieces
   versions.str[!grepl("\\(.*\\)", versions.str)] <- NA
-  compare  <- Strip(sub(".*\\(\\s*([=><]*).*\\)", "\\1", versions.str))
-  versions <- Strip(sub(".*\\(\\s*[=><]*(.*)\\)", "\\1", versions.str))
+  compare  <- str_trim(sub(".*\\(\\s*([=><]*).*\\)", "\\1", versions.str))
+  versions <- str_trim(sub(".*\\(\\s*[=><]*(.*)\\)", "\\1", versions.str))
 
   compare.nna   <- compare[!is.na(compare)]
   compare.valid <- compare.nna %in% c(">", ">=", "==", "<=", "<", "")

@@ -11,6 +11,8 @@ Those R packages are the followings:
   functions are used to get the list of available packages, download
   these packages and extract them on local disk. Future versions will
   include mailing list and RStudio http logs.
+* extractoR.data contains functions to read, manipulate and export R
+  packages metadata.
 * extractoR.extract contains functions to read data extracted with
   extractoR.fetch and parse them. Most of these functions return
   data.table objects.
@@ -42,6 +44,7 @@ devtools package to automatically fetch last Github release:
     install_github("maelick/extractoR", subdir="extractoR")
     install_github("maelick/extractoR", subdir="extractoR.fetch")
     install_github("maelick/extractoR", subdir="extractoR.extract")
+    install_github("maelick/extractoR", subdir="extractoR.data")
     install_github("maelick/extractoR", subdir="extractoR.checkings")
     install_github("maelick/extractoR", subdir="extractoR.content")
 

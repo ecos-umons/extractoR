@@ -1,1 +1,6 @@
+import(data.table)
+import(extractoR.fetch)
+import(extractoR.extract)
+import(extractoR.data)
+
 exportPattern("^[[:alpha:]]+")
