@@ -1,4 +1,3 @@
-importFrom(extractoR.utils, Strip, GuessEncoding)
 importFrom(ctv, CRAN.views)
 import(data.table)
 

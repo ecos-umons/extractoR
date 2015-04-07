@@ -9,10 +9,9 @@ Maintainer: Maëlick Claes <himself@maelick.net>
 Description: extractoR is a set of R packages that can be used to
              fetch, extract and dump CRAN packages metadata. This main
              package acts as a glue for functions defined in other
-             packages. Other packages are: extractoR.utils,
-             extractoR.fetch, extractoR.extract,
+             packages. Other packages are: extractoR.fetch, extractoR.extract,
              extractoR.checkings, extractoR.content.
-Depends: extractoR.utils, extractoR.fetch, extractoR.extract,
-         extractoR.checkings, extractoR.content
+Depends: extractoR.fetch, extractoR.extract,
+         extractoR.content
 License: GPL-3
 Encoding: UTF-8
