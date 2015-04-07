@@ -27,36 +27,24 @@ ExtractPeople <- function(s) {
   #   s: The string containing the people name and email.
   #
   # Returns:
-  #   A two columns dataframe containing the name and email of people
+  #   A two columns datatable containing the name and email of people
   #   extracted.
   s <- gsub("(<[a-fA-F0-9]{2}>)", "", s)
   s <- gsub("[[:space:]]+", " ", s)
   s <- unlist(strsplit(s, "( (with|from|by|/|and) )|[,;&>]"))
   s <- Strip(grep("[[:alpha:]]", s, value=TRUE))
   m <- matrix(unlist(lapply(s, ExtractPerson)), nrow=2)
-  data.frame(name=m[1, ], email=m[2, ], stringsAsFactors=FALSE)
+  data.table(name=m[1, ], email=m[2, ])
 }
 
 ExtractRoles <- function(descfiles, role) {
   # Extracts all the people defined in DESCRIPTION files for a given
   # role.
-  #
-  # Args:
-  #   descfiles: A dataframe containing DESCRIPTION files (like the
-  #              one returned by ReadDescFiles)
-  #   role: The role to extract (either Maintainer or Author).
-  #
-  # Returns:
-  #   A five columns dataframe containing package name, version and
-  #   the role, the name and email of people extracted.
-  roles <- descfiles[descfiles$key==role, ]
-  Extract <- function(d) {
-    df <- ExtractPeople(d["value"])
-    df$package <- d["package"]
-    df$version <- d["version"]
-    df$role <- tolower(d["key"])
-    df[, c(3, 4, 5, 1, 2)]
-  }
-  people <- apply(roles, 1, Extract)
-  FlattenDF(people)
+  roles <- descfiles[tolower(key) == tolower(role), ]
+  rbindlist(mapply(function(package, version, value) {
+    people <- ExtractPeople(value)
+    if (nrow(people)) {
+      cbind(data.table(package, version, role=tolower(role)), people)
+    }
+  }, roles$package, roles$version, roles$value, SIMPLIFY=FALSE))
 }

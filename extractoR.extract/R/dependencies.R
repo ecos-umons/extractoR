@@ -29,58 +29,24 @@ ParseDependencies <- function(string) {
       paste(compare.nna[!compare.valid], collapse = ", "))
   }
 
-  data.frame(name=names, compare=compare,
-             version=versions, stringsAsFactors=FALSE)
+  data.table(dependency=names, constraint.type=compare,
+             constraint.version=versions)
 }
 
-ExtractDependency <- function(package, version, type, dependencies) {
+ExtractDependency <- function(package, version, type.name, key, dependencies) {
   # Extracts the dependencies defined in a dependencies string.
-  #
-  # Args:
-  #   package: The package name.
-  #   version: The package version
-  #   type: Name of of the extracted dependency type.
-  #   dependencies: The dependencies string.
-  #
-  # Returns:
-  #   A six columns dataframe containing package name, version, the
-  #   type of the dependency, the package in depends on (dependency),
-  #   the constraint type (constraint.type) which is either >, >=, <,
-  #   <=, == or nothing, and the constraint version
-  #   (constraint.version) if any.
   deps <- ParseDependencies(dependencies)
-  deps[4:6] <- deps[1:3]
-  names(deps) <- c("package", "version", "type", "dependency",
-                   "constraint.type", "constraint.version")
   if (nrow(deps)) {
-    deps$package <- package
-    deps$version <- version
-    deps$type <- type
+    cbind(data.table(package, version, type.name, key), deps)
   }
-  deps
 }
 
-ExtractDependencies <- function(descfiles, types, type=tolower(types[1])) {
+ExtractDependencies <- function(descfiles, types, type.name=tolower(types[1])) {
   # Extracts all the dependencies defined in DESCRIPTION files for a
   # given dependency type.
-  #
-  # Args:
-  #   descfiles: A dataframe containing DESCRIPTION files (like the
-  #              one returned by ReadDescFiles)
-  #   types: The types of dependency to extract (either Depends,
-  #          Imports, Suggests, Enhances or LinkingTo) as it appears
-  #          in the DESCRIPTION file.
-  #   type: Name to give to the extracted dependency type.
-  #
-  # Returns:
-  #   A six columns dataframe containing package name, version, the
-  #   type of the dependency, the package in depends on (dependency),
-  #   the constraint type (constraint.type) which is either >, >=, <,
-  #   <=, == or nothing, and the constraint version
-  #   (constraint.version) if any.
-  deps <- descfiles[descfiles$key %in% types, ]
+  deps <- descfiles[tolower(descfiles$key) %in% tolower(types), ]
   deps <- deps[grep(dependencies.re, deps$value),]
-  FlattenDF(apply(deps, 1, function(d) {
-    ExtractDependency(d["package"], d["version"], type, d["value"])
-  }))
+  rbindlist(mapply(function(package, version, key, value) {
+    ExtractDependency(package, version, type.name, key, value)
+  }, deps$package, deps$version, deps$key, deps$value, SIMPLIFY=FALSE))
 }

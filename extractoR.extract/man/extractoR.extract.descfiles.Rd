@@ -1,6 +1,7 @@
 \name{Descfiles}
 \alias{Descfiles}
-\alias{ExtractDescfiles}
+\alias{CRANDescfiles}
+\alias{ReadDescfile}
 \encoding{UTF-8}
 \title{Descfiles}
 \description{
@@ -8,15 +9,19 @@
 }
 
 \usage{
-ExtractDescfiles(packages, datadir)
+ReadDescfile(package, version, filename)
+CRANDescfiles(cran, datadir)
 }
 \arguments{
-  \item{packages}{A list of packages like the one returned by
+  \item{package}{Package name}
+  \item{version}{Version of package}
+  \item{filename}{Filename of the DESCRIPTION file}
+  \item{cran}{A list of packages like the one returned by
     \code{FetchCRANList}}
   \item{datadir}{Directory where to store and extract the packages.}
 }
 \value{
-  \code{ReadDescfiles} returns a four column dataframe with packages
+  \code{ReadDescfiles} returns a four column \code{data.table} with packages
   name, version, DESCRIPTION files keys and values.
 }
 

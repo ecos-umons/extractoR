@@ -1,28 +1,28 @@
-GetDescfileName <- function(package, version, datadir) {
+DescfileName <- function(package, version, datadir) {
   # Returns the file name of a DESCRIPTION file.
-  file.path(datadir, package, version, package, "DESCRIPTION")
+  file.path(datadir, "packages", package, version, package, "DESCRIPTION")
 }
 
-ReadDescfile <- function(package, version, datadir) {
-  message(sprintf("Reading DESCRIPTION file %s %s", package, version))
-  name <- GetDescfileName(package, version, datadir)
-  if (file.exists(name)) {
-    descfile <- read.dcf(name)
+ReadDescfile <- function(package, version, filename) {
+  message(sprintf("Reading DESCRIPTION file %s", filename))
+  if (file.exists(filename)) {
+    descfile <- read.dcf(filename)
     values <- as.vector(descfile[1, ])
-    encoding <- GuessEncoding(name)
+    encoding <- GuessEncoding(filename)
     if ("Encoding" %in% colnames(descfile)) {
       encoding <- descfile[colnames(descfile) == "Encoding"]
     }
     values <- iconv(as.vector(descfile[1, ]), encoding, "utf8")
     n <- ncol(descfile)
-    data.frame(package=rep(package, n), version=rep(version, n),
-               key=colnames(descfile), value=values, stringsAsFactors=FALSE)
+    as.data.table(list(package=package, version=version,
+                       key=colnames(descfile), value=values))
   } else NULL
 }
 
-ExtractDescfiles <- function(packages, datadir) {
-  descfiles <- apply(packages, 1,
-                     function(p) ReadDescfile(p["package"], p["version"],
-                                              datadir))
-  FlattenDF(descfiles)
+CRANDescfiles <- function(cran, datadir) {
+  packages <- cran$package
+  versions <- cran$version
+  filenames <- mapply(DescfileName, packages, versions,
+                      MoreArgs=list(datadir), SIMPLIFY=FALSE)
+  rbindlist(mapply(ReadDescfile, packages, versions, filenames, SIMPLIFY=FALSE))
 }
