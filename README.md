@@ -7,18 +7,13 @@ and dump CRAN packages metadata.
 Those R packages are the followings:
 * extractoR: main package which act as a glue for functions defined in
   other packages.
-* extractoR.utils: placeholder for helper functions used across
-  different packages.
 * extractoR.fetch contains functions to fetch raw data from CRAN. Main
   functions are used to get the list of available packages, download
   these packages and extract them on local disk. Future versions will
-  include mailing list fetching.
+  include mailing list and RStudio http logs.
 * extractoR.extract contains functions to read data extracted with
-  extractoR.fetch and parse them.. Most of those functions return data
-  frames.
-* extractoR.sql contains functions related to SQL database. Its main
-  purpose is to store dataframes created by extractoR.extract into SQL
-  tables.
+  extractoR.fetch and parse them. Most of these functions return
+  data.table objects.
 * extractoR.checkings contains functions to read and insert in SQL
   table results of "R CMD check" commands run on CRAN (see
   http://cran.r-project.org/web/checks/). It requires that one
@@ -45,10 +40,8 @@ It can also be installed directly from the R interpreter using the
 devtools package to automatically fetch last Github release:
 
     install_github("maelick/extractoR", subdir="extractoR")
-    install_github("maelick/extractoR", subdir="extractoR.utils")
     install_github("maelick/extractoR", subdir="extractoR.fetch")
     install_github("maelick/extractoR", subdir="extractoR.extract")
-    install_github("maelick/extractoR", subdir="extractoR.sql")
     install_github("maelick/extractoR", subdir="extractoR.checkings")
     install_github("maelick/extractoR", subdir="extractoR.content")
 
@@ -58,33 +51,7 @@ Usage
 -----
 
 The sub directory "scripts" contains simple example scripts which can
-be reused for various tasks. Here's an example of code which downloads
-all packages (may be very long...) and dumps everything in a MySQL
-database. Before running the script, the database must be initialized
-with the schema given in the "db" directory. Then the script will
-fetch the list of packages and download all packages inside the
-packages subdirectory in data directory, then extract information
-about packages, versions, maintainers, dates and dependencies in RDS
-files in data/rds. Finally it inserts this information in MySQL
-tables.
-
-    library(extractoR)
-
-    FetchAll("data")
-    ExtractAll("data")
-
-    dbuser <- "user"
-    dbpass <- "password"
-    dbname <- "rdata"
-
-    con <- dbConnect(MySQL(), user=dbuser, password=dbpass, dbname=dbname)
-    dbClearResult(dbSendQuery(con, "SET NAMES utf8"))
-    dbClearResult(dbSendQuery(con, "SET collation_connection=utf8_bin"))
-    dbClearResult(dbSendQuery(con, "SET collation_server=utf8_bin"))
-
-    rdata <- LoadRData("data/rds")
-
-    InsertAll(con, rdata)
+be reused for various tasks.
 
 There are also functions to extract task views (using ctv package) and
 HTTP log of mirrors (like the one provided by the RStudio mirror).
