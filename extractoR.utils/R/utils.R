@@ -31,55 +31,6 @@ Strip <- function(s) {
   gsub("^[[:space:]]*|[[:space:]]*$", "", s)
 }
 
-ParseArchiveName <- function(archive) {
-  # Parses a package archive name in order to get the package name and
-  # version of the archive.
-  #
-  # Args:
-  #   s: The package archive name.
-  #
-  # Returns:
-  #   A list containig the name of the package (package) and version
-  #   (version).
-  archive <- strsplit(archive, "_")[[1]]
-  list(package=archive[1], version=strsplit(archive[2], "\\.tar\\.gz")[[1]][1])
-}
-
-FlattenDF <- function(l, keep.rownames=FALSE) {
-  # Converts a list of dataframes which have the same columns to a
-  # single dataframe. This function is more efficient on large
-  # list of dataframes than calling do.call on rbind.
-  #
-  # Args:
-  #   l: The list of dataframes.
-  #   keep.rownames: Keep rownames if TRUE.
-  #
-  # Returns:
-  #   The new dataframe which is the concatenation of all rows of the
-  #   dataframes contained in the list.
-  names(l) <- NULL
-  classes <- sapply(l[[1]], class)
-  if (keep.rownames) {
-    rownames <- as.vector(unlist(sapply(l, rownames)))
-  }
-  c.row <- function(n) {
-    is.factor <- classes[n] == "factor"
-    res <- do.call(base::c, lapply(l, function(x) {
-      if (is.factor) as.character(x[[n]]) else x[[n]]
-    }))
-    if (is.factor) factor(res) else res
-  }
-  df <- lapply(names(classes), c.row)
-  df <- as.data.frame(df, stringsAsFactors=FALSE)
-  colnames(df) <- names(classes)
-  if (keep.rownames) {
-    if (length(unique(rownames)) == nrow(df)) {
-      rownames(df) <- rownames
-    }
-  }
-  df
-}
-
 GuessEncoding <- function(filename) {
   # Guesses the encoding of a file.
   cmd <- sprintf("file --mime-encoding %s", filename)
