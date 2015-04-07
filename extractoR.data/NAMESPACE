@@ -1,1 +1,5 @@
 import(data.table)
+export(LoadCSV)
+export(LoadRData)
+export(SaveCSV)
+export(SaveRData)
