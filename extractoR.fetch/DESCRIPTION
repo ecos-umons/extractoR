@@ -11,6 +11,6 @@ Description: This package is part of extractoR which is a set of R
              CRAN packages metadata. extractoR.fetch parses CRAN web
              pages, downloads and extracts packages.
 Depends: data.table
-Imports: RCurl, XML, extractoR.utils
+Imports: RCurl, XML
 License: GPL-3
 Encoding: UTF-8

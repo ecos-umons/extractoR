@@ -1,7 +1,6 @@
 importFrom(RCurl, getCurlHandle, getURL, getCurlInfo)
 importFrom(XML, htmlTreeParse, xpathSApply, xmlValue, xmlAttrs, xmlNode)
 
-importFrom(extractoR.utils, ParseArchiveName, FlattenDF)
 import(data.table)
 
 export(FetchCRANList)
