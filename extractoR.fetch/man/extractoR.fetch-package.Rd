@@ -23,12 +23,12 @@ Maintainer: Maëlick Claes <himself@maelick.net>
 \dontrun{
 library(extractoR.fetch)
 
-mirror <- "http://cran.parentingamerica.com"
+mirror <- "http://cran.rstudio.com"
 
 # Fetch the list of all recommended, contributed and archived packages
 # on CRAN
 cran <- FetchCRANList(mirror)
-saveRDS(cran, "data/packages/cran.rds")
-FetchPackages(cran, "data/packages/")
+FetchPackage("A3", "0.9-1", "data/packages/")
+FetchRVersions(mirror)
 }
 }

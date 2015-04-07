@@ -1,18 +1,18 @@
-\name{FetchPackages}
-\alias{FetchPackages}
+\name{FetchPackage}
+\alias{FetchPackage}
 \encoding{UTF-8}
-\title{FetchPackages}
+\title{FetchPackage}
 \description{
   Downloads and extracts a list packages in datadir.
 }
 
 \usage{
-FetchPackages(cran, datadir, cran.mirror="http://cran.r-project.org")
+FetchPackage(package, version, datadir, cran.mirror="http://cran.r-project.org")
 }
 \arguments{
-  \item{cran}{A dataframe of packages like the one returned by
-    \code{FetchCRANList}}
-  \item{datadir}{Directory where to store and extract the packages.}
+  \item{package}{The name of the package to fetch.}
+  \item{version}{The version of the package to fetch.}
+  \item{datadir}{Directory where to store and extract the package.}
   \item{cran.mirror}{Root URL of the CRAN mirror to use.}
 }
 \value{
@@ -20,7 +20,7 @@ FetchPackages(cran, datadir, cran.mirror="http://cran.r-project.org")
   has been donwloaded.
 }
 \details{
-  Packages are extracted to <datadir>/<package>/<versions> and they are
+  Packages are extracted to <datadir>/<package>/<version> and they are
   downloaded iff this directory doesn't exist.
 }
 
@@ -30,7 +30,7 @@ FetchPackages(cran, datadir, cran.mirror="http://cran.r-project.org")
 
 \examples{
 \dontrun{
-FetchPackages(readRDS("data/packages/cran.rds"), "data/packages/")
+FetchPackage("A3", "0.9-1", "data/packages/")
 }
 }
 

@@ -1,11 +1,30 @@
+FetchPageLinks <- function(url) {
+  # Fetches all links values from a web page.
+  message(sprintf("Parsing %s", url))
+  doc = htmlTreeParse(url, useInternalNodes=T)
+  xpathSApply(doc, "//a[@href]", xmlValue)
+}
+
+ParseFilename <- function(filenames) {
+  data.table(package=gsub("(.*)_(.*)\\.tar\\.gz", "\\1", filenames),
+             version=gsub("(.*)_(.*)\\.tar\\.gz", "\\2", filenames),
+             filename=filenames)
+}
+
+FetchCurrentFilenames <- function(cran.mirror) {
+  filenames <- FetchPageLinks(file.path(cran.mirror, "src/contrib"))
+  filenames <- grep(".*_.*\\.tar\\.gz$", filenames, value=TRUE)
+  ParseFilename(filenames)[, list(package, version)]
+}
+
 FetchCurrent <- function(cran.mirror="http://cran.r-project.org") {
   dest <- tempfile()
   src <- file.path(cran.mirror, "src", "contrib", "Meta", "current.rds")
   download.file(src, dest)
   res <- readRDS(dest)[c("size", "mtime")]
   file.remove(dest)
-  res$filename <- rownames(res)
-  res[c("filename", "size", "mtime")]
+  res$package <- rownames(res)
+  as.data.table(res)[, archived := FALSE]
 }
 
 FetchArchived <- function(current=NULL,
@@ -15,30 +34,20 @@ FetchArchived <- function(current=NULL,
   dest <- tempfile()
   src <- file.path(cran.mirror, "src", "contrib", "Meta", "archive.rds")
   download.file(src, dest)
-  res <- FlattenDF(readRDS(dest), keep.rownames=TRUE)[c("size", "mtime")]
+  res <- rbindlist(lapply(readRDS(dest), function(package) {
+    package$filename <- sapply(strsplit(rownames(package), "/"),
+                               function(p) p[2])
+    as.data.table(package)
+  }))
   file.remove(dest)
-  res$filename <- sapply(strsplit(rownames(res), "/"),
-                         function(x) x[length(x)])
-  if (!is.null(current)) {
-    res <- res[!res$filename %in% intersect(current$filename, res$filename), ]
-  }
-  res[c("filename", "size", "mtime")]
+  res <- merge(ParseFilename(res$filename), res, by="filename")
+  res[, list(package, version, size, mtime)][, archived := TRUE]
 }
 
 FetchCRANList <- function(cran.mirror="http://cran.r-project.org") {
-  # Fetches the list of all package archives (archived, non-archived
-  # and recommded in all R's versions) of CRAN.
-  current <- FetchCurrent(cran.mirror)
+  # Fetches the list of all package archives (archived, non-archived) of CRAN.
+  current <- merge(FetchCurrentFilenames(cran.mirror),
+                   FetchCurrent(cran.mirror), by="package")
   archived <- FetchArchived(current, cran.mirror)
-  archived <- archived[!archived$filename %in% current$filename, ]
-  packages <- rbind(current, archived)
-  rversions <- FetchRVersions(cran.mirror)
-  recommended <- rversions[!rversions$filename %in% packages$filename, ]
-  packages <- rbind(packages, data.frame(filename=unique(recommended$filename),
-                                         size=NA, mtime=NA))
-  pnames <- sapply(packages$filename, ParseArchiveName)
-  packages$package <- as.character(pnames[1, ])
-  packages$version <- as.character(pnames[2, ])
-  cols <- c("package", "version", "filename", "size", "mtime")
-  list(packages=packages[cols], rversions=unique(rversions$rversion))
+  rbind(current, archived)
 }
