@@ -49,5 +49,6 @@ FetchCRANList <- function(cran.mirror="http://cran.r-project.org") {
   current <- merge(FetchCurrentFilenames(cran.mirror),
                    FetchCurrent(cran.mirror), by="package")
   archived <- FetchArchived(current, cran.mirror)
-  rbind(current, archived)
+  res <- rbind(current, archived)
+  res[res[, .I[which.max(mtime)], by=c("package", "version")]$V1]
 }
