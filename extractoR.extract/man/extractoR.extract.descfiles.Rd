@@ -2,6 +2,7 @@
 \alias{Descfiles}
 \alias{CRANDescfiles}
 \alias{ReadDescfile}
+\alias{BrokenPackages}
 \encoding{UTF-8}
 \title{Descfiles}
 \description{
