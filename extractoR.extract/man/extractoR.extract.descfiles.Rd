@@ -9,7 +9,7 @@
 }
 
 \usage{
-ReadDescfile(package, version, filename)
+ReadDescfile(filename, package=NA, version=NA)
 CRANDescfiles(cran, datadir)
 }
 \arguments{
@@ -21,8 +21,11 @@ CRANDescfiles(cran, datadir)
   \item{datadir}{Directory where to store and extract the packages.}
 }
 \value{
-  \code{ReadDescfiles} returns a four column \code{data.table} with packages
-  name, version, DESCRIPTION files keys and values.
+  \code{ReadDescfiles} returns a two or four column \code{data.table}
+  with packages DESCRIPTION files keys and values, and package name and
+  version given as parameters.
+
+  \code{CRANDescfiles}
 }
 
 \author{

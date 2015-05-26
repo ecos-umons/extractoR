@@ -3,7 +3,7 @@ DescfileName <- function(package, version, datadir) {
   file.path(datadir, "packages", package, version, package, "DESCRIPTION")
 }
 
-ReadDescfile <- function(package, version, filename) {
+ReadDescfile <- function(filename, package=NA, version=NA) {
   ## message(sprintf("Reading DESCRIPTION file %s", filename))
   if (file.exists(filename)) {
     descfile <- read.dcf(filename)
@@ -14,8 +14,9 @@ ReadDescfile <- function(package, version, filename) {
     }
     values <- iconv(as.vector(descfile[1, ]), encoding, "utf8")
     n <- ncol(descfile)
-    as.data.table(list(package=package, version=version,
-                       key=colnames(descfile), value=values))
+    res <- as.data.table(key=colnames(descfile), value=values)
+    if (is.na(package) | is.na(version)) res
+    else cbind(data.table(package=package, version=version), res)
   } else NULL
 }
 
@@ -25,5 +26,5 @@ CRANDescfiles <- function(cran, datadir) {
   versions <- cran$version
   filenames <- mapply(DescfileName, packages, versions,
                       MoreArgs=list(datadir), SIMPLIFY=FALSE)
-  rbindlist(mapply(ReadDescfile, packages, versions, filenames, SIMPLIFY=FALSE))
+  rbindlist(mapply(ReadDescfile, filenames, packages, versions, SIMPLIFY=FALSE))
 }
