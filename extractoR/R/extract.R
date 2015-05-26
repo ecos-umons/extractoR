@@ -9,6 +9,12 @@ Extract <- function(datadir) {
   })
   message(sprintf("Description files read in %.3fs", t[3]))
 
+  message("Extracting broken packages")
+  t <- system.time({
+    rdata$borken <- BrokenPackages(rdata$descfiles)
+  })
+  message(sprintf("Broken packages extracted in %.3fs", t[3]))
+
   message("Extracting people")
   t <- system.time({
     rdata$roles <- ExtractRoles(rdata$descfiles, "maintainer")
@@ -47,7 +53,8 @@ Extract <- function(datadir) {
 
   message("Saving objects in data/rds")
   t <- system.time({
-    SaveRData(rdata, file.path(datadir, "rds"))
+    SaveRData(rdata, datadir)
+    SaveCSV(rdata, datadir)
   })
   message(sprintf("Objects saved in %.3fs", t[3]))
 }
