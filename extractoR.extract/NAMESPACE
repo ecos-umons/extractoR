@@ -4,7 +4,7 @@ import(data.table)
 
 export(ReadDescfile, CRANDescfiles)
 export(ExtractPeople, ExtractRoles)
-export(ExtractDependencies)
+export(ParseDependencies, ExtractDependencies)
 export(ExtractDates)
 export(ExtractTaskViews)
 export(ExtractHttpLog)
