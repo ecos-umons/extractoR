@@ -4,7 +4,7 @@ DescfileName <- function(package, version, datadir) {
 }
 
 ReadDescfile <- function(package, version, filename) {
-  message(sprintf("Reading DESCRIPTION file %s", filename))
+  ## message(sprintf("Reading DESCRIPTION file %s", filename))
   if (file.exists(filename)) {
     descfile <- read.dcf(filename)
     values <- as.vector(descfile[1, ])
@@ -20,6 +20,7 @@ ReadDescfile <- function(package, version, filename) {
 }
 
 CRANDescfiles <- function(cran, datadir) {
+  cran <- unique(cran[, list(package, version)])
   packages <- cran$package
   versions <- cran$version
   filenames <- mapply(DescfileName, packages, versions,
