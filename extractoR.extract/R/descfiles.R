@@ -14,7 +14,7 @@ ReadDescfile <- function(filename, package=NA, version=NA) {
     }
     values <- iconv(as.vector(descfile[1, ]), encoding, "utf8")
     n <- ncol(descfile)
-    res <- as.data.table(key=colnames(descfile), value=values)
+    res <- as.data.table(list(key=colnames(descfile), value=values))
     if (is.na(package) | is.na(version)) res
     else cbind(data.table(package=package, version=version), res)
   } else NULL
