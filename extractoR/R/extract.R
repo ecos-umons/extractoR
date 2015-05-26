@@ -11,7 +11,7 @@ Extract <- function(datadir) {
 
   message("Extracting broken packages")
   t <- system.time({
-    rdata$borken <- BrokenPackages(rdata$descfiles)
+    rdata$broken <- BrokenPackages(rdata$descfiles)
   })
   message(sprintf("Broken packages extracted in %.3fs", t[3]))
 
