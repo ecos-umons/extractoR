@@ -27,7 +27,8 @@ BrokenPackages(descfiles)
   with packages DESCRIPTION files keys and values, and package name and
   version given as parameters.
 
-  \code{CRANDescfiles}
+  \code{CRANDescfiles} reads DESCRIPTION files of all CRAN packages and
+  returns a single \code{data.table}.
 
   \code{BrokenPackages} returns a \code{data.table} telling which
   packages are not packages (does not contain a "Package" and "Version"
