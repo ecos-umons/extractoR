@@ -11,6 +11,7 @@
 \usage{
 ReadDescfile(filename, package=NA, version=NA)
 CRANDescfiles(cran, datadir)
+BrokenPackages(descfiles)
 }
 \arguments{
   \item{package}{Package name}
@@ -19,6 +20,7 @@ CRANDescfiles(cran, datadir)
   \item{cran}{A list of packages like the one returned by
     \code{FetchCRANList}}
   \item{datadir}{Directory where to store and extract the packages.}
+  \item{descfiles}{DESCRIPTION files}
 }
 \value{
   \code{ReadDescfiles} returns a two or four column \code{data.table}
@@ -26,6 +28,10 @@ CRANDescfiles(cran, datadir)
   version given as parameters.
 
   \code{CRANDescfiles}
+
+  \code{BrokenPackages} returns a \code{data.table} telling which
+  packages are not packages (does not contain a "Package" and "Version"
+  entry in DESCRIPTION file) and have not well formatted dependencies.
 }
 
 \author{
