@@ -2,7 +2,7 @@ importFrom(ctv, CRAN.views)
 importFrom(stringr, str_trim)
 import(data.table)
 
-export(ReadDescfile, CRANDescfiles)
+export(ReadDescfile, CRANDescfiles, BrokenPackages)
 export(ExtractPeople, ExtractRoles)
 export(ParseDependencies, ExtractDependencies)
 export(ExtractDates)

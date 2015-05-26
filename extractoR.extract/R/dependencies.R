@@ -50,3 +50,8 @@ ExtractDependencies <- function(descfiles, types, type.name=tolower(types[1])) {
     ExtractDependency(package, version, type.name, key, value)
   }, deps$package, deps$version, deps$key, deps$value, SIMPLIFY=FALSE))
 }
+
+DepsWellFormatted <- function(descfile) {
+  deps <- descfile[key == "Depends" | key == "Imports", value]
+  all(grepl(dependencies.re, deps))
+}
