@@ -28,6 +28,7 @@ ParseDependencies <- function(string) {
     stop("Invalid comparison operator in dependency: ",
       paste(compare.nna[!compare.valid], collapse = ", "))
   }
+  compare[compare %in% c("", "==")] <- "="
 
   data.table(dependency=names, constraint.type=compare,
              constraint.version=versions)
