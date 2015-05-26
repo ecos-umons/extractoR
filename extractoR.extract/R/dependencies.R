@@ -1,6 +1,6 @@
 pkgname.re <- "([[:alpha:]][[:alnum:].]*)"
 version.re <- "[-[:digit:].]+"
-constraint.re <- sprintf("[(](>=?|==|<=?)?[[:space:]]*(%s)[)]", version.re)
+constraint.re <- sprintf("[(][>=<]=?[[:space:]]*(%s)[)]", version.re)
 dependency.re <- sprintf("%s([[:space:]]*%s)?", pkgname.re, constraint.re)
 dependencies.re <- "^[[:space:]]*((%s)([[:space:]]*,[[:space:]]*%s)*,?)?$"
 dependencies.re <- sprintf(dependencies.re, dependency.re, dependency.re)
@@ -19,16 +19,16 @@ ParseDependencies <- function(string) {
 
   versions.str <- pieces
   versions.str[!grepl("\\(.*\\)", versions.str)] <- NA
-  compare  <- str_trim(sub(".*\\(\\s*([=><]*).*\\)", "\\1", versions.str))
-  versions <- str_trim(sub(".*\\(\\s*[=><]*(.*)\\)", "\\1", versions.str))
+  compare  <- str_trim(sub(".*\\(\\s*([=><]+).*\\)", "\\1", versions.str))
+  versions <- str_trim(sub(".*\\(\\s*[=><]+(.*)\\)", "\\1", versions.str))
 
   compare.nna   <- compare[!is.na(compare)]
-  compare.valid <- compare.nna %in% c(">", ">=", "==", "<=", "<", "")
+  compare.valid <- compare.nna %in% c(">", ">=", "=", "==", "<=", "<")
   if(!all(compare.valid)) {
     stop("Invalid comparison operator in dependency: ",
       paste(compare.nna[!compare.valid], collapse = ", "))
   }
-  compare[compare %in% c("", "==")] <- "="
+  compare[compare == "=="] <- "="
 
   data.table(dependency=names, constraint.type=compare,
              constraint.version=versions)
