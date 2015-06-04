@@ -7,7 +7,7 @@
 \description{
   extractoR.fetch is part of extractoR which is a set of R packages that
   can be used to fetch, extract and query CRAN packages
-  metadata. extractoR.fetch parses CRAN web pages, downloads and
+  metadata. extractoR.cran.fetch parses CRAN web pages, downloads and
   extracts packages.
 }
 
