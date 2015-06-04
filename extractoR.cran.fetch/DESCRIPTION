@@ -1,4 +1,4 @@
-Package: extractoR.fetch
+Package: extractoR.cran.fetch
 Type: Package
 Title: CRAN packages metadata extractor (fetch)
 Version: 1.0

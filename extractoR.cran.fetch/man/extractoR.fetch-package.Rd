@@ -1,6 +1,6 @@
-\name{extractoR.fetch-package}
-\alias{extractoR.fetch-package}
-\alias{extractoR.fetch}
+\name{extractoR.cran.fetch-package}
+\alias{extractoR.cran.fetch-package}
+\alias{extractoR.cran.fetch}
 \docType{package}
 \encoding{UTF-8}
 \title{CRAN packages metadata extractor (fetch)}
