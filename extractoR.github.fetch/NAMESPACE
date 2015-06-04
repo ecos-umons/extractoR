@@ -1,0 +1,6 @@
+importFrom(RCurl, getCurlHandle, getURL, getCurlInfo)
+
+import(data.table)
+import(logging)
+
+export(FetchGithubRepository)

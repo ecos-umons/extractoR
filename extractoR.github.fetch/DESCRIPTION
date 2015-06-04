@@ -1,0 +1,15 @@
+Package: extractoR.github.fetch
+Type: Package
+Title: Github R packages metadata extractor (fetch)
+Version: 1.0
+Date: 2013-08-21
+Author: Maëlick Claes <himself@maelick.net>
+Maintainer: Maëlick Claes <himself@maelick.net>
+Description: This package is part of extractoR which is a set of R
+             packages that can be used to fetch, extract and query R
+             packages metadata. extractoR.github.fetch fetch
+             repositories from Github.
+Depends: data.table
+Imports: RCurl, logging
+License: GPL-3
+Encoding: UTF-8
