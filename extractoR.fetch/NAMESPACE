@@ -5,5 +5,4 @@ import(data.table)
 
 export(FetchCRANList)
 export(FetchPackage)
-export(FetchLogs)
 export(FetchRVersions)

@@ -1,3 +1,5 @@
+# Not updated for a long time
+
 FetchLogsList <- function(url) {
   links <- FetchPageLinks(url)
   dates <- grep("^\\d\\d\\d\\d-\\d\\d-\\d\\d$", links, value=TRUE)

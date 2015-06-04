@@ -1,3 +1,5 @@
+# These functions have not been updated for a very long time
+
 FetchMLList <- function(url) {
   # Fetches the list of mailing lists listed on a page.
   #
