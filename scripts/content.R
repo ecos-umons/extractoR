@@ -1,4 +1,6 @@
-source("scripts/main.R")
+library(extractoR)
+
+datadir <- "/data/cran"
 
 options(expressions = 100000)
 
