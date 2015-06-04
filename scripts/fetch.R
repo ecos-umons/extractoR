@@ -1,3 +1,3 @@
 source("scripts/main.R")
 
-system.time(res <- FetchAll("data", cran.mirror=mirror))
+system.time(res <- extractoR::Fetch(datadir, cran.mirror=mirror))

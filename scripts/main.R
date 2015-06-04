@@ -1,5 +1,5 @@
-library(devtools)
 library(extractoR)
 
+datadir <- "/data/cran"
 mirrors <- getCRANmirrors()
-mirror <- mirrors[mirrors$City == "Bonn", ]$URL
+mirror <- mirrors[mirrors$City == "0-Cloud", ]$URL
