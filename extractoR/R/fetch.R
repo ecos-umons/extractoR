@@ -1,16 +1,64 @@
-Fetch <- function(datadir, cran.mirror="http://cran.r-project.org") {
+CRANFetch <- function(datadir, cran.mirror="http://cran.r-project.org") {
+  rdata <- list()
+
+  datadir <- file.path(datadir, "cran")
+
   message("Fetching CRAN list")
-  t <- system.time(cran <- FetchCRANList(cran.mirror))
-  saveRDS(cran, file.path(datadir, "rds", "packages.rds"))
-  message(sprintf("CRAN list fetched from CRAN in %.3fs", t[3]))
+  t <- system.time(rdata$packages <- FetchCRANList(cran.mirror))
+  message(sprintf("Package list fetched from CRAN in %.3fs", t[3]))
 
   message("Fetching R Versions")
-  t <- system.time(rversions <- FetchRVersions(cran.mirror))
-  saveRDS(rversions, file.path(datadir, "rds", "rversions.rds"))
-  message(sprintf("CRAN list fetched from CRAN in %.3fs", t[3]))
+  t <- system.time(rdata$rversions <- FetchRVersions(cran.mirror))
+  message(sprintf("R versions list fetched from CRAN in %.3fs", t[3]))
+
+  rdata$index <- MakeCRANIndex(rdata$packages)
+
+  message("Saving objects in data/cran/rds")
+  t <- system.time({
+    SaveRData(rdata, datadir)
+    SaveCSV(rdata, datadir)
+  })
+  message(sprintf("Objects saved in %.3fs", t[3]))
 
   message("Downloading missing packages")
+  cran <- rdata$packages
   t <- system.time(res <- mapply(FetchPackage, cran$package, cran$version,
-                                 datadir, cran.mirror))
+                                 file.path(datadir, "packages"), cran.mirror))
   message(sprintf("%d packages downloaded in %.3fs", length(res[res]), t[3]))
+}
+
+GithubFetch <- function(datadir, fetch=TRUE, update=TRUE, cluster.size=4,
+                        ignore=c("cran", "rpkg", "Bioconductor-mirror")) {
+  datadir <- file.path(datadir, "github")
+  reposdir <- file.path(datadir, "repos")
+  github <- as.data.table(read.csv(file.path(datadir, "csv/repositories.csv"),
+                                   stringsAsFactors=FALSE))
+  if (!"subdir" %in% names(github)) {
+    github[, subdir := "."]
+  }
+  if (!"owner" %in% names(github)) {
+    setnames(github, c("name", "owner.login"), c("repository", "owner"))
+  }
+
+  if (fetch) {
+    cl <- InitCluster("github", "github-download.log", n=cluster.size)
+    t <- system.time({
+      clusterMap(cl, FetchGithubRepository, github$owner, github$repository,
+                 MoreArgs=list(reposdir, update), SIMPLIFY=FALSE)
+    })
+    message(sprintf("%d repositories updated in %.3fs", nrow(github), t[3]))
+    stopCluster(cl)
+  }
+
+  message("Makeing Github index")
+  t <- system.time(index <- MakeGithubIndex(github, reposdir, ignore))
+  message(sprintf("Github index made in %.3fs", t[3]))
+
+  message("Saving objects in data/github/rds")
+  t <- system.time({
+    rdata <- list(repositories=github, index=index)
+    SaveRData(rdata, datadir)
+    SaveCSV(rdata, datadir)
+  })
+  message(sprintf("Objects saved in %.3fs", t[3]))
 }

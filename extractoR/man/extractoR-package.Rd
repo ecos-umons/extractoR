@@ -2,32 +2,35 @@
 \alias{extractoR-package}
 \alias{extractoR}
 \docType{package}
-\title{CRAN packages metadata extractor}
+\title{R packages metadata extractor}
 \description{
   extractoR is a set of R packages that can be used to fetch, extract
-  and dump CRAN packages metadata. This main package acts as a glue for
+  and dump R packages metadata. This main package acts as a glue for
   functions defined in other packages. Other packages are:
-  extractoR.fetch, extractoR.extract, extractoR.data,
-  extractoR.checkings, extractoR.content.
+  extractoR.cran.fetch, extractoR.github.fetch, extractoR.extract,
+  extractoR.data, extractoR.snapshots, extractoR.content.
 }
 
 \details{
   extractoR is composed of the following packages:
 
-  \code{extractoR.fetch} contains functions to fetch raw data from
+  \code{extractoR.cran.fetch} contains functions to fetch raw data from
   CRAN. Main functions are used to get the list of available packages,
   download these packages and extract them on local disk. Future
   versions will include mailing list fetching.
+
+  \code{extractoR.github.fetch} contains functions to fetch R package
+  repositories from Github.
 
   \code{extractoR.extract} contains functions to read data extracted
   with extractoR.fetch and parse them. Most of those functions return
   \code{data.table} objects.
 
   \code{extractoR.data} contains functions to read, manipulate and
-  export R packages metadata.
+  export extracted and processed (meta)data.
 
-  \code{extractoR.checkings} contains functions to read and insert in
-  SQL table results of "R CMD check" commands run on CRAN (see
+  \code{extractoR.snapshots} contains functions to read results of "R
+  CMD check" commands run on CRAN (see
   http://cran.r-project.org/web/checks/). It requires that one manually
   download the files check_flavors.rds, check_details.rds and
   check_results.rds and then store them in a directory which name is

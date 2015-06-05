@@ -1,5 +1,8 @@
 import(data.table)
-import(extractoR.fetch)
+import(logging)
+import(parallel)
+import(extractoR.cran.fetch)
+import(extractoR.github.fetch)
 import(extractoR.extract)
 import(extractoR.data)
 
