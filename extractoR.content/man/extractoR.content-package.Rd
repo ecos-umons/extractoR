@@ -3,12 +3,12 @@
 \alias{extractoR.content}
 \docType{package}
 \encoding{UTF-8}
-\title{CRAN packages metadata extractor (content)}
+\title{R packages metadata extractor (content)}
 \description{
   extractoR.extract is part of extractoR which is a set of R packages
-  that can be used to fetch, extract and query CRAN packages metadata.
+  that can be used to fetch, extract and query R package metadata.
   extractoR.content browses packages and aggregates informations about
-  packages content.
+  package content.
 }
 
 \author{
