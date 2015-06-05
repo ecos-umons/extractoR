@@ -10,7 +10,8 @@
 
 \usage{
 MakeGithubIndex(github, datadir)
-MakeRepositoryId(owner, repo, subdir)
+MakeRepositoryId(owner, repo, subdir,
+                 ignore=c("cran", "rpkg", "Bioconductor-mirror"))
 }
 \arguments{
   \item{github}{Github snapshot table.}
@@ -18,6 +19,7 @@ MakeRepositoryId(owner, repo, subdir)
   \item{owner}{The name of the owner of the repository.}
   \item{repo}{The name of the repository.}
   \item{subdir}{Subdirectory in the repository where the package is located.}
+  \item{ignore}{Repository owners to ignore.}
 }
 \value{
   \code{MakeGithubIndex} returns an index of package versions from the

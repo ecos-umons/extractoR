@@ -1,6 +1,6 @@
-RunGit <- function(FUNC, dir) {
+RunGit <- function(FUNC, directory) {
   tmp <- getwd()
-  setwd(dir)
+  setwd(directory)
   res <- FUNC()
   setwd(tmp)
   res

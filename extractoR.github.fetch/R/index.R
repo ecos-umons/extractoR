@@ -2,7 +2,7 @@ LogDescfile <- function(owner, repo, subdir, root.dir=".") {
   RunGit(function() {
     loginfo("Fetching DESCRIPTION history for %s/%s",
             owner, repo, logger="git.log")
-    res <- system2("git", c("log", "--pretty=format:\"%H %ci\"",
+    res <- system2("git", c("log", "--pretty=format:\"%H %ci\"", "--",
                             file.path(subdir, "DESCRIPTION")),
                    stdout=TRUE)
     data.table(owner=owner, repository=repo, subdir,
@@ -19,14 +19,14 @@ MakeRepositoryId <- function(owner, repo, subdir) {
   ids
 }
 
-MakeGithubIndex <- function(github, datadir) {
-  github <- github[!owner %in% c("cran", "rpkg")]
-  root.dirs <- github[, file.path(datadir, owner, repository)]
-  github <- github[file.exists(file.path(root.dirs, "DESCRIPTION"))]
-  setkey(github, owner, repository, subdir)
+MakeGithubIndex <- function(github, datadir,
+                            ignore=c("cran", "rpkg", "Bioconductor-mirror")) {
+  github <- setkey(github[!owner %in% ignore], owner, repository, subdir)
+  github[, root.dir := file.path(datadir, owner, repository)]
+  github <- github[file.exists(file.path(root.dir, "DESCRIPTION"))]
 
   logs <- rbindlist(mapply(LogDescfile, github$owner, github$repo,
-                           github$subdir, root.dirs, SIMPLIFY=FALSE))
+                           github$subdir, github$root.dir, SIMPLIFY=FALSE))
   logs <- merge(github, setkey(logs, owner, repository, subdir))
   ids <- logs[, MakeRepositoryId(owner, repository, subdir)]
   logs[, list(source="github", repository=ids, version=commit, time=date)]
