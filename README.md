@@ -7,11 +7,11 @@ and dump R package metadata.
 Those R packages are the followings:
 * extractoR: main package which act as a glue for functions defined in
   other packages.
-* extractoR.cran.fetch contains functions to fetch raw data from CRAN.
-  Main functions are used to get the list of available packages,
-  download these packages and extract them on local disk.
-* extractoR.github.fetch contains functions to fetch R package
-  repositories data from Github.
+* extractoR.cran contains functions to fetch raw data from CRAN. Main
+  functions are used to get the list of available packages, download
+  these packages and extract them on local disk.
+* extractoR.github contains functions to fetch R package repositories
+  data from Github.
 * extractoR.data contains functions to read, manipulate and export R
   packages metadata.
 * extractoR.extract contains functions to read data extracted with
@@ -42,12 +42,13 @@ provided in the root directory of extractoR repo:
 It can also be installed directly from the R interpreter using the
 devtools package to automatically fetch last Github release:
 
-    install_github("maelick/extractoR", subdir="extractoR")
-    install_github("maelick/extractoR", subdir="extractoR.fetch")
+    install_github("maelick/extractoR", subdir="extractoR.cran")
+    install_github("maelick/extractoR", subdir="extractoR.github")
     install_github("maelick/extractoR", subdir="extractoR.extract")
     install_github("maelick/extractoR", subdir="extractoR.data")
-    install_github("maelick/extractoR", subdir="extractoR.checkings")
+    install_github("maelick/extractoR", subdir="extractoR.snapshots")
     install_github("maelick/extractoR", subdir="extractoR.content")
+    install_github("maelick/extractoR", subdir="extractoR")
 
 
 

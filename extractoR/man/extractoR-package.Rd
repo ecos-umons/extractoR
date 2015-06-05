@@ -7,19 +7,19 @@
   extractoR is a set of R packages that can be used to fetch, extract
   and dump R packages metadata. This main package acts as a glue for
   functions defined in other packages. Other packages are:
-  extractoR.cran.fetch, extractoR.github.fetch, extractoR.extract,
+  extractoR.cran, extractoR.github, extractoR.extract,
   extractoR.data, extractoR.snapshots, extractoR.content.
 }
 
 \details{
   extractoR is composed of the following packages:
 
-  \code{extractoR.cran.fetch} contains functions to fetch raw data from
+  \code{extractoR.cran} contains functions to fetch raw data from
   CRAN. Main functions are used to get the list of available packages,
   download these packages and extract them on local disk. Future
   versions will include mailing list fetching.
 
-  \code{extractoR.github.fetch} contains functions to fetch R package
+  \code{extractoR.github} contains functions to fetch R package
   repositories from Github.
 
   \code{extractoR.extract} contains functions to read data extracted

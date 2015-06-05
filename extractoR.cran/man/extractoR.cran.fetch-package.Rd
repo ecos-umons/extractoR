@@ -1,14 +1,13 @@
-\name{extractoR.cran.fetch-package}
-\alias{extractoR.cran.fetch-package}
-\alias{extractoR.cran.fetch}
+\name{extractoR.cran-package}
+\alias{extractoR.cran-package}
+\alias{extractoR.cran}
 \docType{package}
 \encoding{UTF-8}
-\title{CRAN packages metadata extractor (fetch)}
+\title{CRAN packages metadata extractor}
 \description{
-  extractoR.fetch is part of extractoR which is a set of R packages that
-  can be used to fetch, extract and query CRAN packages
-  metadata. extractoR.cran.fetch parses CRAN web pages, downloads and
-  extracts packages.
+  extractoR.cran is part of extractoR which is a set of R packages that
+  can be used to fetch, extract and query CRAN packages metadata.
+  extractoR.cran parses CRAN web pages, downloads and extracts packages.
 }
 
 \author{
@@ -21,7 +20,7 @@ Maintainer: Maëlick Claes <himself@maelick.net>
 
 \examples{
 \dontrun{
-library(extractoR.fetch)
+library(extractoR.cran)
 
 mirror <- "http://cran.rstudio.com"
 

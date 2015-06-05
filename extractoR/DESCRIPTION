@@ -9,8 +9,8 @@ Maintainer: Maëlick Claes <himself@maelick.net>
 Description: extractoR is a set of R packages that can be used to
              fetch, extract and dump R packages metadata. This main
              package acts as a glue for functions defined in other
-             packages. Other packages are: extractoR.cran.fetch,
-             extractoR.github.fetch, extractoR.extract,
+             packages. Other packages are: extractoR.cran,
+             extractoR.github, extractoR.extract,
              extractoR.data, extractoR.snapshots, extractoR.content.
 Depends: extractoR.cran.fetch, extractoR.github.fetch,
          extractoR.extract, extractoR.data, extractoR.content,
