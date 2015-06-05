@@ -12,7 +12,7 @@ FetchGithubRepository(owner, name, datadir, update=TRUE)
 \arguments{
   \item{owner}{The name of the owner of the repository.}
   \item{name}{The name of the repository.}
-  \item{datadir}{Directory where to store and extract the repository.}
+  \item{datadir}{Directory where to store and extract the repositories.}
   \item{update}{If TRUE will also update (i.e. pull) existing repositories}
 }
 \details{
