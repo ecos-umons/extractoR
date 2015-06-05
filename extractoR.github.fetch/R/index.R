@@ -20,15 +20,14 @@ MakeRepositoryId <- function(owner, repo, subdir) {
 }
 
 MakeGithubIndex <- function(github, datadir) {
-  repos <- repos[!owner %in% c("cran", "rpkg")]
-  root.dirs <- file.path(datadir, owner, repository)
-  repos <- repos[file.exists(file.path(root.dirs, "DESCRIPTION"))]
-  repos <- repos[]
-  setkey(repos, owner, repository, subdir)
+  github <- github[!owner %in% c("cran", "rpkg")]
+  root.dirs <- github[, file.path(datadir, owner, repository)]
+  github <- github[file.exists(file.path(root.dirs, "DESCRIPTION"))]
+  setkey(github, owner, repository, subdir)
 
-  logs <- rbindlist(mapply(LogDescfile, repos$owner, repos$repo,
-                           repos$subdir, root.dirs, SIMPLIFY=FALSE))
-  logs <- merge(repos, setkey(logs, owner, repository, subdir))
-  logs[, list(source="github", repository=MakeRepositoryId(owner, repo, subdir),
-              version=commit, time=date)]
+  logs <- rbindlist(mapply(LogDescfile, github$owner, github$repo,
+                           github$subdir, root.dirs, SIMPLIFY=FALSE))
+  logs <- merge(github, setkey(logs, owner, repository, subdir))
+  ids <- logs[, MakeRepositoryId(owner, repository, subdir)]
+  logs[, list(source="github", repository=ids, version=commit, time=date)]
 }
