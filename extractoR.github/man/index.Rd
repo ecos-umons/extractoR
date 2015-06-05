@@ -9,9 +9,9 @@
 }
 
 \usage{
-MakeGithubIndex(github, datadir)
-MakeRepositoryId(owner, repo, subdir,
-                 ignore=c("cran", "rpkg", "Bioconductor-mirror"))
+MakeGithubIndex(github, datadir,
+                ignore=c("cran", "rpkg", "Bioconductor-mirror"))
+MakeRepositoryId(owner, repo, subdir)
 }
 \arguments{
   \item{github}{Github snapshot table.}
