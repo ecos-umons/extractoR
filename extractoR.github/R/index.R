@@ -5,9 +5,7 @@ LogDescfile <- function(owner, repo, subdir, root.dir=".") {
     res <- system2("git", c("log", "--pretty=format:\"%H %ci\"", "--",
                             file.path(subdir, "DESCRIPTION")),
                    stdout=TRUE)
-    data.table(owner=owner, repository=repo, subdir,
-               commit=sub("^([^ ]+) (.*)$", "\\1", res),
-               date=ParseDate(sub("^([^ ]+) (.*)$", "\\2", res)))
+    cbind(data.table(owner=owner, repository=repo, subdir), ParseCommit(res))
   }, root.dir)
 }
 
