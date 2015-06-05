@@ -12,9 +12,8 @@ Description: extractoR is a set of R packages that can be used to
              packages. Other packages are: extractoR.cran,
              extractoR.github, extractoR.extract,
              extractoR.data, extractoR.snapshots, extractoR.content.
-Depends: extractoR.cran.fetch, extractoR.github.fetch,
-         extractoR.extract, extractoR.data, extractoR.content,
-         data.table
-Imports: parallel, logging
+Depends: data.table
+Imports: parallel, logging, extractoR.cran, extractoR.github,
+         extractoR.extract, extractoR.data, extractoR.content
 License: GPL-3
 Encoding: UTF-8
