@@ -1,8 +1,9 @@
 library(devtools)
 
-install("extractoR.fetch")
+install("extractoR.cran.fetch")
+install("extractoR.github.fetch")
 install("extractoR.extract")
 install("extractoR.data")
-## install("extractoR.checkings")
+## install("extractoR.snapshots")
 install("extractoR.content")
 install("extractoR")
