@@ -1,9 +1,8 @@
 library(extractoR)
+library(logging)
 
-datadir <- "/data/github"
+datadir <- "/data/rdata"
 
-## logfile <- "github-download.log"
-## basicConfig()
-## addHandler(writeToFile, logger="github", file=logfile)
+basicConfig()
 
-GithubFetch(datadir, cluster=4)
+GithubFetch(datadir, fetch=FALSE, update=FALSE, cluster=4)

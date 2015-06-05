@@ -1,6 +1,6 @@
 library(extractoR)
 
-datadir <- "/data/cran"
+datadir <- "/data/rdata"
 mirror <- as.data.table(getCRANmirrors())[City == "0-Cloud", URL]
 
-system.time(res <- extractoR::Fetch(datadir, cran.mirror=mirror))
+system.time(res <- CRANFetch(datadir, cran.mirror=mirror))
