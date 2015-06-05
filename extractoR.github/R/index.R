@@ -12,7 +12,7 @@ LogDescfile <- function(owner, repo, subdir, root.dir=".") {
 }
 
 MakeRepositoryId <- function(owner, repo, subdir) {
-  ids <- sprintf("%s:%s", owner, repo)
+  ids <- sprintf("%s/%s", owner, repo)
   normalized <- normalizePath(subdir, mustWork=FALSE)
   has.subdir <- !is.na(subdir) & normalized != getwd()
   ids[has.subdir] <- sprintf("%s:%s", ids[has.subdir], subdir[has.subdir])

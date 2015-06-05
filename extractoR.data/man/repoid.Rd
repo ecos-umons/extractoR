@@ -17,7 +17,7 @@ ParseRepositoryId(str)
 }
 \value{
   \code{ParseGithubRepositoryName} parses a github repository name of
-  the form \code{owner:repository[:subdir]}.
+  the form \code{owner/repository[/subdir]}.
 
   \code{ParseRepositoryId} parses a repository id of the form
   \code{source:repository[:version]}.
