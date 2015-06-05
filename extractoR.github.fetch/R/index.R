@@ -21,7 +21,7 @@ MakeRepositoryId <- function(owner, repo, subdir) {
 
 MakeGithubIndex <- function(github, datadir) {
   repos <- repos[!owner %in% c("cran", "rpkg")]
-  root.dirs <- file.path(datadir, "github", "repos", owner, repository)
+  root.dirs <- file.path(datadir, owner, repository)
   repos <- repos[file.exists(file.path(root.dirs, "DESCRIPTION"))]
   repos <- repos[]
   setkey(repos, owner, repository, subdir)

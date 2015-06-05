@@ -34,7 +34,7 @@ FetchArchive <- function(package, version,
 
 FetchPackage <- function(package, version, datadir,
                          cran.mirror="http://cran.r-project.org") {
-  dest <- file.path(datadir, "packages", package, version)
+  dest <- file.path(datadir, package, version)
   if (!file.exists(dest)) {
     res <- FetchArchive(package, version, cran.mirror)
     if (length(res)) {
