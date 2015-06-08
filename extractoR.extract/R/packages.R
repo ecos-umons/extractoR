@@ -27,6 +27,6 @@ Packages <- function(descfiles, broken) {
   res <- Uniques(PackagesMatchingRepository(Duplicates(packages)))
   res <- rbind(Uniques(packages), res)
   res <- merge(res, metadatas, by=c("source", "package", "Package"))
-  res[, c(list(source=source, package=package, version=version),
+  res[, c(list(source=source, repository=package, ref=version),
           lapply(keys, get, envir=environment()))]
 }
