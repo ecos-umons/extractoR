@@ -57,18 +57,3 @@ Descfiles <- function(index, datadir) {
     }
   }, index$source, index$repository, index$version, SIMPLIFY=FALSE))
 }
-
-IsPackage <- function(descfile) {
-  descfile[, "Package" %in% key && "Version" %in% key]
-}
-
-IsBroken <- function(descfile) {
-  !IsPackage(descfile) || !DepsWellFormatted(descfile)
-}
-
-BrokenPackages <- function(descfiles) {
-  res <- descfiles[, list(is.package=IsPackage(.SD),
-                          deps.well.formatted=DepsWellFormatted(.SD)),
-                   by=c("package", "version")]
-  res[, is.broken := !is.package | !deps.well.formatted]
-}
