@@ -13,7 +13,7 @@ DepsWellFormatted <- function(descfile) {
   all(grepl(dependencies.re, deps))
 }
 
-BrokenPackages <- function(descfiles, packages) {
+BrokenPackages <- function(descfiles, index) {
   res <- descfiles[, {
     logdebug("Checking if %s %s (%s) is broken", package,
              version, source, logger="extract.broken")
@@ -22,7 +22,7 @@ BrokenPackages <- function(descfiles, packages) {
          deps.well.formatted=DepsWellFormatted(.SD),
          has.descfile=TRUE)
   }, by=c("source", "package", "version")]
-  res <- setkey(res, source, package, version)[packages]
+  res <- setkey(res, source, package, version)[index]
   res[is.na(has.descfile),
       c("is.package", "version.well.formatted",
         "deps.well.formatted", "has.descfile") := FALSE]
