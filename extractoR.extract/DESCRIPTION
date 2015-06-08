@@ -12,6 +12,5 @@ Description: This package is part of extractoR which is a set of R
              packages metadata in data.table objects.
 Depends: data.table
 Imports: ctv, stringr, logging, extractoR.github, extractoR.data
-Suggests: extractoR.data
 License: GPL-3
 Encoding: UTF-8
