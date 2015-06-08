@@ -39,7 +39,7 @@ ReadGithubDescfile <- function(package, ref, datadir) {
       res <- tryCatch(ReadDescfile(filename), error=function(e) NULL)
       system2("git", c("checkout", "HEAD", filename))
       if (!is.null(res)) {
-        cbind(data.table(source="cran", package, version=ref), res)
+        cbind(data.table(source="github", package, version=ref), res)
       }
     }
   }, file.path(datadir, repo.name$owner, repo.name$repository))
