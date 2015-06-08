@@ -1,8 +1,12 @@
 importFrom(ctv, CRAN.views)
 importFrom(stringr, str_trim)
 import(data.table)
+import(logging)
+importFrom(extractoR.github, RunGit)
+importFrom(extractoR.data, ParseGithubRepositoryName)
 
-export(ReadDescfile, CRANDescfiles, BrokenPackages)
+export(MakeGlobalIndex)
+export(ReadDescfile, ReadCRANDescfile, ReadGithubDescfile, Descfiles, BrokenPackages)
 export(ExtractPeople, ExtractRoles)
 export(ParseDependencies, ExtractDependencies)
 export(ExtractDates)
