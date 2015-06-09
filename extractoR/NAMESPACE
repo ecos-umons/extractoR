@@ -6,4 +6,5 @@ import(extractoR.github)
 import(extractoR.extract)
 import(extractoR.data)
 
-exportPattern("^[[:alpha:]]+")
+export(CRANFetch, GithubFetch)
+export(Extract)

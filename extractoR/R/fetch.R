@@ -50,13 +50,18 @@ GithubFetch <- function(datadir, fetch=TRUE, update=TRUE, cluster.size=4,
     stopCluster(cl)
   }
 
+  rdata <- list(repositories=github)
+
   message("Makeing Github index")
-  t <- system.time(index <- MakeGithubIndex(github, reposdir, ignore))
+  t <- system.time(rdata$index <- MakeGithubIndex(github, reposdir, ignore))
   message(sprintf("Github index made in %.3fs", t[3]))
+
+  message("Fetching Github repositories tags")
+  t <- system.time(rdata$tags <- RepositoryTags(github, reposdir))
+  message(sprintf("Github repositories tags fetched in %.3fs", t[3]))
 
   message("Saving objects in data/github/rds")
   t <- system.time({
-    rdata <- list(repositories=github, index=index)
     SaveRData(rdata, datadir)
     SaveCSV(rdata, datadir)
   })
