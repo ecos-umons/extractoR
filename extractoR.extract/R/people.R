@@ -40,11 +40,11 @@ ExtractPeople <- function(s) {
 ExtractRoles <- function(descfiles, role) {
   # Extracts all the people defined in DESCRIPTION files for a given
   # role.
-  roles <- descfiles[tolower(key) == tolower(role), ]
-  rbindlist(mapply(function(package, version, value) {
+  roles <- descfiles[tolower(key) == tolower(role) & grepl("\\S", value), ]
+  rbindlist(mapply(function(source, repository, ref, value) {
     people <- ExtractPeople(value)
     if (nrow(people)) {
-      cbind(data.table(package, version, role=tolower(role)), people)
+      cbind(data.table(source, repository, ref, role=tolower(role)), people)
     }
-  }, roles$package, roles$version, roles$value, SIMPLIFY=FALSE))
+  }, roles$source, roles$repository, roles$ref, roles$value, SIMPLIFY=FALSE))
 }
