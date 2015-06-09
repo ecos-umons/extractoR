@@ -55,7 +55,7 @@ Descfiles <- function(index, datadir) {
     } else {
       stop(sprintf("Unknown source: %s", src))
     }
-  }, index$source, index$repository, index$version, SIMPLIFY=FALSE))
+  }, index$source, index$repository, index$ref, SIMPLIFY=FALSE))
   setnames(res, c("package", "version"), c("repository", "ref"))
   res
 }
