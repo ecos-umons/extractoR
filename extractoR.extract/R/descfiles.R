@@ -46,7 +46,7 @@ ReadGithubDescfile <- function(package, ref, datadir) {
 }
 
 Descfiles <- function(index, datadir) {
-  rbindlist(mapply(function(src, repository, version) {
+  res <- rbindlist(mapply(function(src, repository, version) {
     dir <- file.path(datadir, src)
     if (src == "cran") {
       ReadCRANDescfile(repository, version, file.path(dir, "packages"))
@@ -56,4 +56,6 @@ Descfiles <- function(index, datadir) {
       stop(sprintf("Unknown source: %s", src))
     }
   }, index$source, index$repository, index$version, SIMPLIFY=FALSE))
+  setnames(res, c("package", "version"), c("repository", "ref"))
+  res
 }

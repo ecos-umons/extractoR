@@ -15,14 +15,14 @@ DepsWellFormatted <- function(descfile) {
 
 BrokenPackages <- function(descfiles, index) {
   res <- descfiles[, {
-    logdebug("Checking if %s %s (%s) is broken", package,
-             version, source, logger="extract.broken")
+    logdebug("Checking if %s %s (%s) is broken", repository,
+             ref, source, logger="extract.broken")
     list(is.package=IsPackage(.SD),
          version.well.formatted=VersionWellFormatted(.SD),
          deps.well.formatted=DepsWellFormatted(.SD),
          has.descfile=TRUE)
-  }, by=c("source", "package", "version")]
-  res <- setkey(res, source, package, version)[index]
+  }, by=c("source", "repository", "ref")]
+  res <- setkey(res, source, repository, ref)[index]
   res[is.na(has.descfile),
       c("is.package", "version.well.formatted",
         "deps.well.formatted", "has.descfile") := FALSE]

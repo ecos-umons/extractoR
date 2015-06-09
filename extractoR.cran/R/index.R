@@ -1,3 +1,3 @@
 MakeCRANIndex <- function(packages) {
-  packages[, list(source="cran", repository=package, version, time=mtime)]
+  packages[, list(source="cran", repository=package, ref=version, time=mtime)]
 }
