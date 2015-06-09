@@ -1,44 +1,49 @@
 \name{Checks}
 \alias{Checks}
 \alias{ListCheckings}
-\alias{ReadCheckings}
-\alias{ExtractStatus}
+\alias{ReadChecking}
+\alias{ConvertCSV}
+\alias{SnapshotIndex}
 \encoding{UTF-8}
 \title{Checks}
 \description{
-  Functions used to read checking informations.
+  Functions used to read R CMD check informations.
 }
 
 \usage{
-ListCheckings(checkdir, from.date="1970-01-01", to.date=NA)
-ReadCheckings(date, filename, checkdir, flavors=NULL, extract.maintainer=FALSE)
-ExtractStatus(date, checkdir, extract.maintainer=FALSE)
+ListCheckings(checkdir)
+ReadChecking(date, dir, filename, checkdir, extract.maintainer=FALSE)
+ConvertCSV(checks, datadir)
+SnapshotIndex(datadir)
 }
 \arguments{
-  \item{checkdir}{Root dir where all checking files are stored.}
-  \item{from.date}{Oldest checking to read.}
-  \item{to.date}{Newest checking to read.}
-  \item{date}{The date of the checking to extract. It must be formatted
-    using the format "%y-%m-%d-%H-%M". It is the directory where the RDS
-    file is stored.}
+  \item{checkdir}{Root dir where all check files are stored.}
+  \item{date}{The date of the checking to extract.}
+  \item{dir}{The directory where the RDS file is stored formatted using
+    the format "\%y-\%m-\%d-\%H-\%M".}
   \item{filename}{Name of the RDS file to read.}
-  \item{flavors}{Flavors to extract (all if NULL)}
   \item{extract.maintainer}{Boolean flag for extracting information
     about maintainers}
+  \item{checks}{\code{data.table} like the one returned by
+    \code{ListChecking}.}
+  \item{datadir}{Root directory where data is stored.}
 }
 
 \value{
-  \code{ReadCheckings} reads checking RDS files and returns adataframe
-  containing the row of the read rds file plus a column with the date of
-  the check.
-
   \code{ListCheckings} lists available checking RDS file and returns a
   vector containing the directories name where the different checking
-  RDS files are stored for each extraction. Those directories shoudl be
-  named using the date format "%y-%m-%d-%H-%M".
+  RDS files are stored for each extraction. Those directories should be
+  named using the date format "\%y-\%m-\%d-\%H-\%M".
 
-  \code{ExtractStatus} read and extract status of all packages for Linux
-  (Debian), Windows and MacOS X flavors on devel and release R versions.
+  \code{ReadChecking} reads checking RDS files and returns a
+  \code{data.table} containing the rows of file plus a
+  column with the date of the check.
+
+  \code{ConvertCSV} converts to CSV checking results.
+
+  \code{SnapshotIndex} builds an index of CRAN snapshots from CSV
+  converted checking results. The index contains for each day all
+  packages that were available on the Debian Release X86\_64 flavor.
 }
 
 \author{
