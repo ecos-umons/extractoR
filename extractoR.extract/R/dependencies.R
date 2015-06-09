@@ -34,20 +34,21 @@ ParseDependencies <- function(string) {
              constraint.version=versions)
 }
 
-ExtractDependency <- function(package, version, type.name, key, dependencies) {
+ExtractDependency <- function(source, repository, ref, type.name,
+                              key, dependencies) {
   # Extracts the dependencies defined in a dependencies string.
   deps <- ParseDependencies(dependencies)
   if (nrow(deps)) {
-    cbind(data.table(package, version, type.name, key), deps)
+    cbind(data.table(source, repository, ref, type.name, key), deps)
   }
 }
 
 ExtractDependencies <- function(descfiles, types, type.name=tolower(types[1])) {
   # Extracts all the dependencies defined in DESCRIPTION files for a
   # given dependency type.
-  deps <- descfiles[tolower(descfiles$key) %in% tolower(types), ]
+  deps <- descfiles[tolower(key) %in% tolower(types), ]
   deps <- deps[grep(dependencies.re, deps$value),]
-  rbindlist(mapply(function(package, version, key, value) {
-    ExtractDependency(package, version, type.name, key, value)
-  }, deps$package, deps$version, deps$key, deps$value, SIMPLIFY=FALSE))
+  rbindlist(mapply(function(source, repository, ref, key, value) {
+    ExtractDependency(source, repository, ref, type.name, key, value)
+  }, deps$source, deps$repo, deps$ref, deps$key, deps$value, SIMPLIFY=FALSE))
 }
