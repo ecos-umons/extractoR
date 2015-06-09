@@ -19,9 +19,8 @@ ExtractDates <- function(descfiles, type) {
   # Extracts dates information from DESCRIPTION files.
   d <- descfiles[tolower(key) == tolower(type)]
   dates <- sapply(strsplit(d$value, ";"), function(x) strftime(ParseDate(x[1])))
-  df <- data.table(package=d$package, version=d$version,
-                   type=tolower(type), date=dates)
-  df[!is.na(date)]
+  d[, list(source, repository, ref, type=tolower(type),
+           date=dates)][!is.na(date)]
 }
 
 ## ExtractTimeline <- function(dates) {
