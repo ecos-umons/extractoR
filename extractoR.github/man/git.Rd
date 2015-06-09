@@ -13,7 +13,7 @@ RunGit(FUNC, directory)
 ParseDate(date)
 }
 \arguments{
-  \item{FUNC}{Function tor un.}
+  \item{FUNC}{Function to run.}
   \item{directory}{Directory where is stored the git repository.}
   \item{date}{Character string containing the date.}
 }
