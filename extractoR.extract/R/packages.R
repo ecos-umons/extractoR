@@ -16,10 +16,7 @@ PackagesMatchingRepository <- function(packages, tolower=FALSE) {
 
 Packages <- function(descfiles, broken) {
   packages <- broken[TRUE & !is.broken, list(source, repository, ref)]
-  keys <- c("Package", "Version", "Depends", "Imports", "Suggests",
-            "Maintainer", "Author", "Date", "Packaged", "Date/Publication")
-  names(keys) <- keys
-  metadatas <- descfiles[key %in% keys]
+  metadatas <- descfiles[key %in% c("Package", "Version")]
   setkey(metadatas, source, repository, ref)
   metadatas <- dcast(metadatas[packages], source + repository + ref ~ key)
   packages <- unique(metadatas[, list(source, repository, Package)])
@@ -27,6 +24,5 @@ Packages <- function(descfiles, broken) {
   res <- Uniques(PackagesMatchingRepository(Duplicates(packages)))
   res <- rbind(Uniques(packages), res)
   res <- merge(res, metadatas, by=c("source", "repository", "Package"))
-  setkey(res[, c(list(source=source, repository=repository, ref=ref),
-                 lapply(keys, get, envir=environment()))], NULL)
+  setkey(res[, list(source, repository, ref, Package, Version)], NULL)
 }
