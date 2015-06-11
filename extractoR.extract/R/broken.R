@@ -4,8 +4,12 @@ IsPackage <- function(descfile) {
   UniqueKey("Package") && UniqueKey("Version")
 }
 
+PackageWellFormatted <- function(descfile) {
+  grepl("^[-._[:alnum:]]+$", descfile[key == "Package", value])
+}
+
 VersionWellFormatted <- function(descfile) {
-  length(grep("\\d+[-.]\\d+([-.]\\d+)?", descfile[key == "Version"]$value)) > 0
+  grepl("^\\d+([-.]\\d+)*", descfile[key == "Version", value])
 }
 
 DepsWellFormatted <- function(descfile) {
@@ -18,6 +22,7 @@ BrokenPackages <- function(descfiles, index) {
     logdebug("Checking if %s %s (%s) is broken", repository,
              ref, source, logger="extract.broken")
     list(is.package=IsPackage(.SD),
+         package.well.formatted=PackageWellFormatted(.SD),
          version.well.formatted=VersionWellFormatted(.SD),
          deps.well.formatted=DepsWellFormatted(.SD),
          has.descfile=TRUE)
@@ -26,6 +31,8 @@ BrokenPackages <- function(descfiles, index) {
   res[is.na(has.descfile),
       c("is.package", "version.well.formatted",
         "deps.well.formatted", "has.descfile") := FALSE]
-  res[, is.broken := !is.package | !deps.well.formatted]
+  res[, is.broken := (!has.descfile | !is.package |
+                      !package.well.formatted | !version.well.formatted |
+                      !deps.well.formatted)]
   res
 }
