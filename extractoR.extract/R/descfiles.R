@@ -56,6 +56,8 @@ Descfiles <- function(index, datadir) {
       stop(sprintf("Unknown source: %s", src))
     }
   }, index$source, index$repository, index$ref, SIMPLIFY=FALSE))
+  re <- "^\\s*(\\d+([-.]\\d+)*\\S*)(\\s.*)?$"
+  res[key == "Version", value := sub(re, "\\1", value)]
   setnames(res, c("package", "version"), c("repository", "ref"))
   res
 }
