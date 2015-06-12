@@ -1,0 +1,6 @@
+import(data.table)
+import(logging)
+importFrom(extractoR.github, RunGit)
+importFrom(extractoR.data, ParseGithubRepositoryName)
+
+export(Namespaces)
