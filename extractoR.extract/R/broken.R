@@ -1,3 +1,10 @@
+pkgname.re <- "([[:alpha:]][[:alnum:].]*)"
+version.re <- "[-[:digit:].]+"
+constraint.re <- sprintf("[(][>=<]=?[[:space:]]*(%s)[)]", version.re)
+dependency.re <- sprintf("%s([[:space:]]*%s)?", pkgname.re, constraint.re)
+dependencies.re <- "^[[:space:]]*((%s)([[:space:]]*,[[:space:]]*%s)*,?)?$"
+dependencies.re <- sprintf(dependencies.re, dependency.re, dependency.re)
+
 IsPackage <- function(descfile) {
   keys <- table(descfile$key)
   UniqueKey <- function(key) key %in% names(keys) && keys[key] == 1
