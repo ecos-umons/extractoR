@@ -22,7 +22,7 @@ ReadDescfile <- function(filename, package=NA, version=NA) {
 
 ReadCRANDescfile <- function(package, version, datadir) {
   loginfo("Parsing CRAN DESCRIPTION file from %s %s",
-          package, version, logger="extract.descfile.cran")
+          package, version, logger="description.cran")
   filename <- file.path(datadir, package, version, package, "DESCRIPTION")
   descfile <- ReadDescfile(filename, package, version)
   if (!is.null(descfile)) cbind(data.table(source="cran"), descfile)
@@ -30,7 +30,7 @@ ReadCRANDescfile <- function(package, version, datadir) {
 
 ReadGithubDescfile <- function(package, ref, datadir) {
   loginfo("Parsing Github DESCRIPTION file from package %s %s",
-          package, ref, logger="extract.descfile.github")
+          package, ref, logger="description.github")
   repo.name <- ParseGithubRepositoryName(package)
   RunGit(function() {
     filename <- file.path(repo.name$subdir, "DESCRIPTION")
