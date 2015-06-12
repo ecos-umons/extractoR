@@ -1,9 +1,11 @@
 library(devtools)
 
+install("extractoR.data")
 install("extractoR.cran")
 install("extractoR.github")
+install("extractoR.description")
+install("extractoR.namespace")
 install("extractoR.extract")
-install("extractoR.data")
 install("extractoR.snapshots")
 install("extractoR.content")
 install("extractoR")
