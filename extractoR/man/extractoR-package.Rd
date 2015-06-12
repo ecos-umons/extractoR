@@ -22,8 +22,8 @@
   \code{extractoR.github} contains functions to fetch R package
   repositories from Github.
 
-  \code{extractoR.extract} contains functions to read data extracted
-  with extractoR.fetch and parse them. Most of those functions return
+  \code{extractoR.extract} contains functions to extract information
+  from R package repositories. Most of those functions return
   \code{data.table} objects.
 
   \code{extractoR.data} contains functions to read, manipulate and

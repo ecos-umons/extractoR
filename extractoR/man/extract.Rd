@@ -3,7 +3,7 @@
 \encoding{UTF-8}
 \title{Extract}
 \description{
-  Extract CRAN data
+  Extract R data
 }
 
 \usage{
@@ -13,14 +13,15 @@ Extract(datadir)
   \item{datadir}{Directory where to store data}
 }
 \details{
-  Extracts all informations from package list in
-  <datadir>/packages.yml and save them in RDS files in <datadir>/rds.
+  Extracts all informations from Github and CRAN packages.
 }
 
 \author{
   Maëlick Claes <himself@maelick.net>
 }
 
-\keyword{fetch}
+\keyword{extract}
 \keyword{cran}
+\keyword{github}
+\keyword{broken}
 \keyword{package}
