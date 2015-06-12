@@ -1,0 +1,11 @@
+importFrom(stringr, str_trim)
+import(data.table)
+import(logging)
+importFrom(extractoR.github, RunGit)
+importFrom(extractoR.data, ParseGithubRepositoryName)
+
+export(MakeGlobalIndex)
+export(ReadDescfile, ReadCRANDescfile, ReadGithubDescfile, Descfiles)
+export(ExtractPeople, ExtractRoles)
+export(ParseDependencies, ExtractDependencies)
+export(ExtractDates)

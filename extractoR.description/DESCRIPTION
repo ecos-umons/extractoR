@@ -1,0 +1,15 @@
+Package: extractoR.description
+Type: Package
+Title: R packages metadata extractor (DESCRIPTION files)
+Version: 1.0
+Date: 2013-08-21
+Author: Maëlick Claes <himself@maelick.net>
+Maintainer: Maëlick Claes <himself@maelick.net>
+Description: This package is part of extractoR which is a set of R
+             packages that can be used to fetch, extract and query
+             CRAN packages metadata. extractoR.description parses
+             DESCRIPTION files from R packages.
+Depends: data.table
+Imports: stringr, logging, extractoR.github, extractoR.data
+License: GPL-3
+Encoding: UTF-8
