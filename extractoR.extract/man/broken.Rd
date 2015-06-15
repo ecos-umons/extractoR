@@ -7,10 +7,11 @@
 }
 
 \usage{
-BrokenPackages(descfiles, index)
+BrokenPackages(descfiles, namespaces, index)
 }
 \arguments{
   \item{descfiles}{DESCRIPTION files}
+  \item{namespaces}{NAMESPACE files}
   \item{index}{Repository index}
 }
 \value{
