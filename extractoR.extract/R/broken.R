@@ -24,9 +24,9 @@ DepsWellFormatted <- function(descfile) {
   all(grepl(dependencies.re, deps))
 }
 
-BrokenPackages <- function(descfiles, index) {
+BrokenPackages <- function(descfiles, namespaces, index) {
   res <- descfiles[, {
-    logdebug("Checking if %s %s (%s) is broken", repository,
+    logdebug("Checking if %s %s (%s) DESCRIPTION file is broken", repository,
              ref, source, logger="extract.broken")
     list(is.package=IsPackage(.SD),
          package.well.formatted=PackageWellFormatted(.SD),
@@ -38,6 +38,7 @@ BrokenPackages <- function(descfiles, index) {
   res[is.na(has.descfile),
       c("is.package", "version.well.formatted",
         "deps.well.formatted", "has.descfile") := FALSE]
+  res[, has.namespace := file.path(source, repository, ref) %in% names(namespaces)]
   res[, is.broken := (!has.descfile | !is.package |
                       !package.well.formatted | !version.well.formatted |
                       !deps.well.formatted)]
