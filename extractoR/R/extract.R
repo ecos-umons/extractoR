@@ -2,10 +2,11 @@ Extract <- function(datadir) {
   rdata <- list()
   index <- readRDS(file.path(datadir, "rds", "index.rds"))
   descfiles <- readRDS(file.path(datadir, "rds", "descfiles.rds"))
+  namespaces <- readRDS(file.path(datadir, "rds", "namespaces.rds"))
 
   message("Extracting broken packages")
   t <- system.time({
-    rdata$broken <- BrokenPackages(descfiles, index)
+    rdata$broken <- BrokenPackages(descfiles, namespaces, index)
   })
   message(sprintf("Broken packages extracted in %.3fs", t[3]))
 

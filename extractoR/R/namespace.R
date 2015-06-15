@@ -4,7 +4,7 @@ ParseNamespaceFiles <- function(datadir) {
   message("Reading NAMESPACE files")
   t <- system.time({
     namespaces <- Namespaces(index, datadir)
-    names(namespaces) <- file.path(index$source, index$repository, index$ref)
+    rdata <- list(namespaces=namespaces)
   })
   message(sprintf("NAMESPACE files read in %.3fs", t[3]))
 
