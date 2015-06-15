@@ -15,8 +15,8 @@ ReadGithubNamespace <- function(package, ref, datadir) {
     status <- system2("git", c("checkout", ref, filename))
     if (!status) {
       res <- tryCatch({
-        subdir <-  parseNamespaceFile(basename(repo.name$subdir),
-                                      file.path(repo.name$subdir, ".."))
+        parseNamespaceFile(basename(normalizePath(repo.name$subdir)),
+                           file.path(repo.name$subdir, ".."))
       }, error=function(e) NULL)
       system2("git", c("checkout", "HEAD", filename))
       res
@@ -35,6 +35,6 @@ Namespaces <- function(index, datadir) {
       stop(sprintf("Unknown source: %s", src))
     }
   }, index$source, index$repository, index$ref, SIMPLIFY=FALSE)
-  ## setnames(res, c("package", "version"), c("repository", "ref"))
-  res
+  names(res) <- file.path(index$source, index$repository, index$ref)
+  res[!sapply(res, is.null)]
 }
