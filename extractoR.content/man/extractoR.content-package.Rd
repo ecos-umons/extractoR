@@ -16,9 +16,3 @@ Maëlick Claes <himself@maelick.net>
 
 Maintainer: Maëlick Claes <himself@maelick.net>
 }
-
-\examples{
-\dontrun{
-library(extractoR.content)
-}
-}

@@ -7,30 +7,23 @@
 }
 
 \usage{
-ParsePackage(package, version, path, fcode, fnull, ferr,
-             guess.encoding=FALSE)
+ParsePackage(source, repository, ref, datadir)
 }
 \arguments{
-  \item{package}{Name of the package.}
-  \item{version}{Version of the package.}
-  \item{path}{Path where the package is stored}
-  \item{fcode}{Function to call when package code was successfull
-    parsed.}
-  \item{fnull}{Function to call when package doesn't contain code.}
-  \item{ferr}{Function to call when package code parsing produced an
-    error.}
-  \item{guess.encoding}{If TRUE try to guess file encoding. This might
-    be useless and will drastically slow down the execution.}
+  \item{source}{Source of the repository.}
+  \item{repository}{Repository in which the package is stored.}
+  \item{ref}{Reference of the repository to use.}
+  \item{datadir}{Directory where data is stored.}
 }
 \value{
-  Returns the value that fcode, fnull or ferr produced depending on
-  which one has been called.
+  Parse the R code of the package found in the given repository into
+  \code{datadir}/code/\code{source}/\code{repository}/\code{ref}.rds.
 }
 
 \author{
   Maëlick Claes <himself@maelick.net>
 }
 
-\keyword{description}
-\keyword{descfile}
-\keyword{extract}
+\keyword{package}
+\keyword{code}
+\keyword{parse}

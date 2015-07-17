@@ -9,6 +9,6 @@ Description: This package is part of extractoR which is a set of R
              packages that can be used to fetch, extract and query R
              packages metadata. extractoR.content browses packages and
              aggregates informations about package content.
-Imports: cloneR, hash
+Imports: sourceR, hash, extractoR.data, extractoR.github, logging
 License: GPL-3
 Encoding: UTF-8

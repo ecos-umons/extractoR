@@ -1,6 +1,9 @@
-importFrom(cloneR, ParsePackage, FindFunctions)
+importFrom(sourceR, ParsePackage, FunctionDefinitions, FunctionCalls,
+           CodingStyle)
 importFrom(hash, hash)
+importFrom(extractoR.data, ParseGithubRepositoryName)
+importFrom(extractoR.github, RunGit)
+importFrom(logging, loginfo)
 
-export(VisitPackages)
 export(ParsePackage)
-export(BrowseFunctions)
+export(FunctionDefinitions, FunctionCalls, CodingStyle)
