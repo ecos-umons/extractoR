@@ -35,6 +35,6 @@ Namespaces <- function(index, datadir) {
       stop(sprintf("Unknown source: %s", src))
     }
   }, index$source, index$repository, index$ref, SIMPLIFY=FALSE)
-  names(res) <- file.path(index$source, index$repository, index$ref)
+  names(res) <- paste(index$source, index$repository, index$ref, sep=":")
   res[!sapply(res, is.null)]
 }
