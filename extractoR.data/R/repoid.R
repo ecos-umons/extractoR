@@ -11,5 +11,5 @@ ParseGithubRepositoryName <- function(str) {
 ParseRepositoryId <- function(str) {
   data.table(source=sub(re2, "\\1", str),
              repository=sub(re2, "\\2", str),
-             version=sub(re2, "\\4", str))
+             ref=sub(re2, "\\4", str))
 }
