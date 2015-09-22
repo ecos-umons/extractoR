@@ -3,7 +3,6 @@
 \alias{ListCheckings}
 \alias{ReadChecking}
 \alias{ConvertCSV}
-\alias{SnapshotIndex}
 \encoding{UTF-8}
 \title{Checks}
 \description{
@@ -14,7 +13,6 @@
 ListCheckings(checkdir)
 ReadChecking(date, dir, filename, checkdir, extract.maintainer=FALSE)
 ConvertCSV(checks, datadir)
-SnapshotIndex(datadir)
 }
 \arguments{
   \item{checkdir}{Root dir where all check files are stored.}
@@ -40,10 +38,6 @@ SnapshotIndex(datadir)
   column with the date of the check.
 
   \code{ConvertCSV} converts to CSV checking results.
-
-  \code{SnapshotIndex} builds an index of CRAN snapshots from CSV
-  converted checking results. The index contains for each day all
-  packages that were available on the Debian Release X86\_64 flavor.
 }
 
 \author{

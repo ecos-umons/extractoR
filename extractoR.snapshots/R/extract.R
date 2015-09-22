@@ -53,17 +53,42 @@ ConvertCSV <- function(checks, datadir) {
   }, checks$date, checks$dir)
 }
 
-SnapshotIndex <- function(datadir) {
+SnapshotIndex <- function(datadir, Subset, remove.duplicates=FALSE) {
   date.re <- "\\d\\d(-\\d\\d){2} \\d\\d(:\\d\\d){2}"
   files <- dir(file.path(datadir, "cran", "snapshots"),
                pattern=sprintf("%s\\.csv$", date.re))
-  files <- files[!duplicated(as.Date(files))]
-  res <- rbindlist(lapply(files, function(f) {
+  if (remove.duplicates) files <- files[!duplicated(as.Date(files))]
+  lapply(files, function(f) {
     loginfo("read CRAN check %s", f)
     snapshot <- fread(file.path(datadir, "cran", "snapshots", f))
-    snapshot[flavor == "r-release-linux-x86_64", list(date, package, version)]
-  }))
-  write.csv(res, file=file.path(datadir, "cran", "snapshots.csv"),
-            row.names=FALSE)
+    Subset(snapshot)
+  })
+}
+
+PackageHistory <- function(datadir, flv="r-release-linux-x86_64",
+                           remove.duplicates=FALSE) {
+  res <- rbindlist(SnapshotIndex(datadir, function(snapshot) {
+    snapshot[flavor$flv, list(date, package, version)]
+  }, remove.duplicates))
+  SaveCSV(list("package-history"=res), file.path(datadir, "cran"))
+  res
+}
+
+CRANCheckHistory <- function(datadir, flv="r-release-linux-x86_64",
+                             remove.duplicates=FALSE) {
+  res <- rbindlist(SnapshotIndex(datadir, function(snapshot) {
+    snapshot[flavor == flv, list(date, package, version)]
+  }, remove.duplicates))
+  SaveCSV(list("check-history"=res), file.path(datadir, "cran"))
+  res
+}
+
+FlavorHistory <- function(datadir, remove.duplicates=FALSE) {
+  res <- rbindlist(SnapshotIndex(datadir, function(snapshot) {
+    flavors <- table(snapshot$flavor)
+    data.table(date=flavors$date[1], flavor=names(flavors),
+               packages=as.integer(flavors))
+  }, remove.duplicates))
+  SaveCSV(list("flavor-history"=res), file.path(datadir, "cran"))
   res
 }
