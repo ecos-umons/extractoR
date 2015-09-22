@@ -85,9 +85,9 @@ CRANCheckHistory <- function(datadir, flv="r-release-linux-x86_64",
 
 FlavorHistory <- function(datadir, remove.duplicates=FALSE) {
   res <- rbindlist(SnapshotIndex(datadir, function(snapshot) {
+    date <- snapshot$date[1]
     flavors <- table(snapshot$flavor)
-    data.table(date=flavors$date[1], flavor=names(flavors),
-               packages=as.integer(flavors))
+    data.table(date, flavor=names(flavors), packages=as.integer(flavors))
   }, remove.duplicates))
   SaveCSV(list("flavor-history"=res), file.path(datadir, "cran"))
   res
