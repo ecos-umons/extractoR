@@ -1,5 +1,6 @@
 import(data.table)
 import(logging)
+importFrom(extractoR.data, SaveCSV)
 
 export(ListCheckings, ReadChecking, ConvertCSV)
 export(SnapshotIndex, PackageHistory, CRANCheckHistory, FlavorHistory)

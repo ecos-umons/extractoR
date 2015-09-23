@@ -15,6 +15,6 @@ Description: This package contains functions to read results of "R CMD
              this manual extraction should be automated with a cron
              job to keep an history of this check results.
 Depends: data.table
-Imports: logging
+Imports: logging, extractoR.data
 License: GPL-3
 Encoding: UTF-8
