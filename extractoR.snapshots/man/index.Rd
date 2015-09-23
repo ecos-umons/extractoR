@@ -1,7 +1,6 @@
 \name{Index}
 \alias{Index}
 \alias{SnapshotIndex}
-\alias{PackageHistory}
 \alias{CRANCheckHistory}
 \alias{FlavorHistory}
 \encoding{UTF-8}
@@ -12,7 +11,6 @@
 
 \usage{
 SnapshotIndex(datadir, Subset, remove.duplicates=FALSE)
-PackageHistory(datadir, flv="r-release-linux-x86_64", remove.duplicates=FALSE)
 CRANCheckHistory(datadir, flv="r-release-linux-x86_64", remove.duplicates=FALSE)
 FlavorHistory(datadir, remove.duplicates=FALSE)
 }
@@ -27,9 +25,6 @@ FlavorHistory(datadir, remove.duplicates=FALSE)
   \code{SnapshotIndex} builds an index of CRAN snapshots from CSV
   converted checking results. Subset is a function used to select a
   subset of each snapshot to return.
-
-  \code{PackageHistory} returns the history of packages available for
-  a single flavor.
 
   \code{CRANCheckHistory} returns the history of CRAN check results for
   a single flavor.
