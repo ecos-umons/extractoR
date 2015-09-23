@@ -77,7 +77,7 @@ PackageHistory <- function(datadir, flv="r-release-linux-x86_64",
 CRANCheckHistory <- function(datadir, flv="r-release-linux-x86_64",
                              remove.duplicates=FALSE) {
   res <- rbindlist(SnapshotIndex(datadir, function(snapshot) {
-    snapshot[flavor == flv, list(date, package, version)]
+    snapshot[flavor == flv, list(date, package, version, status)]
   }, remove.duplicates))
   SaveCSV(list("check-history"=res), file.path(datadir, "cran"))
   res
