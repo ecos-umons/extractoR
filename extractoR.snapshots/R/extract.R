@@ -65,12 +65,14 @@ SnapshotIndex <- function(datadir, Subset, remove.duplicates=FALSE) {
   })
 }
 
-CRANCheckHistory <- function(datadir, flv="r-release-linux-x86_64",
-                             remove.duplicates=FALSE) {
-  res <- rbindlist(SnapshotIndex(datadir, function(snapshot) {
-    snapshot[flavor == flv, list(date, package, version, status)]
-  }, remove.duplicates))
-  SaveCSV(list("check-history"=res), file.path(datadir, "cran"))
+CRANCheckHistory <- function(datadir, flavors="r-release-linux-x86_64",
+                             filename=flavors[1], remove.duplicates=FALSE) {
+  res <- list(rbindlist(SnapshotIndex(datadir, function(snapshot) {
+    loginfo("Subset for flavor %s", filename)
+    snapshot[flavor %in% flavors, list(date, flavor, package, version, status)]
+  }, remove.duplicates)))
+  names(res) <- filename
+  SaveCSV(res, file.path(datadir, "cran", "check-history"))
   res
 }
 

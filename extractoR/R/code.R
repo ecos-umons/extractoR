@@ -56,7 +56,9 @@ ExtractFunctionCalls <- function(datadir, cluster.size=6) {
       dest <- file.path(datadir, "calls", src, repo, sprintf("%s.rds", ref))
       src <- file.path(datadir, "code", src, repo, sprintf("%s.rds", ref))
       dir.create(dirname(dest), recursive=TRUE)
-      saveRDS(extractoR.content::FunctionCalls(readRDS(src)), dest)
+      res <- tryCatch(extractoR.content::FunctionCalls(readRDS(src)),
+                      error=function(e) e)
+      saveRDS(res, dest)
     }, packages$source, packages$repository, packages$ref)
   })
   message(sprintf("Function calls extracted in %.3fs", t[3]))

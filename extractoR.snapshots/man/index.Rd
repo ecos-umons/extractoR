@@ -10,15 +10,16 @@
 }
 
 \usage{
-SnapshotIndex(datadir, Subset, remove.duplicates=FALSE)
-CRANCheckHistory(datadir, flv="r-release-linux-x86_64", remove.duplicates=FALSE)
-FlavorHistory(datadir, remove.duplicates=FALSE)
+SnapshotIndex(datadir, Subset, remove.duplicates)
+CRANCheckHistory(datadir, flavors, filename, remove.duplicates)
+FlavorHistory(datadir, remove.duplicates)
 }
 \arguments{
   \item{datadir}{Root directory where data is stored.}
   \item{Subset}{Function taking a snapshot as parameter.}
   \item{remove.duplicates}{If TRUE only keep one snapshot per date.}
-  \item{flv}{Flavor to select.}
+  \item{flavors}{Flavors to select.}
+  \item{filename}{Name of the CSV file to save result in.}
 }
 
 \value{
@@ -27,7 +28,7 @@ FlavorHistory(datadir, remove.duplicates=FALSE)
   subset of each snapshot to return.
 
   \code{CRANCheckHistory} returns the history of CRAN check results for
-  a single flavor.
+  a selected flavors.
 
   \code{flv} returns the history of available flavors.
 }
