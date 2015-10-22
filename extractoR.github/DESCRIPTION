@@ -10,6 +10,6 @@ Description: This package is part of extractoR which is a set of R
              packages metadata. extractoR.github fetches repositories
              from Github.
 Depends: data.table
-Imports: RCurl, logging
+Imports: RCurl, logging, extractoR.data
 License: GPL-3
 Encoding: UTF-8

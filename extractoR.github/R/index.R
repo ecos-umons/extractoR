@@ -1,12 +1,5 @@
 LogDescfile <- function(owner, repo, subdir, root.dir=".") {
-  RunGit(function() {
-    loginfo("Fetching DESCRIPTION history for %s/%s",
-            owner, repo, logger="git.log")
-    res <- system2("git", c("log", "--pretty=format:\"%H %ci\"", "--",
-                            file.path(subdir, "DESCRIPTION")),
-                   stdout=TRUE)
-    cbind(data.table(owner=owner, repository=repo, subdir), ParseCommit(res))
-  }, root.dir)
+  LogFile("DESCRIPTION", owner, repo, subdir, root.dir)
 }
 
 MakeRepositoryId <- function(owner, repo, subdir) {

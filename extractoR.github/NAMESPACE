@@ -1,4 +1,5 @@
 importFrom(RCurl, getCurlHandle, getURL, getCurlInfo)
+importFrom(extractoR.data, ParseGithubRepositoryName)
 
 import(data.table)
 import(logging)
@@ -6,5 +7,6 @@ import(logging)
 export(FetchGithubRepository)
 export(MakeRepositoryId)
 export(MakeGithubIndex)
+export(MakeTravisIndex)
 export(RunGit, ParseDate)
 export(RepositoryTags)
