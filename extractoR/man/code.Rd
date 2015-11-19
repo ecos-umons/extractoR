@@ -4,6 +4,7 @@
 \alias{ExtractFunctions}
 \alias{ExtractFunctionCalls}
 \alias{ExtractCodingStyle}
+\alias{ResolveFunctionCalls}
 \encoding{UTF-8}
 \title{Code}
 \description{
@@ -15,6 +16,7 @@ ParseCode(datadir)
 ExtractFunctions(datadir, cluster.size=6)
 ExtractFunctionCalls(datadir, cluster.size=6)
 ExtractCodingStyle(datadir, cluster.size=6)
+ResolveFunctionCalls(datadir)
 }
 \arguments{
   \item{datadir}{Directory where data is stored.}
@@ -28,6 +30,10 @@ ExtractCodingStyle(datadir, cluster.size=6)
   \code{ExtractCodingStyle} extract function definitions, function calls
   and coding style found inside R packages and store them on disk. These
   functions are run on a cluster of the given size.
+
+  \code{ResolveFunctionCalls} extracts the list of function calls that
+  refer to non core R packages (i.e. explicit calls, calls to a
+  dependency's function or to the package own's functions).
 }
 
 \author{

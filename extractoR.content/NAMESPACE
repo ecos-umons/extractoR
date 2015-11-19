@@ -1,3 +1,4 @@
+import(data.table)
 importFrom(sourceR, ParsePackage, FunctionDefinitions, FunctionCalls,
            CodingStyle)
 importFrom(hash, hash)
@@ -7,3 +8,4 @@ importFrom(logging, loginfo)
 
 export(ParsePackage)
 export(FunctionDefinitions, FunctionCalls, CodingStyle)
+export(ExplicitCalls, ImplicitCalls)

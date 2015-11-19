@@ -87,3 +87,43 @@ ExtractCodingStyle <- function(datadir, cluster.size=6) {
   message(sprintf("Coding style extracted in %.3fs", t[3]))
   stopCluster(cl)
 }
+
+ResolveFunctionCalls <- function(datadir) {
+  packages <- readRDS(file.path(datadir, "rds", "packages.rds"))
+  exports <- readRDS(file.path(datadir, "rds", "exports.rds"))
+  exports <- merge(exports, packages, by=c("source", "repository", "ref"))
+  deps <- readRDS(file.path(datadir, "rds", "deps.rds"))
+  deps <- deps[type.name %in% c("imports", "depends", "linkingto")]
+  setkey(deps, source, repository, ref, dependency)
+
+  src <- packages[, file.path(datadir, "calls", source, repository,
+                              sprintf("%s.rds", ref))]
+  dest1 <- packages[, file.path(datadir, "calls-implicit", source, repository,
+                                sprintf("%s.rds", ref))]
+  dest2 <- packages[, file.path(datadir, "calls-explicit", source, repository,
+                                sprintf("%s.rds", ref))]
+  packages <- packages[file.exists(src) & !file.exists(dest1) &
+                       !file.exists(dest2)]
+  if (nrow(packages) == 0) return(invisible(NULL))
+
+  message("Resolving function calls")
+  t <- system.time({
+    mapply(function(src, repo, ref) {
+      dest <- file.path(datadir, "calls-explicit", src, repo,
+                        sprintf("%s.rds", ref))
+      dir.create(dirname(dest), recursive=TRUE)
+      res <- extractoR.content::ExplicitCalls(src, repo, ref, datadir)
+      saveRDS(res, dest)
+
+      dest <- file.path(datadir, "calls-implicit", src, repo,
+                        sprintf("%s.rds", ref))
+      dir.create(dirname(dest), recursive=TRUE)
+      deps.exports <- exports[Package %in% deps[list(src, repo, ref),
+                                                unique(dependency)]]
+      res <- extractoR.content::ImplicitCalls(src, repo, ref, datadir,
+                                              deps.exports)
+      saveRDS(res, dest)
+    }, packages$source, packages$repository, packages$ref)
+  })
+  message(sprintf("Function calls resolved in %.3fs", t[3]))
+}
