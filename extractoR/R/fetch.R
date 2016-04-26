@@ -40,6 +40,17 @@ GithubFetch <- function(datadir, fetch=TRUE, update=TRUE, cluster.size=4,
     setnames(github, c("name", "owner.login"), c("repository", "owner"))
   }
 
+  cl <- InitCluster("github", "github-download.log", n=cluster.size)
+  t <- system.time({
+    exist <- clusterMap(cl, TestGithubRepository,
+                        github$owner, github$repository,
+                        github$subdir, SIMPLIFY=TRUE)
+  })
+  message(sprintf("%d repositories tested in %.3fs", nrow(github), t[3]))
+  github <- github[exist]
+  message(sprintf("repositories reduced to %s", nrow(github), t[3]))
+  stopCluster(cl)
+
   if (fetch) {
     cl <- InitCluster("github", "github-download.log", n=cluster.size)
     t <- system.time({
