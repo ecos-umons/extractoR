@@ -5,4 +5,4 @@ datadir <- "/data/rdata"
 
 basicConfig()
 
-GithubFetch(datadir, fetch=FALSE, update=FALSE, cluster=4)
+GithubFetch(datadir, fetch=TRUE, update=TRUE, cluster=4)

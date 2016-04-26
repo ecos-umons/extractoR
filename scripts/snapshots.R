@@ -10,8 +10,8 @@ system.time(ConvertCSV(checks, datadir))
 
 flavors <- list("release-linux"="r-release-linux-x86_64",
                 "release-windows"="r-release-windows-ix86+x86_64",
-                "patched-solaris"=c("r-patched-solaris-x86_64",
-                  "r-prerel-solaris-x86_64"),
+                "patched-solaris"=c("r-patched-solaris-x86",
+                  "r-prerel-solaris-x86"),
                 "oldrel-windows"="r-oldrel-windows-ix86+x86_64",
                 "devel-windows"="r-devel-windows-ix86+x86_64",
                 "devel-osx"=c("r-devel-macosx-x86_64",
@@ -26,5 +26,5 @@ flavors <- list("release-linux"="r-release-linux-x86_64",
 system.time(for (name in names(flavors)) {
   print(name)
   system.time(snapshots <- CRANCheckHistory(datadir, flavors=flavors[[name]],
-                                            filename=name)
+                                            filename=name))
 })
