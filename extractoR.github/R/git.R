@@ -16,6 +16,7 @@ ParseCommit <- function(commit) {
              date=ParseDate(sub("^([^ ]+) (.*)$", "\\2", commit)))
 }
 
+# Run a git log on a file
 LogFile <- function(file, owner, repo, subdir, root.dir=".") {
   RunGit(function() {
     loginfo("Fetching %s history for %s/%s", file, owner, repo,
