@@ -1,7 +1,30 @@
+HTTPHeader <- function(url) {
+  curl <- getCurlHandle()
+  getURL(url, header=1, nobody=1, curl=curl)
+  res <- getCurlInfo(curl)
+  loginfo("HTTP response code %d for %s", res$response.code, url, logger="cran.check")
+  res
+}
+
+HTTPGetURL <- function(url) {
+  res <- HTTPHeader(url)
+  code <- res$response.code
+  if (code == "301") HTTPGetURL(res$redirect.url)
+  else if (code == "200") url
+  else NULL
+}
+
+HTTPGetFile <- function(url) {
+  curl <- getCurlHandle()
+  getURL(url, curl=curl)
+}
+
 FetchPageLinks <- function(url) {
   # Fetches all links values from a web page.
+  url <- HTTPGetURL(url)
   message(sprintf("Parsing %s", url))
-  doc = htmlTreeParse(url, useInternalNodes=T)
+  doc <- HTTPGetFile(url)
+  doc = htmlTreeParse(doc, asText=TRUE, useInternalNodes=TRUE)
   xpathSApply(doc, "//a[@href]", xmlValue)
 }
 
@@ -50,5 +73,6 @@ FetchCRANList <- function(cran.mirror="http://cran.r-project.org") {
                    FetchCurrent(cran.mirror), by="package")
   archived <- FetchArchived(current, cran.mirror)
   res <- rbind(current, archived)
+  # Removing duplicates
   res[res[, .I[which.max(mtime)], by=c("package", "version")]$V1]
 }

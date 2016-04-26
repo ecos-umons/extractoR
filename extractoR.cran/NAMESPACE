@@ -2,6 +2,7 @@ importFrom(RCurl, getCurlHandle, getURL, getCurlInfo)
 importFrom(XML, htmlTreeParse, xpathSApply, xmlValue, xmlAttrs, xmlNode)
 
 import(data.table)
+import(logging)
 
 export(FetchCRANList)
 export(FetchPackage)
