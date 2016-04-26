@@ -30,7 +30,7 @@ ParsePackage <- function(source, repository, ref, datadir) {
     stop(sprintf("Unknown source: %s", src))
   }
   data <- list(source=source, repository=repository, ref=ref)
-  if (is.list(res)) {
+  if (inherits(res, "package.code")) {
     data$code <- res
   } else if (inherits(res, "error")) {
     data$err <- res
