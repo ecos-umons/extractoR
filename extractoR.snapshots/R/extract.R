@@ -72,7 +72,7 @@ CRANCheckHistory <- function(datadir, flavors="r-release-linux-x86_64",
     snapshot[flavor %in% flavors, list(date, flavor, package, version, status)]
   }, remove.duplicates)))
   names(res) <- filename
-  SaveCSV(res, file.path(datadir, "cran", "check-history"))
+  SaveCSV(res, file.path(datadir, "cran"), "check-history")
   res
 }
 
