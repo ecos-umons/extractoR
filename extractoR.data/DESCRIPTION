@@ -10,6 +10,6 @@ Description: This package is part of extractoR which is a set of R
              packages metadata. extractoR.data is used to read,
              manipulate and export R packages metadata.
 Depends: data.table
-Imports: rjson, yaml
+Imports: rjson, yaml, logging
 License: GPL-3
 Encoding: UTF-8

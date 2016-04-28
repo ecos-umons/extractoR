@@ -1,6 +1,7 @@
 import(data.table)
 importFrom(rjson, fromJSON, toJSON)
 importFrom(yaml, as.yaml, yaml.load_file)
+importFrom(logging, loginfo)
 exportPattern("^Save")
 exportPattern("^Load")
 export(ParseGithubRepositoryName, ParseRepositoryId)
