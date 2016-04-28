@@ -15,14 +15,16 @@
 }
 
 \usage{
-SaveRData(rdata, datadir, subdir=".", format="rds", FUNC=saveRDS, ...)
-LoadRData(datadir, subdir=".", format="rds", FUNC=readRDS, ...)
-SaveCSV(rdata, datadir, subdir=".")
-LoadCSV(datadir, subdir=".")
-SaveYAML(rdata, datadir, subdir=".")
-LoadYAML(datadir, subdir=".")
-SaveJSON(rdata, datadir, subdir=".")
-LoadJSON(datadir, subdir=".")
+SaveRData(rdata, datadir, subdir=".", format="rds",
+          FUNC=saveRDS, FILTER=base::identity, ...)
+LoadRData(datadir, subdir=".", format="rds",
+          FUNC=readRDS, FILTER=base::identity, ...)
+SaveCSV(rdata, datadir, subdir=".", FILTER=base::identity)
+LoadCSV(datadir, subdir=".", FILTER=base::identity)
+SaveYAML(rdata, datadir, subdir=".", FILTER=base::identity)
+LoadYAML(datadir, subdir=".", FILTER=base::identity)
+SaveJSON(rdata, datadir, subdir=".", FILTER=base::identity)
+LoadJSON(datadir, subdir=".", FILTER=base::identity)
 }
 \arguments{
   \item{rdata}{A list containing objects to be saved}
@@ -30,6 +32,7 @@ LoadJSON(datadir, subdir=".")
   \item{subdir}{Subdirectory where to save/load objects}
   \item{format}{Format used to save/load \code{data.table} objects}
   \item{FUNC}{Function used to read/write from file}
+  \item{FILTER}{Function used to filter the files to read/write}
   \item{...}{Additional arguments to pass to \code{FUNC}}
 }
 \value{
