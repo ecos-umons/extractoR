@@ -121,14 +121,16 @@ ResolveFunctionCalls <- function(datadir) {
   deps <- deps[type.name %in% c("imports", "depends", "linkingto")]
   setkey(deps, source, repository, ref, dependency)
 
-  src <- packages[, file.path(datadir, "calls", source, repository,
-                              sprintf("%s.rds", ref))]
+  src1 <- packages[, file.path(datadir, "functions", source, repository,
+                               sprintf("%s.rds", ref))]
+  src2 <- packages[, file.path(datadir, "calls", source, repository,
+                               sprintf("%s.rds", ref))]
   dest1 <- packages[, file.path(datadir, "calls-implicit", source, repository,
                                 sprintf("%s.rds", ref))]
   dest2 <- packages[, file.path(datadir, "calls-explicit", source, repository,
                                 sprintf("%s.rds", ref))]
-  packages <- packages[file.exists(src) & !file.exists(dest1) &
-                       !file.exists(dest2)]
+  packages <- packages[file.exists(src1) & file.exists(src2) &
+                       !file.exists(dest1) & !file.exists(dest2)]
   if (nrow(packages) == 0) return(invisible(NULL))
 
   message("Resolving function calls")
