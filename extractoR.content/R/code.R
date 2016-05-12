@@ -1,5 +1,5 @@
 FunctionDefinitions <- function(package) {
-  loginfo("Parsing R functions from package %s %s %s",
+  loginfo("Extracting R functions from package %s %s %s",
           package$source, package$repository, package$ref, logger="functions")
   if (!is.null(package$code)) {
     package <- c(package, sourceR::FunctionDefinitions(package$code))
@@ -9,7 +9,7 @@ FunctionDefinitions <- function(package) {
 }
 
 FunctionCalls <- function(package) {
-  loginfo("Parsing R function calls from package %s %s %s",
+  loginfo("Extracting R function calls from package %s %s %s",
           package$source, package$repository, package$ref, logger="functions")
   if (!is.null(package$code)) {
     calls <- sourceR::FunctionCalls(package$code)
