@@ -29,16 +29,24 @@ ExtractFunctions <- function(datadir, cluster.size=6) {
   message("Extracting functions")
   cl <- InitCluster("code.functions", "code.log", n=cluster.size)
   t <- system.time({
-    clusterMap(cl, function(src, repo, ref) {
+    res <- clusterMap(cl, function(src, repo, ref) {
       dest <- file.path(datadir, "functions", src, repo, sprintf("%s.rds", ref))
       src <- file.path(datadir, "code", src, repo, sprintf("%s.rds", ref))
-      dir.create(dirname(dest), recursive=TRUE)
-      res <- extractoR.content::FunctionDefinitions(readRDS(src))
-      saveRDS(res, dest)
+      code <- readRDS(src)
+      if (is.null(code$err)) {
+        res <- try(extractoR.content::FunctionDefinitions(code))
+        if (!inherits(res, "try-error")) {
+          dir.create(dirname(dest), recursive=TRUE, showWarnings=FALSE)
+          saveRDS(res, dest)
+          return(TRUE)
+        }
+      }
+      return(FALSE)
     }, packages$source, packages$repository, packages$ref)
   })
   message(sprintf("Functions extracted in %.3fs", t[3]))
   stopCluster(cl)
+  invisible(res)
 }
 
 ExtractFunctionCalls <- function(datadir, cluster.size=6) {
@@ -53,17 +61,24 @@ ExtractFunctionCalls <- function(datadir, cluster.size=6) {
   message("Extracting function calls")
   cl <- InitCluster("code.calls", "code.log", n=cluster.size)
   t <- system.time({
-    clusterMap(cl, function(src, repo, ref) {
+    res <- clusterMap(cl, function(src, repo, ref) {
       dest <- file.path(datadir, "calls", src, repo, sprintf("%s.rds", ref))
       src <- file.path(datadir, "code", src, repo, sprintf("%s.rds", ref))
-      dir.create(dirname(dest), recursive=TRUE)
-      res <- tryCatch(extractoR.content::FunctionCalls(readRDS(src)),
-                      error=function(e) e)
-      saveRDS(res, dest)
+      code <- readRDS(src)
+      if (is.null(code$err)) {
+        res <- try(extractoR.content::FunctionCalls(code))
+        if (!inherits(res, "try-error")) {
+          dir.create(dirname(dest), recursive=TRUE, showWarnings=FALSE)
+          saveRDS(res, dest)
+          return(TRUE)
+        }
+      }
+      return(FALSE)
     }, packages$source, packages$repository, packages$ref)
   })
   message(sprintf("Function calls extracted in %.3fs", t[3]))
   stopCluster(cl)
+  invisible(res)
 }
 
 ExtractCodingStyle <- function(datadir, cluster.size=6) {
@@ -78,15 +93,24 @@ ExtractCodingStyle <- function(datadir, cluster.size=6) {
   message("Extracting coding style")
   cl <- InitCluster("code.codingstyle", "code.log", n=cluster.size)
   t <- system.time({
-    clusterMap(cl, function(src, repo, ref) {
+    res <- clusterMap(cl, function(src, repo, ref) {
       dest <- file.path(datadir, "codingstyle", src, repo, sprintf("%s.rds", ref))
       src <- file.path(datadir, "code", src, repo, sprintf("%s.rds", ref))
-      dir.create(dirname(dest), recursive=TRUE)
-      saveRDS(extractoR.content::CodingStyle(readRDS(src)), dest)
+      code <- readRDS(src)
+      if (is.null(code$err)) {
+        res <- try(extractoR.content::CodingStyle(code))
+        if (!inherits(res, "try-error")) {
+          dir.create(dirname(dest), recursive=TRUE, showWarnings=FALSE)
+          saveRDS(res, dest)
+          return(TRUE)
+        }
+      }
+      return(FALSE)
     }, packages$source, packages$repository, packages$ref)
   })
   message(sprintf("Coding style extracted in %.3fs", t[3]))
   stopCluster(cl)
+  invisible(res)
 }
 
 ResolveFunctionCalls <- function(datadir) {
