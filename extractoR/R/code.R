@@ -115,7 +115,7 @@ ExtractCodingStyle <- function(datadir, cluster.size=6) {
 
 ResolveFunctionCalls <- function(datadir) {
   packages <- readRDS(file.path(datadir, "rds", "packages.rds"))
-  exports <- readRDS(file.path(datadir, "rds", "exports.rds"))
+  exports <- readRDS(file.path(datadir, "rds", "exports_expanded.rds"))
   exports <- merge(exports, packages, by=c("source", "repository", "ref"))
   deps <- readRDS(file.path(datadir, "rds", "deps.rds"))
   deps <- deps[type.name %in% c("imports", "depends", "linkingto")]
