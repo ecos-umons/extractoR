@@ -29,10 +29,16 @@ SaveCSV <- function(rdata, datadir, subdir=".", FILTER=base::identity) {
             row.names=FALSE)
 }
 
+LoadFastCSV <- function(datadir, subdir=".", FILTER=base::identity) {
+  LoadRData(datadir, subdir, format="csv", FUNC=function(file) {
+    fread(file)
+  }, FILTER)
+}
+
 LoadCSV <- function(datadir, subdir=".", FILTER=base::identity) {
-  cran <- LoadRData(datadir, subdir, format="csv", FUNC=read.csv, FILTER,
+  res <- LoadRData(datadir, subdir, format="csv", FUNC=read.csv, FILTER,
                     stringsAsFactor=FALSE)
-  lapply(cran, as.data.table)
+  lapply(res, as.data.table)
 }
 
 SaveJSON <- function(rdata, datadir, subdir=".", FILTER=base::identity) {
@@ -53,4 +59,20 @@ SaveYAML <- function(rdata, datadir, subdir=".", FILTER=base::identity) {
 
 LoadYAML <- function(datadir, subdir=".", FILTER=base::identity) {
   LoadRData(datadir, subdir, format="yml", FUNC=yaml.load_file, FILTER)
+}
+
+SaveFeather <- function(rdata, datadir, subdir=".", FILTER=base::identity) {
+  rdata <- rdata[sapply(rdata, inherits, "data.table")]
+  SaveRData(rdata, datadir, subdir, format="feather.gz", FUNC=function(data, file) {
+    ## write_feather(data, gzfile(file))
+    write_feather(data, file)
+  }, FILTER)
+}
+
+LoadFeather <- function(datadir, subdir=".", FILTER=base::identity) {
+  res <- LoadRData(datadir, subdir, format="feather.gz", FUNC=function(file) {
+    ## read_feather(gzfile(file))
+    read_feather(file)
+  }, FILTER)
+  lapply(res, as.data.table)
 }
