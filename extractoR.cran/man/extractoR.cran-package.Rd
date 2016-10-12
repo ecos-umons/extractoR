@@ -28,6 +28,5 @@ mirror <- "http://cran.rstudio.com"
 # on CRAN
 cran <- FetchCRANList(mirror)
 FetchPackage("A3", "0.9-1", "data/packages/")
-FetchRVersions(mirror)
 }
 }
