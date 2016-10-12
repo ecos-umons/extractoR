@@ -7,10 +7,6 @@ CRANFetch <- function(datadir, cran.mirror="http://cran.r-project.org") {
   t <- system.time(rdata$packages <- FetchCRANList(cran.mirror))
   message(sprintf("Package list fetched from CRAN in %.3fs", t[3]))
 
-  message("Fetching R Versions")
-  t <- system.time(rdata$rversions <- FetchRVersions(cran.mirror))
-  message(sprintf("R versions list fetched from CRAN in %.3fs", t[3]))
-
   rdata$index <- MakeCRANIndex(rdata$packages)
 
   message("Saving objects in data/cran/rds")
@@ -63,7 +59,7 @@ GithubFetch <- function(datadir, fetch=TRUE, update=TRUE, cluster.size=4,
 
   rdata <- list(repositories=github)
 
-  message("Makeing Github index")
+  message("Making Github index")
   t <- system.time(rdata$index <- MakeGithubIndex(github, reposdir, ignore))
   message(sprintf("Github index made in %.3fs", t[3]))
 
