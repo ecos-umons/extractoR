@@ -13,6 +13,8 @@ importFrom(utils, head, read.csv)
 
 export(CRANIndex, GithubIndex, UpdateIndex)
 export(ExtractDescriptionFiles)
+export(ExtractDependencies)
+export(ExtractRoles)
 export(ExtractNamespaceFiles)
 export(ExtractPackages)
 export(ParseCode, ExtractFunctions, ExtractFunctionCalls, ExtractCodingStyle)
