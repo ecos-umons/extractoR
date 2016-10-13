@@ -4,7 +4,8 @@ library(logging)
 basicConfig()
 
 datadir <- "/data/rdata"
-mirror <- as.data.table(getCRANmirrors())[City == "0-Cloud", URL[1]]
+mirror <- getCRANmirrors()$URL[grepl("0-Cloud", getCRANmirrors()$Name,
+                                     ignore.case=FALSE)][1]
 
 system.time(res <-
   UpdateIndex(datadir,
