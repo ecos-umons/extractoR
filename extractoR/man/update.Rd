@@ -1,5 +1,5 @@
-\name{Fetch}
-\alias{Fetch}
+\name{Update}
+\alias{Update}
 \alias{CRANIndex}
 \alias{GithubIndex}
 \alias{UpdateIndex}
@@ -47,6 +47,7 @@ UpdateIndex(db="rdata", host="mongodb://localhost", datadir,
 }
 
 \keyword{fetch}
+\keyword{update}
 \keyword{cran}
 \keyword{github}
 \keyword{repository}
