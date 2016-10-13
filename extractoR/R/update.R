@@ -61,7 +61,7 @@ GithubIndex <- function(datadir, fetch=TRUE, update=TRUE, cluster.size=4,
   index
 }
 
-UpdateIndex <- function(db="rdata", host="mongodb://localhost", datadir,
+UpdateIndex <- function(datadir, db="rdata", host="mongodb://localhost",
                         cran.params=list(), github.params=list()) {
   cran.index <- do.call(CRANIndex, c(list(datadir), cran.params))
   github.index <- do.call(CRANIndex, c(list(datadir), github.params))
