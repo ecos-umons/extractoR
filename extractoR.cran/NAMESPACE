@@ -1,5 +1,6 @@
 importFrom(RCurl, getCurlHandle, getURL, getCurlInfo)
 importFrom(XML, htmlTreeParse, xpathSApply, xmlValue, xmlAttrs, xmlNode)
+importFrom(utils, download.file, untar)
 
 import(data.table)
 import(logging)
