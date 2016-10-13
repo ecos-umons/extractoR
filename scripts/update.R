@@ -10,5 +10,5 @@ mirror <- getCRANmirrors()$URL[grepl("0-Cloud", getCRANmirrors()$Name,
 system.time({
   res <- UpdateIndex(datadir,
                      cran.params=list(cran.mirror=mirror),
-                     github.params=list(fetch=TRUE, update=TRUE, cluster=4))
+                     github.params=list(fetch=TRUE, update=TRUE, cluster.size=4))
 })
