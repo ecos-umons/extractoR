@@ -1,7 +1,7 @@
 Package: extractoR.mongo
 Type: Package
 Title: R packages metadata extractor (mongo)
-Version: 1.0
+Version: 0.0.1
 Date: 2013-08-21
 Author: Maëlick Claes <himself@maelick.net>
 Maintainer: Maëlick Claes <himself@maelick.net>

@@ -5,10 +5,11 @@
 \title{R packages metadata extractor}
 \description{
   extractoR is a set of R packages that can be used to fetch, extract
-  and dump R packages metadata. This main package acts as a glue for
-  functions defined in other packages. Other packages are:
-  extractoR.cran, extractoR.github, extractoR.extract,
-  extractoR.data, extractoR.snapshots, extractoR.content.
+  and dump R packages metadata from CRAN and GitHub into MongoDB. This
+  main package acts as a glue for functions defined in other
+  packages. Other packages are: extractoR.cran, extractoR.github,
+  extractoR.description, extractoR.extract, extractoR.data,
+  extractoR.snapshots, extractoR.content.
 }
 
 \details{
@@ -44,22 +45,16 @@
 
 \author{
 Maëlick Claes <himself@maelick.net>, Philippe Grosjean
-<Philippe.Grosjean@umons.ac.be> & Prateek Rastogi
-<p.rastogi@outlook.com>
+<Philippe.Grosjean@umons.ac.be>
 
 Maintainer: Maëlick Claes <himself@maelick.net>
 }
 
 \keyword{cran}
+\keyword{github}
 \keyword{extract}
 
 \examples{
 \dontrun{
-library(extractoR)
-
-Fetch("data")
-Extract("data")
-
-rdata <- LoadRData("data/rds")
 }
 }

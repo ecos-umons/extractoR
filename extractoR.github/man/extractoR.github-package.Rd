@@ -12,7 +12,7 @@
 }
 
 \author{
-Maëlick Claes <himself@maelick.net> & Prateek Rastogi <p.rastogi@outlook.com>
+Maëlick Claes <himself@maelick.net>
 
 Maintainer: Maëlick Claes <himself@maelick.net>
 }

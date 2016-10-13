@@ -18,6 +18,5 @@ Maintainer: Maëlick Claes <himself@maelick.net>
 
 \examples{
 \dontrun{
-TODO
 }
 }
