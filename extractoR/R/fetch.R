@@ -65,7 +65,8 @@ UpdateIndex <- function(db="rdata", host="mongodb://localhost", datadir,
                         cran.params=list(), github.params=list()) {
   cran.index <- do.call(CRANIndex, c(list(datadir), cran.params))
   github.index <- do.call(CRANIndex, c(list(datadir), github.params))
-  index <- MissingEntries(rbind(cran.index, github.index), con)
   loginfo("Adding %d rows to index on %s (%s)", nrow(index), db, host)
-  mongo("index", db, host)$insert(index)
+  con <- mongo("index", db, host)
+  index <- MissingEntries(rbind(cran.index, github.index), con)
+  con$insert(index)
 }
