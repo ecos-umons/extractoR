@@ -1,5 +1,5 @@
-\name{Extract}
-\alias{Extract}
+\name{ExtractPackages}
+\alias{ExtractPackages}
 \encoding{UTF-8}
 \title{Extract}
 \description{
@@ -7,10 +7,12 @@
 }
 
 \usage{
-Extract(datadir)
+ExtractPackages(datadir, db="rdata", host="mongodb://localhost")
 }
 \arguments{
   \item{datadir}{Directory where to store data}
+  \item{db}{MongoDB database.}
+  \item{host}{MongoDB host.}
 }
 \details{
   Extracts all informations from Github and CRAN packages.

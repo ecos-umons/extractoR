@@ -1,7 +1,8 @@
 \name{Fetch}
 \alias{Fetch}
-\alias{CRANFetch}
-\alias{GithubFetch}
+\alias{CRANIndex}
+\alias{GithubIndex}
+\alias{UpdateIndex}
 \encoding{UTF-8}
 \title{Fetch}
 \description{
@@ -9,12 +10,13 @@
 }
 
 \usage{
-CRANFetch(datadir, cran.mirror="http://cran.r-project.org")
-GithubFetch(datadir, fetch=TRUE, update=TRUE, cluster.size=4,
+CRANIndex(datadir, cran.mirror="http://cran.r-project.org")
+GithubIndex(datadir, fetch=TRUE, update=TRUE, cluster.size=4,
             ignore=c("cran", "rpkg", "Bioconductor-mirror"))
+UpdateIndex(db="rdata", host="mongodb://localhost", datadir,
+            cran.params=list(), github.params=list())
 }
 \arguments{
-  \item{datadir}{Directory where to store data}
   \item{cran.mirror}{Root URL of the CRAN mirror to use.}
   \item{fetch}{If FALSE will not clone or update any git repository and
     will just build the package index.}
@@ -24,15 +26,20 @@ GithubFetch(datadir, fetch=TRUE, update=TRUE, cluster.size=4,
   \item{cluster.size}{Number of cluster nodes to use for the git
     repository clone/pull.}
   \item{ignore}{Repository owners to ignore.}
+  \item{db}{MongoDB database.}
+  \item{host}{MongoDB host.}
+  \item{datadir}{Directory where to store data}
+  \item{cran.params}{Parameter list to pass to \code{CRANIndex}.}
+  \item{github.params}{Parameter list to pass to \code{GithubIndex}.}
 }
 \details{
-  \code{CRANFetch} fetches last package list from CRAN and downloads
+  \code{CRANIndex} fetches last package list from CRAN and downloads
   missing package on disk.
 
-  \code{GithubFetch} clones or updates R package Github repositories.
+  \code{GithubIndex} clones or updates R package Github repositories.
 
-  These two functions will also build the index required by
-  \code{extractoR.extract::MakeGeneralIndex}.
+  \code{UpdateIndex} runs \code{CRANIndex} and \code{GithubIndex}, and
+  updates the repository index on MongoDB.
 }
 
 \author{

@@ -1,16 +1,18 @@
-\name{ParseNamespaceFiles}
-\alias{ParseNamespaceFiles}
+\name{ExtractNamespaceFiles}
+\alias{ExtractNamespaceFiles}
 \encoding{UTF-8}
-\title{ParseNamespaceFiles}
+\title{ExtractNamespaceFiles}
 \description{
   Parses NAMESPACE files from R packages.
 }
 
 \usage{
-ParseNamespaceFiles(datadir)
+ExtractNamespaceFiles(datadir, db="rdata", host="mongodb://localhost")
 }
 \arguments{
   \item{datadir}{Directory where to store data}
+  \item{db}{MongoDB database.}
+  \item{host}{MongoDB host.}
 }
 \details{
   Parses NAMESPACE file content, dependencies, authors and dates.

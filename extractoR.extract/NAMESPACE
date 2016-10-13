@@ -1,9 +1,7 @@
-importFrom(ctv, CRAN.views)
 import(data.table)
 import(logging)
 importFrom(extractoR.data, ParseGithubRepositoryName)
+importFrom(jsonlite, toJSON)
 
-export(BrokenPackages)
 export(Packages)
-export(ExtractTaskViews)
-## export(ExtractHttpLog)
+export(FilterPackages)

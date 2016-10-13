@@ -11,12 +11,13 @@
 
 \usage{
 ReadCRANNamespace(package, version, datadir)
-ReadGithubNamespace(package, ref, datadir)
+ReadGithubNamespace(repository, ref, datadir)
 Namespaces(index, datadir)
 }
 \arguments{
   \item{package}{Package name}
   \item{version}{Version of package}
+  \item{repository}{Git repository name.}
   \item{ref}{Git repository reference (commit, branch or tag).}
   \item{index}{Repository index.}
   \item{datadir}{Directory where to store and extract the packages.}

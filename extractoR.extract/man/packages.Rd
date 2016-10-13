@@ -1,21 +1,30 @@
 \name{Packages}
 \alias{Packages}
+\alias{FilterPackages}
 \encoding{UTF-8}
 \title{Packages}
 \description{
-  Identification of packages in CRAN repositories
+  Identification of packages in CRAN and Github repositories
 }
 
 \usage{
-Packages(descfiles, broken)
+Packages(index, descfile.con, namespace.con)
+FilterPackages(packages)
 }
 \arguments{
-  \item{descfiles}{DESCRIPTION files table.}
-  \item{broken}{Broken packages table.}
+  \item{index}{Repository index.}
+  \item{descfile.con}{\code{mongolite} connection to descfile collection.}
+  \item{namespace.con}{\code{mongolite} connection to namespace collection.}
+  \item{packages}{Package \code{data.table} such as the one returned by
+    \code{FilterPackages}.}
 }
 \value{
-  A \code{data.table} with a list of repositories and their associated
-  package metadata.
+  \code{Packages} returns a \code{data.table} with a list of
+  repositories, package name and version (if any) and booleans checking
+  whether DESCRIPTION and NAMESPACE files are well formatted.
+
+  \code{FilterPackages} filters packages returned by \code{Packages} to
+  only keep the valid ones.
 }
 
 \author{

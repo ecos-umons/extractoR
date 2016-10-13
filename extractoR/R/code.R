@@ -145,7 +145,7 @@ ResolveFunctionCalls <- function(datadir) {
       dest <- file.path(datadir, "calls-implicit", src, repo,
                         sprintf("%s.rds", ref))
       dir.create(dirname(dest), recursive=TRUE)
-      deps.exports <- exports[Package %in% deps[list(src, repo, ref),
+      deps.exports <- exports[package %in% deps[list(src, repo, ref),
                                                 unique(dependency)]]
       res <- extractoR.content::ImplicitCalls(src, repo, ref, datadir,
                                               deps.exports)

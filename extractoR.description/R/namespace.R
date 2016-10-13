@@ -6,10 +6,10 @@ ReadCRANNamespace <- function(package, version, datadir) {
   }, error=function(e) NULL)
 }
 
-ReadGithubNamespace <- function(package, ref, datadir) {
-  loginfo("Parsing Github NAMESPACE file from package %s %s",
-          package, ref, logger="namespace.github")
-  repo.name <- ParseGithubRepositoryName(package)
+ReadGithubNamespace <- function(repository, ref, datadir) {
+  loginfo("Parsing Github NAMESPACE file repository %s %s",
+          repository, ref, logger="namespace.github")
+  repo.name <- ParseGithubRepositoryName(repository)
   RunGit(function() {
     filename <- file.path(repo.name$subdir, "NAMESPACE")
     status <- system2("git", c("checkout", ref, filename))
@@ -24,20 +24,18 @@ ReadGithubNamespace <- function(package, ref, datadir) {
   }, file.path(datadir, repo.name$owner, repo.name$repository))
 }
 
-ReadNamespace <- function(source, repository, version, datadir) {
-  dir <- file.path(datadir, source)
-  if (source == "cran") {
-    ReadCRANNamespace(repository, version, file.path(dir, "packages"))
-  } else if (source == "github") {
-    ReadGithubNamespace(repository, version, file.path(dir, "repos"))
-  } else {
-    stop(sprintf("Unknown source: %s", source))
-  }
-}
-
 Namespaces <- function(index, datadir) {
-  res <- mapply(ReadNamespace, index$source, index$repository, index$ref,
-                MoreArgs=list(datadir), SIMPLIFY=FALSE)
-  names(res) <- paste(index$source, index$repository, index$ref, sep=":")
-  res[!sapply(res, is.null)]
+  rbindlist(mapply(function(source, repository, ref) {
+    dir <- file.path(datadir, source)
+    if (source == "cran") {
+      res <- ReadCRANNamespace(repository, ref, file.path(dir, "packages"))
+    } else if (source == "github") {
+      res <- ReadGithubNamespace(repository, ref, file.path(dir, "repos"))
+    } else {
+      stop(sprintf("Unknown source: %s", source))
+    }
+    if (length(res)) {
+      data.table(source, repository, ref, namespace=list(res))
+    }
+  }, index$source, index$repository, index$ref, SIMPLIFY=FALSE))
 }

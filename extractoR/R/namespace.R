@@ -1,17 +1,11 @@
-ParseNamespaceFiles <- function(datadir) {
-  index <- MakeGlobalIndex(datadir)
+ExtractNamespaceFiles <- function(datadir, db="rdata", host="mongodb://localhost") {
+  index <- mongo("index", db, host)$find()
 
-  message("Reading NAMESPACE files")
+  con <- mongo("namespace", db, host)
+  message("Reading namespace files")
   t <- system.time({
-    namespaces <- Namespaces(index, datadir)
-    rdata <- list(namespaces=namespaces)
+    namespace <- Namespaces(MissingEntries(index, con), datadir)
   })
-  message(sprintf("NAMESPACE files read in %.3fs", t[3]))
-
-  message("Saving objects in data/rds")
-  t <- system.time({
-    SaveRData(rdata, datadir)
-    SaveJSON(rdata, datadir)
-  })
-  message(sprintf("Objects saved in %.3fs", t[3]))
+  message(sprintf("Namespace files read in %.3fs", t[3]))
+  con$insert(namespace)
 }

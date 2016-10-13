@@ -1,29 +1,21 @@
-CRANFetch <- function(datadir, cran.mirror="http://cran.r-project.org") {
-  rdata <- list()
-
+CRANIndex <- function(datadir, cran.mirror="http://cran.r-project.org") {
   datadir <- file.path(datadir, "cran")
 
   message("Fetching CRAN list")
-  t <- system.time(rdata$packages <- FetchCRANList(cran.mirror))
+  t <- system.time(packages <- FetchCRANList(cran.mirror))
   message(sprintf("Package list fetched from CRAN in %.3fs", t[3]))
 
-  rdata$index <- MakeCRANIndex(rdata$packages)
-
-  message("Saving objects in data/cran/rds")
-  t <- system.time({
-    SaveRData(rdata, datadir)
-    SaveCSV(rdata, datadir)
-  })
-  message(sprintf("Objects saved in %.3fs", t[3]))
+  index <- MakeCRANIndex(packages)
 
   message("Downloading missing packages")
-  cran <- rdata$packages
-  t <- system.time(res <- mapply(FetchPackage, cran$package, cran$version,
+  t <- system.time(res <- mapply(FetchPackage, index$package, index$version,
                                  file.path(datadir, "packages"), cran.mirror))
   message(sprintf("%d packages downloaded in %.3fs", length(res[res]), t[3]))
+
+  index
 }
 
-GithubFetch <- function(datadir, fetch=TRUE, update=TRUE, cluster.size=4,
+GithubIndex <- function(datadir, fetch=TRUE, update=TRUE, cluster.size=4,
                         ignore=c("cran", "rpkg", "Bioconductor-mirror")) {
   datadir <- file.path(datadir, "github")
   reposdir <- file.path(datadir, "repos")
@@ -57,20 +49,23 @@ GithubFetch <- function(datadir, fetch=TRUE, update=TRUE, cluster.size=4,
     stopCluster(cl)
   }
 
-  rdata <- list(repositories=github)
+  # FIXME
+  ## message("Fetching Github repositories tags")
+  ## t <- system.time(rdata$tags <- RepositoryTags(github, reposdir))
+  ## message(sprintf("Github repositories tags fetched in %.3fs", t[3]))
 
   message("Making Github index")
-  t <- system.time(rdata$index <- MakeGithubIndex(github, reposdir, ignore))
+  t <- system.time(index <- MakeGithubIndex(github, reposdir, ignore))
   message(sprintf("Github index made in %.3fs", t[3]))
 
-  message("Fetching Github repositories tags")
-  t <- system.time(rdata$tags <- RepositoryTags(github, reposdir))
-  message(sprintf("Github repositories tags fetched in %.3fs", t[3]))
+  index
+}
 
-  message("Saving objects in data/github/rds")
-  t <- system.time({
-    SaveRData(rdata, datadir)
-    SaveCSV(rdata, datadir)
-  })
-  message(sprintf("Objects saved in %.3fs", t[3]))
+UpdateIndex <- function(db="rdata", host="mongodb://localhost", datadir,
+                        cran.params=list(), github.params=list()) {
+  cran.index <- do.call(CRANIndex, c(list(datadir), cran.params))
+  github.index <- do.call(CRANIndex, c(list(datadir), github.params))
+  index <- MissingEntries(rbind(cran.index, github.index), con)
+  loginfo("Adding %d rows to index on %s (%s)", nrow(index), db, host)
+  mongo("index", db, host)$insert(index)
 }

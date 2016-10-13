@@ -41,17 +41,17 @@ ReadGithubDescfile <- function(repository, ref, datadir) {
 }
 
 Descfiles <- function(index, datadir) {
-  res <- rbindlist(mapply(function(src, repository, version) {
-    dir <- file.path(datadir, src)
-    if (src == "cran") {
-      res <- ReadCRANDescfile(repository, version, file.path(dir, "packages"))
-    } else if (src == "github") {
-      res <- ReadGithubDescfile(repository, version, file.path(dir, "repos"))
+  res <- rbindlist(mapply(function(source, repository, ref) {
+    dir <- file.path(datadir, source)
+    if (source == "cran") {
+      res <- ReadCRANDescfile(repository, ref, file.path(dir, "packages"))
+    } else if (source == "github") {
+      res <- ReadGithubDescfile(repository, ref, file.path(dir, "repos"))
     } else {
-      stop(sprintf("Unknown source: %s", src))
+      stop(sprintf("Unknown source: %s", source))
     }
     if (!is.null(res) && nrow(res)) {
-      cbind(data.table(source=src, repository, version), res)
+      cbind(data.table(source, repository, ref), res)
     }
   }, index$source, index$repository, index$ref, SIMPLIFY=FALSE))
   re <- "^\\s*(\\d+([-.]\\d+)*\\S*)(\\s.*)?$"

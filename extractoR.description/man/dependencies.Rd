@@ -1,4 +1,5 @@
 \name{Dependencies}
+\alias{ParseDependency}
 \alias{ParseDependencies}
 \alias{ExtractDependencies}
 \encoding{UTF-8}
@@ -9,17 +10,20 @@
 }
 
 \usage{
-ExtractDependencies(descfiles, types, type.name=tolower(types[1]))
-ParseDependencies(string)
+ParseDependency(string)
+ParseDependencies(descfiles, keys, type.name=tolower(keys[1]))
+ExtractDependencies(descfiles, types)
 }
 \arguments{
+  \item{string}{A dependency string to parse}
   \item{descfiles}{A \code{data.table} containing DESCRIPTION files (like the
     one returned by \code{ReadDescFiles}).}
-  \item{types}{The types of dependencies to extract (either Depends,
+  \item{keys}{The types of dependencies to extract (either Depends,
     Imports, Suggests, Enhances or LinkingTo) as it appears in the
     DESCRIPTION file.}
   \item{type.name}{Name to give to the extracted dependency type.}
-  \item{string}{A dependency string to parse}
+  \item{types}{List of dependency types whose values are \code{keys} and
+    names are \code{type.name}.}
 }
 \value{
   \code{ExtractDependencies} returns a six columns \code{data.table}
@@ -31,6 +35,9 @@ ParseDependencies(string)
   \code{ParseDependencies} parses a dependency string into a three
   columns \code{data.table} with the dependency name and its constraint
   type and version if provided.
+
+  \code{ExtractDependencies} extract all dependencies from
+  \code{descfiles} that match \code{types}.
 }
 
 \author{

@@ -5,7 +5,7 @@ dependency.re <- sprintf("%s([[:space:]]*%s)?", pkgname.re, constraint.re)
 dependencies.re <- "^[[:space:]]*((%s)([[:space:]]*,[[:space:]]*%s)*,?)?$"
 dependencies.re <- sprintf(dependencies.re, dependency.re, dependency.re)
 
-ParseDependencies <- function(string) {
+ParseDependency <- function(string) {
   # Parses a dependencies string.
   #
   # Args:
@@ -34,21 +34,24 @@ ParseDependencies <- function(string) {
              constraint.version=versions)
 }
 
-ExtractDependency <- function(source, repository, ref, type.name,
-                              key, dependencies) {
-  # Extracts the dependencies defined in a dependencies string.
-  deps <- ParseDependencies(dependencies)
-  if (nrow(deps)) {
-    cbind(data.table(source, repository, ref, type.name, key), deps)
-  }
-}
-
-ExtractDependencies <- function(descfiles, types, type.name=tolower(types[1])) {
-  # Extracts all the dependencies defined in DESCRIPTION files for a
+ParseDependencies <- function(descfiles, keys, type.name=tolower(keys[1])) {
+  # Parses all the dependencies defined in DESCRIPTION files for a
   # given dependency type.
-  deps <- descfiles[tolower(key) %in% tolower(types), ]
+  deps <- descfiles[tolower(key) %in% tolower(keys), ]
   deps <- deps[grep(dependencies.re, deps$value),]
   rbindlist(mapply(function(source, repository, ref, key, value) {
-    ExtractDependency(source, repository, ref, type.name, key, value)
+    deps <- ParseDependency(value)
+    if (nrow(deps)) {
+      cbind(data.table(source, repository, ref, type.name, key), deps)
+    }
   }, deps$source, deps$repo, deps$ref, deps$key, deps$value, SIMPLIFY=FALSE))
+}
+
+ExtractDependencies <- function(descfiles, types) {
+  if (is.null(names(types))) {
+    names(types) <- sapply(types, function(t) tolower(t[1]))
+  }
+  rbindlist(mapply(function(name, keys) {
+    ParseDependencies(descfiles, keys, name)
+  }, names(types), types, SIMPLIFY=FALSE))
 }

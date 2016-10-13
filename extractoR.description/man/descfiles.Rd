@@ -10,15 +10,16 @@
 }
 
 \usage{
-ReadDescfile(filename, package=NA, version=NA)
+ReadDescfile(filename)
 ReadCRANDescfile(package, version, datadir)
-ReadGithubDescfile(package, ref, datadir)
+ReadGithubDescfile(repository, ref, datadir)
 Descfiles(index, datadir)
 }
 \arguments{
+  \item{filename}{Filename of the DESCRIPTION file}
   \item{package}{Package name}
   \item{version}{Version of package}
-  \item{filename}{Filename of the DESCRIPTION file}
+  \item{repository}{Git repository name.}
   \item{ref}{Git repository reference (commit, branch or tag).}
   \item{index}{Repository index.}
   \item{datadir}{Directory where to store and extract the packages.}

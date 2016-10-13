@@ -1,16 +1,18 @@
-\name{ParseDescriptionFiles}
-\alias{ParseDescriptionFiles}
+\name{ExtractDescriptionFiles}
+\alias{ExtractDescriptionFiles}
 \encoding{UTF-8}
-\title{ParseDescriptionFiles}
+\title{ExtractDescriptionFiles}
 \description{
   Parses DESCRIPTION files from R packages.
 }
 
 \usage{
-ParseDescriptionFiles(datadir)
+ExtractDescriptionFiles(datadir, db="rdata", host="mongodb://localhost")
 }
 \arguments{
   \item{datadir}{Directory where to store data}
+  \item{db}{MongoDB database.}
+  \item{host}{MongoDB host.}
 }
 \details{
   Parses DESCRIPTION file content, dependencies, authors and dates.
