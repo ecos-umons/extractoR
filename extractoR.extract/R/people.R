@@ -37,7 +37,7 @@ ExtractPeople <- function(s) {
   data.table(name=m[1, ], email=m[2, ])
 }
 
-ExtractRoles <- function(descfiles, role) {
+Roles <- function(descfiles, role) {
   # Extracts all the people defined in DESCRIPTION files for a given
   # role.
   roles <- descfiles[tolower(key) == tolower(role) & grepl("\\S", value), ]

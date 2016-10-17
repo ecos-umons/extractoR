@@ -1,9 +1,9 @@
 \name{Dependencies}
+\alias{Dependencies}
 \alias{ParseDependency}
 \alias{ParseDependencies}
-\alias{ExtractDependencies}
 \encoding{UTF-8}
-\title{ExtractDependencies}
+\title{Dependencies}
 \description{
   Extracts all the dependencies defined in DESCRIPTION files for a given
   dependency type.
@@ -12,7 +12,7 @@
 \usage{
 ParseDependency(string)
 ParseDependencies(descfiles, keys, type.name=tolower(keys[1]))
-ExtractDependencies(descfiles, types)
+Dependencies(descfiles, types)
 }
 \arguments{
   \item{string}{A dependency string to parse}

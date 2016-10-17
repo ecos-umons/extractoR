@@ -47,7 +47,7 @@ ParseDependencies <- function(descfiles, keys, type.name=tolower(keys[1])) {
   }, deps$source, deps$repo, deps$ref, deps$key, deps$value, SIMPLIFY=FALSE))
 }
 
-ExtractDependencies <- function(descfiles, types) {
+Dependencies <- function(descfiles, types) {
   if (is.null(names(types))) {
     names(types) <- sapply(types, function(t) tolower(t[1]))
   }
