@@ -4,7 +4,8 @@ ExtractDescriptionFiles <- function(datadir, db="rdata", host="mongodb://localho
   con <- mongo("description", db, host)
   message("Reading DESCRIPTION files")
   t <- system.time({
-    descfiles <- Descfiles(MissingEntries(index, con), datadir)
+    missing <- MissingEntries(index, con)
+    descfiles <- Descfiles(missing, datadir)
   })
   message(sprintf("DESCRIPTION files read in %.3fs", t[3]))
   if (!is.null(descfiles) && nrow(descfiles)) con$insert(descfiles)
