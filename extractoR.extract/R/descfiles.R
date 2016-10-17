@@ -23,7 +23,8 @@ ReadDescfile <- function(filename) {
 ReadCRANDescfile <- function(package, version, datadir) {
   loginfo("Parsing CRAN DESCRIPTION file from %s %s",
           package, version, logger="description.cran")
-  ReadDescfile(file.path(datadir, package, version, package, "DESCRIPTION"))
+  path <- file.path(datadir, package, version, package, "DESCRIPTION")
+  if (file.exists(path)) ReadDescfile(path)
 }
 
 ReadGithubDescfile <- function(repository, ref, datadir) {
@@ -55,6 +56,5 @@ Descfiles <- function(index, datadir) {
     }
   }, index$source, index$repository, index$ref, SIMPLIFY=FALSE))
   re <- "^\\s*(\\d+([-.]\\d+)*\\S*)(\\s.*)?$"
-  res[key == "Version", value := sub(re, "\\1", value)]
-  res
+  if (nrow(res)) res[key == "Version", value := sub(re, "\\1", value)]
 }
