@@ -3,5 +3,5 @@ MissingEntries <- function(index, con) {
     existing <- unique(con$find(fields=toJSON(fields, auto_unbox=TRUE)))
     if (nrow(existing)) {
         setkey(as.data.table(index), source, repository, ref)[!existing]
-    } else index
+    } else as.data.table(index)
 }
