@@ -36,7 +36,10 @@ ReadGithubDescfile <- function(repository, ref, datadir) {
     f <- system2("git", c("ls-tree", ref, filename), stdout=TRUE)
     if (length(f)) {
       args <- c("cat-file", "-p", strsplit(f, " |\t")[[1]][3])
-      ReadDescfile(textConnection(system2("git", args, stdout=TRUE)))
+      f <- textConnection(system2("git", args, stdout=TRUE))
+      res <- tryCatch(ReadDescfile(f), error=function(e) NULL)
+      close(f)
+      res
     }
   }, file.path(datadir, repo.name$owner, repo.name$repository))
 }
