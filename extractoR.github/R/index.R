@@ -20,5 +20,6 @@ MakeGithubIndex <- function(github, datadir,
                            github$subdir, github$root.dir, SIMPLIFY=FALSE))
   logs <- merge(github, setkey(logs, owner, repository, subdir))
   ids <- logs[, MakeRepositoryId(owner, repository, subdir)]
-  logs[, list(source="github", repository=ids, ref=commit, time=date)]
+  logs[, list(source="github", repository=ids, ref=commit,
+              time=as.POSIXct(date))]
 }
