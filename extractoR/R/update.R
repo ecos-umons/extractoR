@@ -8,9 +8,10 @@ CRANIndex <- function(datadir, cran.mirror="http://cran.r-project.org") {
   index <- MakeCRANIndex(packages)
 
   message("Downloading missing packages")
-  t <- system.time(res <- mapply(FetchPackage, index$package, index$version,
-                                 file.path(datadir, "packages"), cran.mirror))
-  message(sprintf("%d packages downloaded in %.3fs", length(res[res]), t[3]))
+  t <- system.time(res <- mapply(FetchPackage, index$repository, index$ref,
+                                 MoreArgs=list(file.path(datadir, "packages"), cran.mirror)))
+  message(sprintf("%d packages downloaded in %.3fs",
+                  if (length(res)) length(res[res]) else 0, t[3]))
 
   index
 }
@@ -64,9 +65,9 @@ GithubIndex <- function(datadir, fetch=TRUE, update=TRUE, cluster.size=4,
 UpdateIndex <- function(datadir, db="rdata", host="mongodb://localhost",
                         cran.params=list(), github.params=list()) {
   cran.index <- do.call(CRANIndex, c(list(datadir), cran.params))
-  github.index <- do.call(CRANIndex, c(list(datadir), github.params))
-  loginfo("Adding %d rows to index on %s (%s)", nrow(index), db, host)
+  github.index <- do.call(GithubIndex, c(list(datadir), github.params))
   con <- mongo("index", db, host)
   index <- MissingEntries(rbind(cran.index, github.index), con)
+  loginfo("Adding %d rows to index on %s (%s)", nrow(index), db, host)
   con$insert(index)
 }
