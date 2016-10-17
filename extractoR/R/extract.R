@@ -1,5 +1,5 @@
 ExtractDescriptionFiles <- function(datadir, db="rdata", host="mongodb://localhost") {
-  index <- mongo("index", db, host)$find()
+  index <- as.data.table(mongo("index", db, host)$find())
 
   con <- mongo("description", db, host)
   message("Reading DESCRIPTION files")
@@ -7,7 +7,7 @@ ExtractDescriptionFiles <- function(datadir, db="rdata", host="mongodb://localho
     descfiles <- Descfiles(MissingEntries(index, con), datadir)
   })
   message(sprintf("DESCRIPTION files read in %.3fs", t[3]))
-  con$insert(descfiles)
+  if (!is.null(descfiles) && nrow(descfiles)) con$insert(descfiles)
 }
 
 ExtractDependencies <- function(datadir, db="rdata", host="mongodb://localhost") {
@@ -27,7 +27,7 @@ ExtractDependencies <- function(datadir, db="rdata", host="mongodb://localhost")
     ##                  "%Suggests", "Recommends"),
     ##                c("Enhances", "Enhanves"),
     ##                c("LinkingTo", "LinkingdTo"))
-    deps <- ExtractDependencies(missing, fields)
+    deps <- Dependencies(missing, fields)
   })
   message(sprintf("Dependencies extracted in %.3fs", t[3]))
   con$insert(deps)
@@ -42,7 +42,7 @@ ExtractRoles <- function(datadir, db="rdata", host="mongodb://localhost") {
     descfiles <- as.data.table(mongo("description", db, host)$find())
     missing <- MissingEntries(index, con)[, list(source, repository, ref)]
     missing <- setkey(descfiles, source, repository, ref)[missing]
-    roles <- ExtractRoles(descfiles, "maintainer")
+    roles <- Roles(missing, "maintainer")
   })
   message(sprintf("Roles extracted in %.3fs", t[3]))
   con$insert(roles)
