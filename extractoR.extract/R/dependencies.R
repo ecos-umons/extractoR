@@ -40,6 +40,7 @@ ParseDependencies <- function(descfiles, keys, type.name=tolower(keys[1])) {
   deps <- descfiles[tolower(key) %in% tolower(keys), ]
   deps <- deps[grep(dependencies.re, deps$value),]
   rbindlist(mapply(function(source, repository, ref, key, value) {
+    loginfo("Parsing %s of %s:%s:%s", key, source, repository, ref)
     deps <- ParseDependency(value)
     if (nrow(deps)) {
       cbind(data.table(source, repository, ref, type.name, key), deps)

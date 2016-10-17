@@ -42,6 +42,7 @@ Roles <- function(descfiles, role) {
   # role.
   roles <- descfiles[tolower(key) == tolower(role) & grepl("\\S", value), ]
   rbindlist(mapply(function(source, repository, ref, value) {
+    loginfo("Parsing %s of %s:%s:%s", role, source, repository, ref)
     people <- ExtractPeople(value)
     if (nrow(people)) {
       cbind(data.table(source, repository, ref, role=tolower(role)), people)
