@@ -16,29 +16,30 @@ CRANIndex <- function(datadir, cran.mirror="http://cran.r-project.org") {
   index
 }
 
-GithubIndex <- function(datadir, fetch=TRUE, update=TRUE, cluster.size=4,
-                        ignore=c("cran", "rpkg", "Bioconductor-mirror")) {
+GithubIndex <- function(datadir, filter=TRUE, fetch=TRUE, update=TRUE,
+                        cluster.size=4, ignore=c("cran", "rpkg", "Bioconductor-mirror")) {
   datadir <- file.path(datadir, "github")
   reposdir <- file.path(datadir, "repos")
   github <- as.data.table(read.csv(file.path(datadir, "csv/repositories.csv"),
                                    stringsAsFactors=FALSE))
+  setkey(github, owner, repository)
   if (!"subdir" %in% names(github)) {
     github[, subdir := "."]
   }
-  if (!"owner" %in% names(github)) {
-    setnames(github, c("name", "owner.login"), c("repository", "owner"))
-  }
 
-  cl <- InitCluster("github", "github-download.log", n=cluster.size)
-  t <- system.time({
-    exist <- clusterMap(cl, TestGithubRepository,
-                        github$owner, github$repository,
-                        github$subdir, SIMPLIFY=TRUE)
-  })
-  message(sprintf("%d repositories tested in %.3fs", nrow(github), t[3]))
-  github <- github[exist]
-  message(sprintf("repositories reduced to %s", nrow(github), t[3]))
-  stopCluster(cl)
+  if (filter) {
+    cl <- InitCluster("github", "github-download.log", n=3 * cluster.size)
+    t <- system.time({
+      exist <- clusterMap(cl, TestGithubRepository,
+                          github$owner, github$repository,
+                          github$subdir, SIMPLIFY=TRUE)
+    })
+    message(sprintf("%d repositories tested in %.3fs", nrow(github), t[3]))
+    github <- github[exist]
+    message(sprintf("repositories reduced to %s", nrow(github), t[3]))
+    write.csv(github, file.path(datadir, "csv/repositories.csv"))
+    stopCluster(cl)
+  }
 
   if (fetch) {
     cl <- InitCluster("github", "github-download.log", n=cluster.size)

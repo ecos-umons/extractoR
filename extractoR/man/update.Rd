@@ -11,13 +11,16 @@
 
 \usage{
 CRANIndex(datadir, cran.mirror="http://cran.r-project.org")
-GithubIndex(datadir, fetch=TRUE, update=TRUE, cluster.size=4,
-            ignore=c("cran", "rpkg", "Bioconductor-mirror"))
+GithubIndex(datadir, filter=TRUE, fetch=TRUE, update=TRUE,
+            cluster.size=4, ignore=c("cran", "rpkg", "Bioconductor-mirror"))
 UpdateIndex(datadir, db="rdata", host="mongodb://localhost",
             cran.params=list(), github.params=list())
 }
 \arguments{
   \item{cran.mirror}{Root URL of the CRAN mirror to use.}
+  \item{filter}{If TRUE will test that GitHub repositories have a
+    DESCRIPTION file, if they don't they will be removed from the
+    repository list.}
   \item{fetch}{If FALSE will not clone or update any git repository and
     will just build the package index.}
   \item{update}{If TRUE will make a git pull inside each already
