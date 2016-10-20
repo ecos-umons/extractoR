@@ -1,5 +1,13 @@
 LogDescfile <- function(owner, repo, subdir, root.dir=".") {
-  LogFile("DESCRIPTION", owner, repo, subdir, root.dir)
+  loginfo("Log DESCRIPTION file for %s:%s:%s", owner, repo, subdir,
+          logger="index.github")
+  commits <- LogFile("DESCRIPTION", subdir, root.dir)
+  if (!Head(root.dir) %in% commits$commit) {
+      commits <- rbind(LogFile(".", subdir, root.dir, 1), commits)
+  }
+  if (nrow(commits)) {
+    cbind(owner=owner, repository=repo, subdir, commits)
+  }
 }
 
 MakeRepositoryId <- function(owner, repo, subdir) {
