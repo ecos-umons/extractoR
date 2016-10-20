@@ -19,7 +19,7 @@ MakeRepositoryId <- function(owner, repo, subdir) {
 }
 
 MakeGithubIndex <- function(github, datadir,
-                            ignore=c("cran", "rpkg", "Bioconductor-mirror")) {
+                            ignore=c("cran", "rpkg", "Bioconductor-mirror", "rforge")) {
   github <- setkey(github[!owner %in% ignore], owner, repository, subdir)
   github[, root.dir := file.path(datadir, owner, repository)]
   github <- github[file.exists(file.path(root.dir, "DESCRIPTION"))]

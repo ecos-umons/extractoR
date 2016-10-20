@@ -17,7 +17,7 @@ CRANIndex <- function(datadir, cran.mirror="http://cran.r-project.org") {
 }
 
 GithubIndex <- function(datadir, filter=TRUE, fetch=TRUE, update=TRUE,
-                        cluster.size=4, ignore=c("cran", "rpkg", "Bioconductor-mirror")) {
+                        cluster.size=4, ignore=c("cran", "rpkg", "Bioconductor-mirror", "rforge")) {
   datadir <- file.path(datadir, "github")
   reposdir <- file.path(datadir, "repos")
   github <- as.data.table(read.csv(file.path(datadir, "csv/repositories.csv"),
