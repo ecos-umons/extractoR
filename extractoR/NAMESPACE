@@ -8,7 +8,7 @@ import(extractoR.data)
 import(extractoR.content)
 import(extractoR.mongo)
 importFrom(mongolite, mongo)
-importFrom(utils, head, read.csv)
+importFrom(utils, head, read.csv, write.csv)
 
 export(CRANIndex, GithubIndex, UpdateIndex)
 export(ExtractDescriptionFiles)
