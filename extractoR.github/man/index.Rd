@@ -10,7 +10,7 @@
 
 \usage{
 MakeGithubIndex(github, datadir,
-                ignore=c("cran", "rpkg", "Bioconductor-mirror"))
+                ignore=c("cran", "rpkg", "Bioconductor-mirror", "rforge"))
 MakeRepositoryId(owner, repo, subdir)
 }
 \arguments{
