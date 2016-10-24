@@ -51,11 +51,6 @@ GithubIndex <- function(datadir, filter=TRUE, fetch=TRUE, update=TRUE,
     stopCluster(cl)
   }
 
-  # FIXME
-  ## message("Fetching Github repositories tags")
-  ## t <- system.time(rdata$tags <- RepositoryTags(github, reposdir))
-  ## message(sprintf("Github repositories tags fetched in %.3fs", t[3]))
-
   message("Making Github index")
   t <- system.time(index <- MakeGithubIndex(github, reposdir, ignore))
   message(sprintf("Github index made in %.3fs", t[3]))

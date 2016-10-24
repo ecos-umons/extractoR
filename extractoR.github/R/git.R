@@ -17,20 +17,20 @@ ParseCommit <- function(commit) {
 }
 
 # Run a git log on a file
-LogFile <- function(file, subdir=".", root.dir=".", limit=0) {
+LogFile <- function(file, subdir=".", root.dir=".", ref="HEAD", limit=0) {
   RunGit(function() {
     logdebug("Fetching %s history for %s", root.dir, logger="git.log")
     args <- c("log", "--pretty=format:\"%H %ci\"")
     if (limit) args <- c(args, "-n", sprintf("%d", limit))
-    args <- c(args, "--", file.path(subdir, file))
+    args <- c(args, sprintf("\"%s\"", ref), "--", file.path(subdir, file))
     res <- system2("git", args, stdout=TRUE)
     ParseCommit(res)
   }, root.dir)
 }
 
-Head <- function(root.dir=".") {
+ParseRef <- function(ref="HEAD", root.dir=".") {
   RunGit(function() {
-    logdebug("Parsing HEAD for %s", root.dir, logger="git.log")
-    system2("git", c("rev-parse", "HEAD"), stdout=TRUE)
+    logdebug("Parsing %s for %s", ref, root.dir, logger="git.log")
+    system2("git", c("rev-parse", ref), stdout=TRUE)
   }, root.dir)
 }
