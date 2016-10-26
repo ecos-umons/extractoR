@@ -34,6 +34,12 @@ Namespaces <- function(index, datadir) {
     } else {
       stop(sprintf("Unknown source: %s", source))
     }
+    res$nativeRoutines <- lapply(res$nativeRoutines, function(nr) {
+      if (inherits(nr, "NativeRoutineMap")) {
+        class(nr) <- "list"
+        nr
+      }
+    })
     if (length(res)) {
       data.table(source, repository, ref, namespace=list(res))
     }
