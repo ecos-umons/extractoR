@@ -12,7 +12,7 @@
 \usage{
 CRANIndex(datadir, cran.mirror="http://cran.r-project.org")
 GithubIndex(datadir, filter=TRUE, fetch=TRUE, update=TRUE,
-            cluster.size=4, ignore=c("cran", "rpkg", "Bioconductor-mirror"))
+            cluster.size=4, ignore=c("cran", "rpkg", "Bioconductor-mirror", "rforge"))
 UpdateIndex(datadir, db="rdata", host="mongodb://localhost",
             cran.params=list(), github.params=list())
 }
