@@ -12,14 +12,16 @@
 }
 
 \usage{
-ParseCode(datadir)
-ExtractFunctions(datadir, cluster.size=6)
-ExtractFunctionCalls(datadir, cluster.size=6)
-ExtractCodingStyle(datadir, cluster.size=6)
+ParseCode(datadir, db="rdata", host="mongodb://localhost")
+ExtractFunctions(datadir, db="rdata", host="mongodb://localhost", cluster.size=6)
+ExtractFunctionCalls(datadir, db="rdata", host="mongodb://localhost", cluster.size=6)
+ExtractCodingStyle(datadir, db="rdata", host="mongodb://localhost", cluster.size=6)
 ResolveFunctionCalls(datadir)
 }
 \arguments{
   \item{datadir}{Directory where data is stored.}
+  \item{db}{MongoDB database.}
+  \item{host}{MongoDB host.}
   \item{cluster.size}{Number of cluster nodes to use.}
 }
 \value{

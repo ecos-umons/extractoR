@@ -1,35 +1,35 @@
-ParseCode <- function(datadir) {
-  packages <- readRDS(file.path(datadir, "rds", "packages.rds"))
-  filenames <- packages[, file.path(datadir, "code", source, repository,
-                                    sprintf("%s.rds", ref))]
-  packages <- packages[!file.exists(filenames)]
+ParseCode <- function(datadir, db="rdata", host="mongodb://localhost") {
+  index <- as.data.table(mongo("index", db, host)$find())
+  filenames <- index[, file.path(datadir, "code", source, repository,
+                                 sprintf("%s.rds", ref))]
+  index <- index[!file.exists(filenames)]
 
   message("Parsing package code")
   t <- system.time({
-    mapply(function(src, repo, ref) {
+    with(index, mapply(function(src, repo, ref) {
       dest <- file.path(datadir, "code", src, repo, sprintf("%s.rds", ref))
       if (!file.exists(dest)) {
         dir.create(dirname(dest), recursive=TRUE)
         saveRDS(extractoR.content::ParsePackage(src, repo, ref, datadir), dest)
       }
-    }, packages$source, packages$repository, packages$ref)
+    }, source, repository, ref))
   })
   message(sprintf("Package code parsed in %.3fs", t[3]))
 }
 
-ExtractFunctions <- function(datadir, cluster.size=6) {
-  packages <- readRDS(file.path(datadir, "rds", "packages.rds"))
-  src <- packages[, file.path(datadir, "code", source, repository,
-                              sprintf("%s.rds", ref))]
-  dest <- packages[, file.path(datadir, "functions", source, repository,
-                               sprintf("%s.rds", ref))]
-  packages <- packages[file.exists(src) & !file.exists(dest)]
-  if (nrow(packages) == 0) return(invisible(NULL))
+ExtractFunctions <- function(datadir, db="rdata", host="mongodb://localhost", cluster.size=6) {
+  index <- as.data.table(mongo("index", db, host)$find())
+  src <- index[, file.path(datadir, "code", source, repository,
+                           sprintf("%s.rds", ref))]
+  dest <- index[, file.path(datadir, "functions", source, repository,
+                            sprintf("%s.rds", ref))]
+  index <- index[file.exists(src) & !file.exists(dest)]
+  if (nrow(index) == 0) return(invisible(NULL))
 
   message("Extracting functions")
   cl <- InitCluster("code.functions", "code.log", n=cluster.size)
   t <- system.time({
-    res <- clusterMap(cl, function(src, repo, ref) {
+    res <- with(index, clusterMap(cl, function(src, repo, ref) {
       dest <- file.path(datadir, "functions", src, repo, sprintf("%s.rds", ref))
       src <- file.path(datadir, "code", src, repo, sprintf("%s.rds", ref))
       code <- readRDS(src)
@@ -42,26 +42,26 @@ ExtractFunctions <- function(datadir, cluster.size=6) {
         }
       }
       return(FALSE)
-    }, packages$source, packages$repository, packages$ref)
+    }, source, repository, ref))
   })
   message(sprintf("Functions extracted in %.3fs", t[3]))
   stopCluster(cl)
   invisible(res)
 }
 
-ExtractFunctionCalls <- function(datadir, cluster.size=6) {
-  packages <- readRDS(file.path(datadir, "rds", "packages.rds"))
-  src <- packages[, file.path(datadir, "code", source, repository,
-                              sprintf("%s.rds", ref))]
-  dest <- packages[, file.path(datadir, "calls", source, repository,
-                               sprintf("%s.rds", ref))]
-  packages <- packages[file.exists(src) & !file.exists(dest)]
-  if (nrow(packages) == 0) return(invisible(NULL))
+ExtractFunctionCalls <- function(datadir, db="rdata", host="mongodb://localhost", cluster.size=6) {
+  index <- as.data.table(mongo("index", db, host)$find())
+  src <- index[, file.path(datadir, "code", source, repository,
+                           sprintf("%s.rds", ref))]
+  dest <- index[, file.path(datadir, "calls", source, repository,
+                            sprintf("%s.rds", ref))]
+  index <- index[file.exists(src) & !file.exists(dest)]
+  if (nrow(index) == 0) return(invisible(NULL))
 
   message("Extracting function calls")
   cl <- InitCluster("code.calls", "code.log", n=cluster.size)
   t <- system.time({
-    res <- clusterMap(cl, function(src, repo, ref) {
+    res <- with(index, clusterMap(cl, function(src, repo, ref) {
       dest <- file.path(datadir, "calls", src, repo, sprintf("%s.rds", ref))
       src <- file.path(datadir, "code", src, repo, sprintf("%s.rds", ref))
       code <- readRDS(src)
@@ -74,26 +74,26 @@ ExtractFunctionCalls <- function(datadir, cluster.size=6) {
         }
       }
       return(FALSE)
-    }, packages$source, packages$repository, packages$ref)
+    }, source, repository, ref))
   })
   message(sprintf("Function calls extracted in %.3fs", t[3]))
   stopCluster(cl)
   invisible(res)
 }
 
-ExtractCodingStyle <- function(datadir, cluster.size=6) {
-  packages <- readRDS(file.path(datadir, "rds", "packages.rds"))
-  src <- packages[, file.path(datadir, "code", source, repository,
-                              sprintf("%s.rds", ref))]
-  dest <- packages[, file.path(datadir, "codingstyle", source, repository,
-                               sprintf("%s.rds", ref))]
-  packages <- packages[file.exists(src) & !file.exists(dest)]
-  if (nrow(packages) == 0) return(invisible(NULL))
+ExtractCodingStyle <- function(datadir, db="rdata", host="mongodb://localhost", cluster.size=6) {
+  index <- as.data.table(mongo("index", db, host)$find())
+  src <- index[, file.path(datadir, "code", source, repository,
+                           sprintf("%s.rds", ref))]
+  dest <- index[, file.path(datadir, "codingstyle", source, repository,
+                            sprintf("%s.rds", ref))]
+  index <- index[file.exists(src) & !file.exists(dest)]
+  if (nrow(index) == 0) return(invisible(NULL))
 
   message("Extracting coding style")
   cl <- InitCluster("code.codingstyle", "code.log", n=cluster.size)
   t <- system.time({
-    res <- clusterMap(cl, function(src, repo, ref) {
+    res <- with(index, clusterMap(cl, function(src, repo, ref) {
       dest <- file.path(datadir, "codingstyle", src, repo, sprintf("%s.rds", ref))
       src <- file.path(datadir, "code", src, repo, sprintf("%s.rds", ref))
       code <- readRDS(src)
@@ -106,7 +106,7 @@ ExtractCodingStyle <- function(datadir, cluster.size=6) {
         }
       }
       return(FALSE)
-    }, packages$source, packages$repository, packages$ref)
+    }, source, repository, ref))
   })
   message(sprintf("Coding style extracted in %.3fs", t[3]))
   stopCluster(cl)
