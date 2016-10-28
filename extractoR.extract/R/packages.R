@@ -24,14 +24,14 @@ DepsWellFormatted <- function(descfile) {
   all(grepl(dependencies.re, deps))
 }
 
-Packages <- function(index, descfile.con, namespace.con) {
+Packages <- function(index, descfiles, namespaces) {
   res <- rbindlist(mapply(function(source, repository, ref) {
-    logdebug("Checking if %s %s (%s) DESCRIPTION file is broken", repository,
+    loginfo("Checking if %s %s (%s) DESCRIPTION file is broken", repository,
              ref, source, logger="extract.broken")
-    query <- toJSON(list(source=source, repository=repository, ref=ref),
-                    auto_unbox=TRUE)
-    descfile <- as.data.table(descfile.con$find(query=query))
-    has.namespace <- descfile.con$count(query=query)
+    query <- data.table(source=source, repository=repository, ref=ref)
+    descfile <- merge(descfiles, query, by=c("source", "repository", "ref"))
+    has.namespace <- nrow(merge(descfiles, query,
+                                by=c("source", "repository", "ref"))) > 0
 
     if (nrow(descfile) > 0 && IsPackage(descfile)) {
       data.table(package=descfile[key == "Package", value],

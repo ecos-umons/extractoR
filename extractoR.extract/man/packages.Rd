@@ -8,13 +8,15 @@
 }
 
 \usage{
-Packages(index, descfile.con, namespace.con)
+Packages(index, descfiles, namespaces)
 FilterPackages(packages)
 }
 \arguments{
   \item{index}{Repository index.}
-  \item{descfile.con}{\code{mongolite} connection to descfile collection.}
-  \item{namespace.con}{\code{mongolite} connection to namespace collection.}
+  \item{descfiles}{DESCRIPTION \code{data.table} such as the one created
+    by \code{Descfiles}.}
+  \item{namespaces}{NAMESPACE \code{data.table} such as the one created
+    by \code{Namespaces}.}
   \item{packages}{Package \code{data.table} such as the one returned by
     \code{FilterPackages}.}
 }
