@@ -11,12 +11,12 @@ IsPackage <- function(descfile) {
   UniqueKey("Package") && UniqueKey("Version")
 }
 
-PackageWellFormatted <- function(descfile) {
-  grepl("^[-._[:alnum:]]+$", descfile[key == "Package", value])
+PackageWellFormatted <- function(str) {
+  grepl("^[-._[:alnum:]]+$", str)
 }
 
-VersionWellFormatted <- function(descfile) {
-  grepl("^\\d+([-.]\\d+)*", descfile[key == "Version", value])
+VersionWellFormatted <- function(str) {
+  grepl("^\\d+([-.]\\d+)*", str)
 }
 
 DepsWellFormatted <- function(descfile) {
@@ -24,29 +24,31 @@ DepsWellFormatted <- function(descfile) {
   all(grepl(dependencies.re, deps))
 }
 
-Packages <- function(index, descfiles, namespaces) {
+Packages <- function(index, descfile.con, namespace.con) {
   res <- rbindlist(mapply(function(source, repository, ref) {
-    loginfo("Checking if %s %s (%s) DESCRIPTION file is broken", repository,
-             ref, source, logger="extract.broken")
-    query <- data.table(source=source, repository=repository, ref=ref)
-    descfile <- merge(descfiles, query, by=c("source", "repository", "ref"))
-    has.namespace <- nrow(merge(descfiles, query,
-                                by=c("source", "repository", "ref"))) > 0
+    loginfo("Checking whether %s %s (%s) DESCRIPTION file is broken",
+            repository, ref, source, logger="extract.broken")
+    query <- toJSON(list(source=source, repository=repository, ref=ref),
+                    auto_unbox=TRUE)
+    descfile <- as.data.table(descfile.con$find(query))
+    namespace <- namespace.con$count(query)
 
     if (nrow(descfile) > 0 && IsPackage(descfile)) {
-      data.table(package=descfile[key == "Package", value],
-                 version=descfile[key == "Version", value], has.descfile=TRUE,
-                 package.well.formatted=PackageWellFormatted(descfile),
-                 version.well.formatted=VersionWellFormatted(descfile),
+      package <- descfile[key == "Package", value]
+      version <- descfile[key == "Version", value]
+      data.table(source, repository, ref, package, version, has.descfile=TRUE,
+                 package.well.formatted=PackageWellFormatted(package),
+                 version.well.formatted=VersionWellFormatted(version),
                  deps.well.formatted=DepsWellFormatted(descfile),
-                 has.namespace=has.namespace)
+                 has.namespace=namespace > 0)
     } else {
-      data.table(package=NA, version=NA, has.descfile=FALSE,
+      data.table(source, repository, ref,
+                 package=NA, version=NA, has.descfile=FALSE,
                  package.well.formatted=FALSE, version.well.formatted=FALSE,
-                 deps.well.formatted=FALSE, has.namespace=has.namespace)
+                 deps.well.formatted=FALSE, has.namespace=namespace > 0)
     }
   }, index$source, index$repository, index$ref, SIMPLIFY=FALSE))
-  res[, is.broken := (!has.descfile | !is.na(package) | !is.na(version) |
+  res[, is.broken := (!has.descfile | is.na(package) | is.na(version) |
                       !package.well.formatted | !version.well.formatted |
                       !deps.well.formatted)]
   res

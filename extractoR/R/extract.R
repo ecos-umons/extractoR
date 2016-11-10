@@ -74,16 +74,17 @@ ExtractNamespaceFiles <- function(datadir, db="rdata", host="mongodb://localhost
 
 ExtractPackages <- function(datadir, db="rdata", host="mongodb://localhost") {
   index <- mongo("index", db, host)$find()
-  descfile.con <- mongo("description", db, host)
-  namespace.con <- mongo("namespace", db, host)
-  descfiles <- as.data.table(descfile.con$find())
-  fields <- '{"_id" : 0, "source": 1, "repository": 1, "ref": 1}'
-  namespaces <- unique(as.data.table(namespace.con$find(fields=fields)))
+  descfile.con <- mongo("description", db, host, verbose=FALSE)
+  namespace.con <- mongo("namespace", db, host, verbose=FALSE)
 
+  con <- mongo("packages", db, host)
+  todo <- MissingEntries(index, con)
   message("Extracting packages")
   t <- system.time({
-    broken <- Packages(index, descfiles, namespaces)
+    for(todo in split(todo, (1:nrow(todo) - 1) %/% 100)) {
+      broken <- Packages(todo, descfile.con, namespace.con)
+      con$insert(broken)
+    }
   })
   message(sprintf("Packages extracted in %.3fs", t[3]))
-  mongo("packages", db, host)$insert(packages)
 }
