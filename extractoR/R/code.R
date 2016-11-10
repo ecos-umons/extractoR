@@ -37,7 +37,7 @@ ExtractFunctions <- function(datadir, db="rdata", host="mongodb://localhost", cl
         res <- try(extractoR.content::FunctionDefinitions(code))
         if (!inherits(res, "try-error")) {
           dir.create(dirname(dest), recursive=TRUE, showWarnings=FALSE)
-          saveRDS(res, dest)
+          try(saveRDS(res, dest))
           return(TRUE)
         }
       }
