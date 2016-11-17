@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/ecos-umons/extractoR.svg?branch=master)](https://travis-ci.org/ecos-umons/extractoR)
+
 extractoR
 =========
 
@@ -27,7 +29,7 @@ It contains function to:
 Installation
 ------------
 
-With the devtools package:
+With devtools package:
 
     devtools::install_github("ecos-umons/extractoR")
 
