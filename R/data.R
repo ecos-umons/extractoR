@@ -61,18 +61,18 @@ LoadYAML <- function(datadir, subdir=".", FILTER=base::identity) {
   LoadRData(datadir, subdir, format="yml", FUNC=yaml.load_file, FILTER)
 }
 
-SaveFeather <- function(rdata, datadir, subdir=".", FILTER=base::identity) {
-  rdata <- rdata[sapply(rdata, inherits, "data.table")]
-  SaveRData(rdata, datadir, subdir, format="feather.gz", FUNC=function(data, file) {
-    ## write_feather(data, gzfile(file))
-    write_feather(data, file)
-  }, FILTER)
-}
+## SaveFeather <- function(rdata, datadir, subdir=".", FILTER=base::identity) {
+##   rdata <- rdata[sapply(rdata, inherits, "data.table")]
+##   SaveRData(rdata, datadir, subdir, format="feather.gz", FUNC=function(data, file) {
+##     ## write_feather(data, gzfile(file))
+##     write_feather(data, file)
+##   }, FILTER)
+## }
 
-LoadFeather <- function(datadir, subdir=".", FILTER=base::identity) {
-  res <- LoadRData(datadir, subdir, format="feather.gz", FUNC=function(file) {
-    ## read_feather(gzfile(file))
-    read_feather(file)
-  }, FILTER)
-  lapply(res, as.data.table)
-}
+## LoadFeather <- function(datadir, subdir=".", FILTER=base::identity) {
+##   res <- LoadRData(datadir, subdir, format="feather.gz", FUNC=function(file) {
+##     ## read_feather(gzfile(file))
+##     read_feather(file)
+##   }, FILTER)
+##   lapply(res, as.data.table)
+## }

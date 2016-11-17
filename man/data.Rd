@@ -9,8 +9,8 @@
 \alias{LoadYAML}
 \alias{SaveJSON}
 \alias{LoadJSON}
-\alias{SaveFeather}
-\alias{LoadFeather}
+%% \alias{SaveFeather}
+%% \alias{LoadFeather}
 \encoding{UTF-8}
 \title{RData}
 \description{
@@ -29,8 +29,8 @@ SaveYAML(rdata, datadir, subdir=".", FILTER=base::identity)
 LoadYAML(datadir, subdir=".", FILTER=base::identity)
 SaveJSON(rdata, datadir, subdir=".", FILTER=base::identity)
 LoadJSON(datadir, subdir=".", FILTER=base::identity, ...)
-SaveFeather(rdata, datadir, subdir=".", FILTER=base::identity)
-LoadFeather(datadir, subdir=".", FILTER=base::identity)
+%% SaveFeather(rdata, datadir, subdir=".", FILTER=base::identity)
+%% LoadFeather(datadir, subdir=".", FILTER=base::identity)
 }
 \arguments{
   \item{rdata}{A list containing objects to be saved}
@@ -49,10 +49,11 @@ LoadFeather(datadir, subdir=".", FILTER=base::identity)
   elements are the objects contained into the data files. By default
   loads RDS files.
 
-  \code{SaveCSV}, \code{SaveYAML}, \code{SaveJSON}, \code{SaveFeather},
-  \code{LoadCSV}, \code{LoadYAML}, \code{LoadJSON} and
-  \code{LoadFeather} call \code{SaveRData} and \code{LoadRData} with
-  parameters to save/load data to CSV, YAML, JSON and Feather formats.
+  \code{SaveCSV}, \code{SaveYAML}, \code{SaveJSON},
+  %\code{SaveFeather}, \code{LoadFeather},
+  \code{LoadCSV}, \code{LoadYAML} and \code{LoadJSON} call
+  \code{SaveRData} and \code{LoadRData} with parameters to save/load
+  data to CSV, YAML, JSON and Feather formats.
 
   \code{LoadFastCSV} loads data from CSV files using \code{data.table}'s
   \code{fread} function.

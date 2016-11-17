@@ -10,7 +10,7 @@ importFrom(stringr, str_trim)
 importFrom(jsonlite, toJSON)
 importFrom(hash, hash)
 importFrom(yaml, as.yaml, yaml.load_file)
-importFrom(feather, read_feather, write_feather)
+## importFrom(feather, read_feather, write_feather)
 importFrom(sourceR, ParsePackage, FunctionDefinitions, FunctionCalls,
            CodingStyle)
 
