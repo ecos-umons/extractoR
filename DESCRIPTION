@@ -1,0 +1,16 @@
+Package: extractoR
+Type: Package
+Title: R packages metadata extractor
+Version: 0.0.1
+Date: 2013-08-21
+Author: Maëlick Claes <himself@maelick.net>
+Maintainer: Maëlick Claes <himself@maelick.net>
+Description: extractoR is a R package that can be used to fetch,
+  extract and dump R packages metadata from CRAN and GitHub into
+  MongoDB.
+Depends: data.table
+Imports: utils, parallel, logging, mongolite, RCurl, XML, stringr,
+  jsonlite, hash, sourceR, feather, yaml
+License: GPL-3
+Encoding: UTF-8
+Remotes: ecos-umons/sourceR
