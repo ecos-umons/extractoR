@@ -1,4 +1,6 @@
-[![Build Status](https://travis-ci.org/ecos-umons/extractoR.svg?branch=master)](https://travis-ci.org/ecos-umons/extractoR)
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/ecos-umons/extractoR/workflows/R-CMD-check/badge.svg)](https://github.com/ecos-umons/extractoR/actions)
+<!-- badges: end -->
 
 extractoR
 =========
